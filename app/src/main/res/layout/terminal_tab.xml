@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    android:paddingHorizontal="15dp"
+    tools:context=".settings.tabs.TerminalTab">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
+
+            <!--- Input messages  -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="4"
+                android:background="@drawable/transparent_bg_bordered_button"
+                android:orientation="horizontal">
+
+                <ScrollView
+                    android:id="@+id/inputDataScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:gravity="bottom"
+                    android:padding="10dp">
+
+
+                    <TextView
+                        android:id="@+id/inputMessages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom"
+                        android:scrollbars="vertical"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="15sp" />
+
+
+                </ScrollView>
+
+            </LinearLayout>
+
+            <!--- Output messages  -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="1.5"
+                android:background="@drawable/transparent_bg_bordered_button"
+                android:orientation="horizontal">
+
+                <ScrollView
+                    android:id="@+id/outputDataScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:gravity="bottom"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/outputMessages"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="7dp"
+                        android:text="outputData"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="15sp" />
+
+                </ScrollView>
+
+            </LinearLayout>
+
+            <!--- Message writer -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/my_message"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.8"
+                    android:gravity="center"
+                    android:text="@string/input_message"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/myMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white" />
+
+            </LinearLayout>
+
+            <!--- BUTTONS  -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnClearTermTab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="7dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/transparent_bg_bordered_button"
+                    android:text="CLEAR"
+                    android:textColor="@drawable/custom_button" />
+
+                <Button
+                    android:id="@+id/btnSendTermTab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/transparent_bg_bordered_button"
+                    android:text="SEND"
+                    android:textColor="@drawable/custom_button" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,3 +1,42 @@
 <resources>
-    <string name="app_name">CarPC</string>
+    <string name="app_name">EVcomputer</string>
+
+    <string name="frag1_text">DASHBOARD SCREEN</string>
+    <string name="frag2_text">CHARGE SCREEN</string>
+    <string name="frag3_text">SETTINGS SCREEN</string>
+    <string name="btnDashboardScreen">DASHBOARD</string>
+    <string name="btnChargeScreen">CHARGE</string>
+    <string name="btnSettingsScreen">SETTINGS</string>
+    <string name="stack">add to Back Stack</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ip_address">IP address</string>
+    <string name="port">PORT</string>
+    <string name="passed">PASSED</string>
+    <string name="PORT">8000</string>
+    <string name="ADDRESS">192.168.1.7</string>
+    <string name="input_message">Input message</string>
+
+    <string-array name="inputTypesAnalog">
+        <item>AI 0</item>
+        <item>AI 1</item>
+        <item>AI 2</item>
+        <item>AI 3</item>
+        <item>AI 4</item>
+        <item>AI 5</item>
+        <item>AI 6</item>
+        <item>AI 7</item>
+        <item>AI 8</item>
+        <item>AI 9</item>
+        <item>AI 10</item>
+        <item>AI 11</item>
+    </string-array>
+
+    <string-array name="inputTypesSpeed">
+        <item>SP 1</item>
+        <item>SP 2</item>
+        <item>OPTO 1</item>
+        <item>OPTO 2</item>
+    </string-array>
 </resources>

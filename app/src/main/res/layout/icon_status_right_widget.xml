@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    tools:context=".widgets.IconStatusRightWidget">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:paddingRight="30dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/right_light"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ico_right_signal"
+            android:visibility="invisible"
+            android:contentDescription="TODO" />
+
+        <ImageView
+            android:id="@+id/head_light"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ico_head_light"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/up_head_light"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ico_up_head_light"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/fog_light"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ico_fog_light"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/drive"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ico_drive"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/reverse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ico_reverse"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+</FrameLayout>
