@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MainActivity.onDestroy when call closeCommunication()");
         }
 
-        Log.d(LOG_TAG, "> onDestroy close");
     }
 
     public void onClick(View v) {
