@@ -59,7 +59,6 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         updateFlag = true;
-
     }
 
     @SuppressLint("SetTextI18n")

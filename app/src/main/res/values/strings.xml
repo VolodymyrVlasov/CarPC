@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EVcomputer</string>
+    <string name="app_name">Car PC</string>
 
     <string name="frag1_text">DASHBOARD SCREEN</string>
     <string name="frag2_text">CHARGE SCREEN</string>

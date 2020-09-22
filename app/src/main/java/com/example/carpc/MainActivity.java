@@ -3,10 +3,7 @@ package com.example.carpc;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.RequiresApi;
@@ -17,7 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.carpc.instruments.ClientSocket;
 import com.example.carpc.instruments.DataParser;
 import com.example.carpc.settings.SettingsWidget;
-import com.example.carpc.settings.tabs.ConnectionTab;
 import com.example.carpc.settings.tabs.TerminalTab;
 import com.example.carpc.widgets.BatteryManagerWidget;
 import com.example.carpc.widgets.BatteryWidget;
@@ -27,7 +23,6 @@ import com.example.carpc.widgets.SpeedometerWidget;
 import com.example.carpc.widgets.TripManagerWidget;
 
 import java.io.IOException;
-import java.net.SocketException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     private androidx.fragment.app.FragmentTransaction fTrans;
 
-    boolean subscribe = false, unsubscribe = false, readLineFlag = false, flagAutoConnect = true;
+    static boolean  subscribe = true, unsubscribe = false, readLineFlag = false, flagAutoConnect, connectionState = false;
     static int port;
     static String inputData, address;
     private static boolean sendMessageFlag = false;
@@ -60,22 +55,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        parser = new DataParser();
-        speedometerWidget = new SpeedometerWidget();
-        batteryManagerWidget = new BatteryManagerWidget();
-        tripManagerWidget = new TripManagerWidget();
-        iconStatusRightWidget = new IconStatusRightWidget();
-        iconStatusLeftWidget = new IconStatusLeftWidget();
-        settingsWidget = new SettingsWidget();
-        batteryWidget = new BatteryWidget();
-        terminalTab = new TerminalTab();
-        ConnectionTab connectionTab = new ConnectionTab();
-        address = connectionTab.getServerAddress();
-        port = connectionTab.getServerPort();
+        initParams();
+
+//        ConnectionTab connectionTab = new ConnectionTab();
+//        address = connectionTab.getServerAddress();
+//        port = connectionTab.getServerPort();
+        address = "192.168.1.7";
+        port = 8000;
+
+        if (address != null && port > 0) {
+            flagAutoConnect = true;
+            startCommunication(address, port);
+
+        } else {
+            flagAutoConnect = false;
+        }
+
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fTrans.add(R.id.centerCont, speedometerWidget);
@@ -89,18 +85,24 @@ public class MainActivity extends AppCompatActivity {
             fTrans.detach(f);
         }
         fTrans.commit();
-        startCommunication(address, port);
+    }
+
+    public void initParams() {
+        parser = new DataParser();
+        speedometerWidget = new SpeedometerWidget();
+        batteryManagerWidget = new BatteryManagerWidget();
+        tripManagerWidget = new TripManagerWidget();
+        iconStatusRightWidget = new IconStatusRightWidget();
+        iconStatusLeftWidget = new IconStatusLeftWidget();
+        settingsWidget = new SettingsWidget();
+        batteryWidget = new BatteryWidget();
+        terminalTab = new TerminalTab();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onResume() {
         super.onResume();
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_FULLSCREEN |
-                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
         List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
         for (Fragment f : fragmentList) {
             fTrans.attach(f);
@@ -110,10 +112,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-        for (Fragment f : fragmentList) {
-            fTrans.detach(f);
-        }
+//        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+//        for (Fragment f : fragmentList) {
+//            fTrans.detach(f);
+//        }
         try {
             closeCommunication();
         } catch (IOException e) {
@@ -135,15 +137,8 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //                break;
             case R.id.btnDashboard:
-//                subscribe = true;
-                getWindow().getDecorView().setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_FULLSCREEN |
-                                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
                 hideKeyboard(this);
-
-//                if (!readLineFlag) sendMessage(SUBSCRIBE);
-//                flagAutoConnect = true;
-
+                fTrans.addToBackStack(null);
                 if (settingsWidget.isAdded()) {
                     fTrans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                     fTrans.detach(settingsWidget);
@@ -176,8 +171,10 @@ public class MainActivity extends AppCompatActivity {
                 if (batteryWidget.isVisible()) {
                     fTrans.detach(batteryWidget);
                 }
+                fTrans.addToBackStack(null);
                 if (!settingsWidget.isVisible()) {
                     fTrans.add(R.id.frgmCont, settingsWidget);
+                    fTrans.attach(settingsWidget);
                     System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> settingsWidget is added when btnSettings onClick");
                 }
                 break;
@@ -186,56 +183,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startCommunication(final String address, final int port) {
+        System.out.println("startCommunication");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (address != null && port > 0) {
-                    try {
-                        socket = new ClientSocket(address, port);
-                        socket.setSoTimeout(1);
-                    } catch (SocketException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    flagAutoConnect = false;
-                }
+                socket = new ClientSocket(address, port);
+                socket.setSoTimeout(10);
+                connectionState = socket.getConnectionState();
 
-                while (true) {
+                while (connectionState) {
                     if (sendMessageFlag) {
-                        if (message.equals(UNSUBSCRIBE)) {
-                            readLineFlag = false;
-                        } else if (message.equals(SUBSCRIBE)) {
-                            readLineFlag = true;
-                        }
                         socket.writeLine(message);
                         sendMessageFlag = false;
                     }
+                    try {
+                        inputData = socket.readLine();
+                        if (!inputData.equals(null)) {
+                            readLineFlag = true;
+                        } else {
+                            readLineFlag = false;
+                            throw new NullPointerException();
+                        }
 
-                    if (readLineFlag) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (readLineFlag) setParameters(inputData);
+                            }
+                        });
+                    } catch (Exception e) {
+                        System.out.println("> Connection lost");
                         try {
-                            inputData = socket.readLine();
-                            connectionStateFlag = true;
-                            if (inputData.equals(null)) {
-                                throw new NullPointerException();
-                            }
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (readLineFlag) setParameters(inputData);
-                                }
-                            });
-                        } catch (Exception e) {
-                            System.out.println("> Connection lost");
-                            try {
-                                inputData = null;
-                                connectionStateFlag = false;
-                                Thread.sleep(100);
-                                Thread.currentThread().interrupt();
-                                if (flagAutoConnect) startCommunication(address, port);
-
-                            } catch (InterruptedException ignored) {
-                            }
+                            connectionState = false;
+                            inputData = null;
+                            Thread.sleep(100);
+                            Thread.currentThread().interrupt();
+                            if (flagAutoConnect) startCommunication(address, port);
+                        } catch (InterruptedException ignored) {
                         }
                     }
                 }
@@ -244,9 +228,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void closeCommunication() throws IOException {
-        flagAutoConnect = false;
-        readLineFlag = false;
-        if (inputData != null) {
+        if (connectionState) {
+            flagAutoConnect = false;
             socket.close();
         }
     }
@@ -294,14 +277,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static Boolean getConnectionState() {
-        return connectionStateFlag;
+        return connectionState;
     }
 
     public static String getInputData() {
         return inputData;
     }
 
-    public static void hideKeyboard(Activity activity) {
+    public void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();

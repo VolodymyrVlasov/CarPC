@@ -14,6 +14,7 @@ public class ClientSocket implements Closeable {
     private Socket socket;
     private BufferedReader reader;
     private BufferedWriter writer;
+    public boolean connectionState;
     int timeout = 10 * 1000; //ms * 1000
 
     public ClientSocket(String ip, int port) {
@@ -21,6 +22,7 @@ public class ClientSocket implements Closeable {
             socket = new Socket();
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Connect to " + ip + ":" + port);
             socket.connect(new InetSocketAddress(ip, port), timeout);
+            connectionState = true;
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Connected");
             reader = createReader();
             writer = createWriter();
@@ -49,8 +51,12 @@ public class ClientSocket implements Closeable {
         return message;
     }
 
-    public void setSoTimeout(int secondsTimeout) throws SocketException {
-        this.socket.setSoTimeout(secondsTimeout * 1000);
+    public void setSoTimeout(int secondsTimeout)  {
+        try {
+            this.socket.setSoTimeout(secondsTimeout * 1000);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
     }
 
     public Boolean isOutputShutdown() {
@@ -69,18 +75,20 @@ public class ClientSocket implements Closeable {
         return new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
-    public boolean isClosed() {
-        return socket.isClosed();
+    public boolean getConnectionState() {
+        return connectionState;
     }
 
     @Override
     public void close() throws IOException {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ClientSocket.close()");
+        connectionState = false;
         writer.close();
         reader.close();
         socket.close();
         Thread.currentThread().interrupt();
     }
+
 
 
 }

@@ -1,10 +1,6 @@
 package com.example.carpc.settings.tabs;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -29,8 +25,8 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     private EditText serverAddress, serverPort;
     private TextView myNetworkAddress;
     private Button btnConnect, btnDisconnect;
-    String address;
-    int port;
+    String address = "192.168.1.7";
+    int port = 8000;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,22 +39,16 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         btnDisconnect = v.findViewById(R.id.btnDisconnect);
         address = serverAddress.getText().toString();
         port = Integer.parseInt(serverPort.getText().toString());
-        if (MainActivity.getConnectionState()) {
-            WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            WifiInfo wifiInf = wifiMan.getConnectionInfo();
-            int ipAddress = wifiInf.getIpAddress();
-            @SuppressLint("DefaultLocale") String ip = String.format("%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
-            myNetworkAddress.setText(ip);
-        }
-
+//        if (MainActivity.getConnectionState()) {
+//            WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+//            WifiInfo wifiInf = wifiMan.getConnectionInfo();
+//            int ipAddress = wifiInf.getIpAddress();
+//            @SuppressLint("DefaultLocale") String ip = String.format("%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
+//            myNetworkAddress.setText(ip);
+//        }
+        setConnectionStateIndicator();
         setRetainInstance(true);
         return v;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setConnectionStateIndicator();
     }
 
     @Override
@@ -76,9 +66,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
                 try {
                     updateConnectionParams();
                     setConnectionStateIndicator();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
                 break;
@@ -86,9 +74,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
                 try {
                     closeConnection();
                     setConnectionStateIndicator();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
                 break;
@@ -118,31 +104,26 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     }
 
     public void setConnectionStateIndicator() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                boolean flag = true;
-                long time = SystemClock.uptimeMillis();
+        boolean flag = true;
+        long time = SystemClock.uptimeMillis();
 
-                while (flag) {
-                    if (SystemClock.uptimeMillis() >= time + 1000) {
-                        if (MainActivity.getConnectionState()) {
-                            btnConnect.setTextColor(Color.argb(255, 3, 218, 197));
-                            btnConnect.setBackground(ResourcesCompat.getDrawable(getResources(),
-                                    R.drawable.transparent_bg_bordered_button_active, null));
-                            btnConnect.setText("CONNECTED");
-                            btnConnect.setActivated(false);
-                        } else {
-                            btnConnect.setTextColor(Color.WHITE);
-                            btnConnect.setBackground(ResourcesCompat.getDrawable(getResources(),
-                                    R.drawable.transparent_bg_bordered_button, null));
-                            btnConnect.setText("CONNECT");
-                            btnConnect.setActivated(true);
-                        }
-                        flag = false;
-                    }
+        while (flag) {
+            if (SystemClock.uptimeMillis() >= time + 200) {
+                if (MainActivity.getConnectionState()) {
+                    btnConnect.setTextColor(Color.argb(255, 3, 218, 197));
+                    btnConnect.setBackground(ResourcesCompat.getDrawable(getResources(),
+                            R.drawable.transparent_bg_bordered_button_active, null));
+                    btnConnect.setText("CONNECTED");
+                    btnConnect.setActivated(false);
+                } else {
+                    btnConnect.setTextColor(Color.WHITE);
+                    btnConnect.setBackground(ResourcesCompat.getDrawable(getResources(),
+                            R.drawable.transparent_bg_bordered_button, null));
+                    btnConnect.setText("CONNECT");
+                    btnConnect.setActivated(true);
                 }
+                flag = false;
             }
-        }).start();
+        }
     }
 }

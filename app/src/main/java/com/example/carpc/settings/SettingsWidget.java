@@ -26,8 +26,8 @@ public class SettingsWidget extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.settings_widget, container, false);
 
-        viewPager = (ViewPager) v.findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) v.findViewById(R.id.tabs);
+        viewPager = v.findViewById(R.id.viewpager);
+        tabLayout = v.findViewById(R.id.tabs);
         setRetainInstance(true);
         return v;
     }
