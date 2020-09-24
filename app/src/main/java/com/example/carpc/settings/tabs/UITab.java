@@ -18,6 +18,13 @@ public class UITab extends Fragment {
                                        Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.u_i, container, false);
         setRetainInstance(true);
+        System.out.println("Create UI TAB");
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("Destroy UI TAB");
     }
 }

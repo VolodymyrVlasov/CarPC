@@ -132,6 +132,38 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/btnSubscribe"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="7dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/transparent_bg_bordered_button"
+                    android:text="SUBSCRIBE"
+                    android:textColor="@drawable/custom_button" />
+
+                <Button
+                    android:id="@+id/btnUnsubscribe"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/transparent_bg_bordered_button"
+                    android:text="UNSUBSCRIBE"
+                    android:textColor="@drawable/custom_button" />
+            </LinearLayout>
+
+            <!--- BUTTONS  -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:orientation="horizontal">
+
+                <Button
                     android:id="@+id/btnClearTermTab"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

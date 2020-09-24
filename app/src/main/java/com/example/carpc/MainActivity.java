@@ -27,14 +27,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "myLogs";
-    private SpeedometerWidget speedometerWidget;
-    private BatteryWidget batteryWidget;
-    private BatteryManagerWidget batteryManagerWidget;
-    private TripManagerWidget tripManagerWidget;
-    private IconStatusRightWidget iconStatusRightWidget;
-    private IconStatusLeftWidget iconStatusLeftWidget;
-    private SettingsWidget settingsWidget;
-    private TerminalTab terminalTab;
+    private static SpeedometerWidget speedometerWidget;
+    private static BatteryWidget batteryWidget;
+    private static BatteryManagerWidget batteryManagerWidget;
+    private static TripManagerWidget tripManagerWidget;
+    private static IconStatusRightWidget iconStatusRightWidget;
+    private static IconStatusLeftWidget iconStatusLeftWidget;
+    private static SettingsWidget settingsWidget;
+    private static TerminalTab terminalTab;
 
     public static DataParser parser;
     public static Boolean connectionStateFlag = false;
@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     private androidx.fragment.app.FragmentTransaction fTrans;
 
-    static boolean  subscribe = true, unsubscribe = false, readLineFlag = false, flagAutoConnect, connectionState = false;
+    static boolean subscribe = true, unsubscribe = false, readLineFlag = false,
+            flagAutoConnect, connectionState = false, setParamsFlag = false;
     static int port;
     static String inputData, address;
     private static boolean sendMessageFlag = false;
@@ -112,10 +113,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-//        for (Fragment f : fragmentList) {
-//            fTrans.detach(f);
-//        }
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        for (Fragment f : fragmentList) {
+            fTrans.detach(f);
+        }
         try {
             closeCommunication();
         } catch (IOException e) {
@@ -137,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //                break;
             case R.id.btnDashboard:
+                sendMessage(SUBSCRIBE);
+                readLineFlag = true;
                 hideKeyboard(this);
                 fTrans.addToBackStack(null);
                 if (settingsWidget.isAdded()) {
@@ -153,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 fTrans.setCustomAnimations(R.animator.left_out, R.animator.left_in).attach(tripManagerWidget);
                 break;
             case R.id.btnSettings:
+
                 if (speedometerWidget.isVisible()) {
                     fTrans.detach(speedometerWidget);
                 }
@@ -171,56 +175,67 @@ public class MainActivity extends AppCompatActivity {
                 if (batteryWidget.isVisible()) {
                     fTrans.detach(batteryWidget);
                 }
-                fTrans.addToBackStack(null);
+
+                  fTrans.addToBackStack(null);
+
+
                 if (!settingsWidget.isVisible()) {
                     fTrans.add(R.id.frgmCont, settingsWidget);
                     fTrans.attach(settingsWidget);
-                    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> settingsWidget is added when btnSettings onClick");
                 }
+                 sendMessage(UNSUBSCRIBE);
                 break;
         }
         fTrans.commit();
     }
 
     public void startCommunication(final String address, final int port) {
+
         System.out.println("startCommunication");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                socket = new ClientSocket(address, port);
-                socket.setSoTimeout(10);
-                connectionState = socket.getConnectionState();
+                try {
+                    socket = new ClientSocket(address, port);
+                    socket.setSoTimeout(2);
+                    Thread.sleep(1);
+                    connectionState = socket.getConnectionState();
+                    System.out.println("connectionState: " + connectionState);
+                    readLineFlag = true;
 
-                while (connectionState) {
-                    if (sendMessageFlag) {
-                        socket.writeLine(message);
-                        sendMessageFlag = false;
-                    }
-                    try {
+                    while (connectionState) {
+                        if (sendMessageFlag) {
+                            if (message.equals(SUBSCRIBE)) {
+                                readLineFlag = true;
+                            } else if (message.equals(UNSUBSCRIBE)) {
+                                readLineFlag = false;
+                            }
+                            socket.writeLine(message);
+                            sendMessageFlag = false;
+                        }
+
                         inputData = socket.readLine();
-                        if (!inputData.equals(null)) {
-                            readLineFlag = true;
-                        } else {
-                            readLineFlag = false;
-                            throw new NullPointerException();
+                        if (!inputData.equals(null) && !inputData.equals("")) {
+                            setParamsFlag = true;
                         }
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (readLineFlag) setParameters(inputData);
+                                if (setParamsFlag) setParameters(inputData);
+                                setParamsFlag = true;
                             }
                         });
-                    } catch (Exception e) {
-                        System.out.println("> Connection lost");
-                        try {
-                            connectionState = false;
-                            inputData = null;
-                            Thread.sleep(100);
-                            Thread.currentThread().interrupt();
-                            if (flagAutoConnect) startCommunication(address, port);
-                        } catch (InterruptedException ignored) {
-                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("> Connection lost");
+                    try {
+                        connectionState = false;
+                        inputData = null;
+                        Thread.sleep(100);
+                        Thread.currentThread().interrupt();
+                        if (flagAutoConnect) startCommunication(address, port);
+                    } catch (InterruptedException ignored) {
                     }
                 }
             }
@@ -229,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void closeCommunication() throws IOException {
         if (connectionState) {
+            readLineFlag = false;
             flagAutoConnect = false;
             socket.close();
         }
@@ -241,8 +257,9 @@ public class MainActivity extends AppCompatActivity {
         startCommunication(newAddress, newPort);
     }
 
-    public void setParameters(String inputData) throws NullPointerException {
+    public static void setParameters(String inputData) throws NullPointerException {
         parser.parseInputData(inputData);
+
         if (settingsWidget.isVisible() && TerminalTab.updateFlag) {
             terminalTab.showNewMessage(inputData);
         }

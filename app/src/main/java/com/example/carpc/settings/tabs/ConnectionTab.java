@@ -1,6 +1,10 @@
 package com.example.carpc.settings.tabs;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -39,15 +43,20 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         btnDisconnect = v.findViewById(R.id.btnDisconnect);
         address = serverAddress.getText().toString();
         port = Integer.parseInt(serverPort.getText().toString());
-//        if (MainActivity.getConnectionState()) {
-//            WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-//            WifiInfo wifiInf = wifiMan.getConnectionInfo();
-//            int ipAddress = wifiInf.getIpAddress();
-//            @SuppressLint("DefaultLocale") String ip = String.format("%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
-//            myNetworkAddress.setText(ip);
-//        }
+        if (MainActivity.getConnectionState()) {
+            WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            WifiInfo wifiInf = wifiMan.getConnectionInfo();
+            int ipAddress = wifiInf.getIpAddress();
+            @SuppressLint("DefaultLocale") String ip = String.format("%d.%d.%d.%d",
+                    (ipAddress & 0xff),
+                    (ipAddress >> 8 & 0xff),
+                    (ipAddress >> 16 & 0xff),
+                    (ipAddress >> 24 & 0xff));
+            myNetworkAddress.setText(ip);
+        }
         setConnectionStateIndicator();
         setRetainInstance(true);
+        System.out.println("Create CONNECTION TAB");
         return v;
     }
 
@@ -56,6 +65,12 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         btnConnect.setOnClickListener(this);
         btnDisconnect.setOnClickListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("Destroy CONNECTION TAB");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

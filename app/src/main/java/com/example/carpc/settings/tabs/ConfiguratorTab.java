@@ -16,6 +16,13 @@ public class ConfiguratorTab extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.car_pc_configuration, container, false);
         setRetainInstance(true);
+        System.out.println("Create CONFIGURATOR TAB");
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("Destroy CONFIGURATOR TAB");
     }
 }

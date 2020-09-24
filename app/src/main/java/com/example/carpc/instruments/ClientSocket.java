@@ -15,7 +15,7 @@ public class ClientSocket implements Closeable {
     private BufferedReader reader;
     private BufferedWriter writer;
     public boolean connectionState;
-    int timeout = 10 * 1000; //ms * 1000
+    int timeout = 2 * 1000; //ms * 1000
 
     public ClientSocket(String ip, int port) {
         try {
@@ -28,6 +28,7 @@ public class ClientSocket implements Closeable {
             writer = createWriter();
         } catch (IOException e) {
             e.printStackTrace();
+            connectionState = false;
         }
     }
 
@@ -38,20 +39,17 @@ public class ClientSocket implements Closeable {
             writer.flush();
         } catch (IOException e) {
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ClientSocket.writeLine - IOException");
+            connectionState = false;
         }
     }
 
-    public String readLine() {
-        String message = null;
-        try {
-            message = reader.readLine();
-        } catch (IOException e) {
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ClientSocket.readLine - IOException");
-        }
+    public String readLine() throws IOException {
+        String message = "";
+        message = reader.readLine();
         return message;
     }
 
-    public void setSoTimeout(int secondsTimeout)  {
+    public void setSoTimeout(int secondsTimeout) {
         try {
             this.socket.setSoTimeout(secondsTimeout * 1000);
         } catch (SocketException e) {
@@ -88,7 +86,6 @@ public class ClientSocket implements Closeable {
         socket.close();
         Thread.currentThread().interrupt();
     }
-
 
 
 }

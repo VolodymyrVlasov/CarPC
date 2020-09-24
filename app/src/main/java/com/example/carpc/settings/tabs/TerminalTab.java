@@ -26,7 +26,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
     private static ScrollView outputDataScrollView;
     private int lineCount = 0;
     EditText message;
-    Button btnSend, btnClear;
+    Button btnSend, btnClear, btnSubscribe, btnUnsubscribe;
     public static boolean updateFlag = false;
 
     @Override
@@ -43,7 +43,10 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         message = v.findViewById(R.id.myMessage);
         btnSend = v.findViewById(R.id.btnSendTermTab);
         btnClear = v.findViewById(R.id.btnClearTermTab);
+        btnSubscribe = v.findViewById(R.id.btnSubscribe);
+        btnUnsubscribe = v.findViewById(R.id.btnUnsubscribe);
         setRetainInstance(true);
+        System.out.println("Create TERMINAL TAB");
         return v;
     }
 
@@ -52,6 +55,9 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         btnSend.setOnClickListener((View.OnClickListener) this);
         btnClear.setOnClickListener((View.OnClickListener) this);
+        btnSubscribe.setOnClickListener((View.OnClickListener) this);
+        btnUnsubscribe.setOnClickListener((View.OnClickListener) this);
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -68,6 +74,12 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         updateFlag = false;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("Destroy TERMINAL TAB");
+
+    }
 
     @SuppressLint("ShowToast")
     @Override
@@ -85,6 +97,12 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
                 transceiverMessages.setText("");
                 Toast.makeText(getContext(), "Button CLEAR clicked", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.btnSubscribe:
+                sendMessage("@a1");
+                break;
+            case R.id.btnUnsubscribe:
+                sendMessage("@a0");
+                break;
             default:
                 break;
         }
@@ -93,8 +111,10 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
     public void showNewMessage(String inputData) {
 //        System.out.println("showNewMessage " + inputData);
         if (updateFlag) {
-            receivedMessages.append("\n" + inputData);
-            inputDataScrollView.fullScroll(View.FOCUS_DOWN);
+            if (!inputData.equals("")) {
+                receivedMessages.append("\n" + inputData);
+                inputDataScrollView.fullScroll(View.FOCUS_DOWN);
+            }
         }
     }
 
