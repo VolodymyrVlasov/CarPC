@@ -71,12 +71,13 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        updateFlag = false;
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        updateFlag = false;
         System.out.println("Destroy TERMINAL TAB");
 
     }
@@ -99,6 +100,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btnSubscribe:
                 sendMessage("@a1");
+                updateFlag = true;
                 break;
             case R.id.btnUnsubscribe:
                 sendMessage("@a0");

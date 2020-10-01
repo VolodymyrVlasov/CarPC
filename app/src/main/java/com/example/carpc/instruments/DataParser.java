@@ -67,7 +67,7 @@ public class DataParser {
                 valueArray.put(inputData.substring(1, 2),
                         Double.parseDouble(inputData.substring(2)));
             }
-        } catch (NullPointerException | StringIndexOutOfBoundsException e) {
+        } catch (NullPointerException | StringIndexOutOfBoundsException | NumberFormatException e) {
         }
     }
 

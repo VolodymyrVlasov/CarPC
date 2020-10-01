@@ -41,20 +41,22 @@ class DrawThread extends Thread {
                     continue;
                 }
 
+                float batteryHeight = canvas.getHeight();
+                float batteryWidth = batteryHeight * 2.2f;
                 float borderWidth = canvas.getHeight() / 25f;
                 float borderRadius = borderWidth * 3f;
                 float batteryPlus = borderWidth * 3f;
 
                 paint.setARGB(255, 170, 170, 170);
                 RectF rectangle1 = new RectF(0, 0,
-                        canvas.getWidth() - batteryPlus,
-                        canvas.getHeight());
+                        batteryWidth - batteryPlus,
+                        batteryHeight);
                 canvas.drawRoundRect(rectangle1, borderRadius, borderRadius, paint);
 
                 paint.setColor(Color.BLACK);
                 RectF rectangle2 = new RectF(borderWidth, borderWidth,
-                        canvas.getWidth() - batteryPlus - borderWidth,
-                        canvas.getHeight() - borderWidth);
+                        batteryWidth - batteryPlus - borderWidth,
+                        batteryHeight - borderWidth);
                 canvas.drawRoundRect(rectangle2, borderRadius, borderRadius, paint);
 
                 int a = 255;
@@ -66,22 +68,22 @@ class DrawThread extends Thread {
                 RectF rectangle3 = new RectF(
                         borderWidth * 2f,
                         borderWidth * 2f,
-                        (float) ((canvas.getWidth() - batteryPlus - borderWidth * 2f) / 100f * capacity),
-                        canvas.getHeight() - borderWidth * 2f);
+                        (float) ((batteryWidth - batteryPlus - borderWidth * 2f) / 100f * capacity),
+                        batteryHeight - borderWidth * 2f);
                 canvas.drawRoundRect(rectangle3, borderRadius, borderRadius, paint);
 
                 paint.setARGB(a, 170, 170, 170);
-                RectF rectangle4 = new RectF(canvas.getWidth() - batteryPlus,
-                        canvas.getHeight() / 4f,
-                        canvas.getWidth() - batteryPlus / 2f,
-                        canvas.getHeight() / 4f * 3f);
+                RectF rectangle4 = new RectF(batteryWidth - batteryPlus,
+                        batteryHeight / 4f,
+                        batteryWidth - batteryPlus / 2f,
+                        batteryHeight / 4f * 3f);
                 canvas.drawRoundRect(rectangle4, borderRadius, borderRadius, paint);
 
-                paint.setTextSize(canvas.getHeight() / 2f);
+                paint.setTextSize(batteryHeight / 2f);
                 paint.setTextAlign(Paint.Align.CENTER);
                 canvas.drawText(String.valueOf(capacity) + "%",
-                        (float) canvas.getWidth() / 2f - batteryPlus,
-                        ((float) canvas.getHeight() / 2f) + (paint.getTextSize() / 3f),
+                        (float) batteryWidth / 2f - batteryPlus,
+                        ((float) batteryHeight / 2f) + (paint.getTextSize() / 3f),
                         paint);
             } finally {
                 if (canvas != null) {

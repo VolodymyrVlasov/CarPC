@@ -1,10 +1,15 @@
 package com.example.carpc;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     private androidx.fragment.app.FragmentTransaction fTrans;
 
-    static boolean subscribe = true, unsubscribe = false, readLineFlag = false,
+    static volatile boolean subscribe = true, unsubscribe = false, readLineFlag = false,
             flagAutoConnect, connectionState = false, setParamsFlag = false;
     static int port;
     static String inputData, address;
@@ -104,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        sendMessage(SUBSCRIBE);
         List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
         for (Fragment f : fragmentList) {
             fTrans.attach(f);
@@ -111,17 +117,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-        for (Fragment f : fragmentList) {
-            fTrans.detach(f);
-        }
         try {
+            //sendMessage(UNSUBSCRIBE);
             closeCommunication();
         } catch (IOException e) {
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MainActivity.onDestroy when call closeCommunication()");
         }
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        for (Fragment f : fragmentList) {
+            fTrans.detach(f);
+        }
+
 
     }
 
@@ -139,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 //                break;
             case R.id.btnDashboard:
                 sendMessage(SUBSCRIBE);
-                readLineFlag = true;
+                // readLineFlag = true;
                 hideKeyboard(this);
                 fTrans.addToBackStack(null);
                 if (settingsWidget.isAdded()) {
@@ -176,14 +190,14 @@ public class MainActivity extends AppCompatActivity {
                     fTrans.detach(batteryWidget);
                 }
 
-                  fTrans.addToBackStack(null);
+                fTrans.addToBackStack(null);
 
 
                 if (!settingsWidget.isVisible()) {
                     fTrans.add(R.id.frgmCont, settingsWidget);
                     fTrans.attach(settingsWidget);
                 }
-                 sendMessage(UNSUBSCRIBE);
+                sendMessage(UNSUBSCRIBE);
                 break;
         }
         fTrans.commit();
@@ -197,19 +211,31 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     socket = new ClientSocket(address, port);
-                    socket.setSoTimeout(2);
+                    socket.setSoTimeout(10);
                     Thread.sleep(1);
                     connectionState = socket.getConnectionState();
-                    System.out.println("connectionState: " + connectionState);
-                    readLineFlag = true;
+                    if (socket.getConnectionState()) {
+                        System.out.println("connectionState: " + connectionState);
+//                        readLineFlag = true;
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), " CONNECTED", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    } else {
+                        System.out.println("connectionState: " + connectionState);
+                        throw new Exception();
+                    }
 
                     while (connectionState) {
+                        Thread.sleep(5);
                         if (sendMessageFlag) {
-                            if (message.equals(SUBSCRIBE)) {
-                                readLineFlag = true;
-                            } else if (message.equals(UNSUBSCRIBE)) {
-                                readLineFlag = false;
-                            }
+//                            if (message.equals(SUBSCRIBE)) {
+//                                readLineFlag = true;
+//                            } else if (message.equals(UNSUBSCRIBE)) {
+//                                readLineFlag = false;
+//                            }
                             socket.writeLine(message);
                             sendMessageFlag = false;
                         }
@@ -217,22 +243,36 @@ public class MainActivity extends AppCompatActivity {
                         inputData = socket.readLine();
                         if (!inputData.equals(null) && !inputData.equals("")) {
                             setParamsFlag = true;
+
                         }
+                        System.out.println("inputData: " + inputData + "      setParamsFlag: " + setParamsFlag);
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 if (setParamsFlag) setParameters(inputData);
-                                setParamsFlag = true;
+                                setParamsFlag = false;
                             }
                         });
                     }
                 } catch (Exception e) {
-                    System.out.println("> Connection lost");
                     try {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast toast = Toast.makeText(getApplicationContext(), "NO CONNECTION", Toast.LENGTH_SHORT);
+                                View view = toast.getView();
+                                //Gets the actual oval background of the Toast then sets the colour filter
+                                view.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                                //Gets the TextView from the Toast so it can be editted
+                                TextView text = view.findViewById(android.R.id.message);
+                                text.setTextColor(Color.WHITE);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                            }
+                        });
                         connectionState = false;
                         inputData = null;
-                        Thread.sleep(100);
+                        Thread.sleep(1000);
                         Thread.currentThread().interrupt();
                         if (flagAutoConnect) startCommunication(address, port);
                     } catch (InterruptedException ignored) {
@@ -244,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void closeCommunication() throws IOException {
         if (connectionState) {
-            readLineFlag = false;
+//            readLineFlag = false;
             flagAutoConnect = false;
             socket.close();
         }
