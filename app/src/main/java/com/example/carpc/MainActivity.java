@@ -1,22 +1,16 @@
 package com.example.carpc;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.carpc.instruments.ClientSocket;
 import com.example.carpc.instruments.DataParser;
 import com.example.carpc.settings.SettingsWidget;
 import com.example.carpc.settings.tabs.TerminalTab;
@@ -28,7 +22,11 @@ import com.example.carpc.widgets.SpeedometerWidget;
 import com.example.carpc.widgets.TripManagerWidget;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.List;
+import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "myLogs";
@@ -40,20 +38,15 @@ public class MainActivity extends AppCompatActivity {
     private static IconStatusLeftWidget iconStatusLeftWidget;
     private static SettingsWidget settingsWidget;
     private static TerminalTab terminalTab;
-
     public static DataParser parser;
     public static Boolean connectionStateFlag = false;
-    private ClientSocket socket;
-
+    private Socket socket;
     private androidx.fragment.app.FragmentTransaction fTrans;
-
-    static volatile boolean subscribe = true, unsubscribe = false, readLineFlag = false,
-            flagAutoConnect, connectionState = false, setParamsFlag = false;
+    static boolean flagAutoConnect, setParamsFlag = false;
+    static volatile boolean subscribe = true, unsubscribe = false, connectionState = false, sendMessageFlag = false;
     static int port;
     static String inputData, address;
-    private static boolean sendMessageFlag = false;
     public static String message;
-
     private static final String UNSUBSCRIBE = "@a0";
     private static final String SUBSCRIBE = "@a1";
 
@@ -125,18 +118,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
-            //sendMessage(UNSUBSCRIBE);
-            closeCommunication();
-        } catch (IOException e) {
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MainActivity.onDestroy when call closeCommunication()");
-        }
+        closeCommunication();
         List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+
         for (Fragment f : fragmentList) {
             fTrans.detach(f);
         }
-
-
     }
 
     public void onClick(View v) {
@@ -170,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 fTrans.setCustomAnimations(R.animator.left_out, R.animator.left_in).attach(tripManagerWidget);
                 break;
             case R.id.btnSettings:
+                setParamsFlag = false;
 
                 if (speedometerWidget.isVisible()) {
                     fTrans.detach(speedometerWidget);
@@ -204,89 +192,229 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startCommunication(final String address, final int port) {
-
-        System.out.println("startCommunication");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    socket = new ClientSocket(address, port);
-                    socket.setSoTimeout(10);
-                    Thread.sleep(1);
-                    connectionState = socket.getConnectionState();
-                    if (socket.getConnectionState()) {
-                        System.out.println("connectionState: " + connectionState);
-//                        readLineFlag = true;
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), " CONNECTED", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    System.out.println("try connect to: " + address + ":" + port);
 
-                    } else {
-                        System.out.println("connectionState: " + connectionState);
-                        throw new Exception();
-                    }
+                    socket = new Socket();
+                    socket.connect(new InetSocketAddress(address, port), 500);
+                    System.out.println("connected");
+                    connectionState = true;
+                    if (connectionState) {
+                        final Scanner scanner = new Scanner(socket.getInputStream());
+                        final PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
-                    while (connectionState) {
-                        Thread.sleep(5);
-                        if (sendMessageFlag) {
-//                            if (message.equals(SUBSCRIBE)) {
-//                                readLineFlag = true;
-//                            } else if (message.equals(UNSUBSCRIBE)) {
-//                                readLineFlag = false;
-//                            }
-                            socket.writeLine(message);
-                            sendMessageFlag = false;
-                        }
-
-                        inputData = socket.readLine();
-                        if (!inputData.equals(null) && !inputData.equals("")) {
-                            setParamsFlag = true;
-
-                        }
-                        System.out.println("inputData: " + inputData + "      setParamsFlag: " + setParamsFlag);
-
-                        runOnUiThread(new Runnable() {
+                        /* input stream thread */
+                        new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                if (setParamsFlag) setParameters(inputData);
-                                setParamsFlag = false;
+                                while (connectionState) {
+                                    try {
+                                        socket.setSoTimeout(0);
+                                        if (scanner.hasNextLine()) {
+                                            inputData = scanner.nextLine();
+                                        } else {
+                                            setParamsFlag = false;
+                                            throw new IOException();
+                                        }
+                                        if (!inputData.equals(null) && !inputData.equals("")) {
+                                            setParamsFlag = true;
+                                        }
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (setParamsFlag) setParameters(inputData);
+                                                setParamsFlag = false;
+                                            }
+                                        });
+                                    } catch (Exception e) {
+                                        System.out.println("scanner no line " + e);
+                                        connectionState = false;
+                                        System.out.println("connectionState false -> interrupt input stream Thread");
+                                        Thread.currentThread().interrupt();
+                                    }
+                                }
                             }
-                        });
+                        }).start();
+
+                        /* output stream thread */
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                while (connectionState) {
+                                    try {
+                                        if (sendMessageFlag) {
+                                            writer.println(message);
+                                            sendMessageFlag = false;
+                                        }
+                                        Thread.sleep(2);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        connectionState = false;
+                                        break;
+                                    }
+                                }
+                                System.out.println("connectionState false -> interrupt output stream Thread");
+                                if (!connectionState) Thread.currentThread().interrupt();
+                            }
+                        }).start();
+                    }
+                    while (true) {
+                        if (!connectionState) {
+                            //socket.setSoTimeout(100);
+                            System.out.println("connectionState false -> throw new Exception");
+                            throw new Exception();
+                        }
+                        Thread.sleep(100);
                     }
                 } catch (Exception e) {
                     try {
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                Toast toast = Toast.makeText(getApplicationContext(), "NO CONNECTION", Toast.LENGTH_SHORT);
-                                View view = toast.getView();
-                                //Gets the actual oval background of the Toast then sets the colour filter
-                                view.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-                                //Gets the TextView from the Toast so it can be editted
-                                TextView text = view.findViewById(android.R.id.message);
-                                text.setTextColor(Color.WHITE);
-                                toast.setGravity(Gravity.CENTER, 0, 0);
-                                toast.show();
-                            }
-                        });
-                        connectionState = false;
+                        System.out.println("connection lost");
+                        socket.close();
                         inputData = null;
-                        Thread.sleep(1000);
+                        setParamsFlag = false;
+                        connectionState = false;
+                        //Thread.sleep(1000);
                         Thread.currentThread().interrupt();
-                        if (flagAutoConnect) startCommunication(address, port);
-                    } catch (InterruptedException ignored) {
+                        if (flagAutoConnect) {
+                            System.out.println("reconnecting");
+                            startCommunication(address, port);
+                        }
+                    } catch (IOException ex) {
+                        e.printStackTrace();
                     }
                 }
             }
         }).start();
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+
+//                    connectionState = socket.getConnectionState();
+//                    if (!connectionState) throw new Exception();
+//                    while (connectionState) {
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                while (true) {
+//                                    if (sendMessageFlag) {
+//                                        socket.writeLine(message);
+//                                        sendMessageFlag = false;
+//                                        System.out.println("Message sent: " + message);
+//                                    }
+//                                }
+//                            }
+//                        }).start();
+
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                inputData = socket.readLine();
+//                                if (!inputData.equals(null) && !inputData.equals("")) {
+//                                    setParamsFlag = true;
+//                                }
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        if (setParamsFlag) setParameters(inputData);
+//                                        setParamsFlag = false;
+//                                    }
+//                                });
+//                            }
+//                        }).start();
+//                    }
+
+//                } catch (Exception e) {
+//                    try {
+//                        Thread.sleep(1000);
+//                        connectionState = false;
+//                        Thread.currentThread().interrupt();
+//                        if (flagAutoConnect) startCommunication(address, port);
+//                    } catch (InterruptedException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+
+//            }
+//        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//
+//                try {
+//                    socket = new ClientSocket(address, port);
+//                    Thread.sleep(1);
+//                    connectionState = socket.getConnectionState();
+//                    if (!socket.getConnectionState()) throw new Exception();
+//
+//                    while (connectionState) {
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                while (true) {
+//                                    if (sendMessageFlag) {
+//                                        socket.writeLine(message);
+//                                        sendMessageFlag = false;
+//                                        System.out.println("Message sended: " + message);
+//                                    }
+//                                }
+//                            }
+//                        }).start();
+//
+//                        inputData = socket.readLine();
+//                        if (!inputData.equals(null) && !inputData.equals("")) {
+//                            setParamsFlag = true;
+//                        }
+//
+//
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                if (setParamsFlag) setParameters(inputData);
+//                                setParamsFlag = false;
+//                            }
+//                        });
+//                    }
+//                } catch (Exception e) {
+//                    try {
+////                        runOnUiThread(new Runnable() {
+////                            public void run() {
+////                                Toast toast = Toast.makeText(getApplicationContext(), "NO CONNECTION", Toast.LENGTH_SHORT);
+////                                View view = toast.getView();
+////                                //Gets the actual oval background of the Toast then sets the colour filter
+////                                view.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+////                                //Gets the TextView from the Toast so it can be editted
+////                                TextView text = view.findViewById(android.R.id.message);
+////                                text.setTextColor(Color.WHITE);
+////                                toast.setGravity(Gravity.CENTER, 0, 0);
+////                                toast.show();
+////                            }
+////                        });
+//                        connectionState = false;
+//                        inputData = null;
+//                        Thread.sleep(1000);
+//                        Thread.currentThread().interrupt();
+//                        if (flagAutoConnect) startCommunication(address, port);
+//                    } catch (InterruptedException ignored) {
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
-    public void closeCommunication() throws IOException {
-        if (connectionState) {
-//            readLineFlag = false;
+    public void closeCommunication() {
+        try {
             flagAutoConnect = false;
             socket.close();
+            connectionState = false;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -354,6 +482,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void sendMessage(String messageToSend) {
+        System.out.println("Message to send: " + messageToSend);
         message = messageToSend;
         sendMessageFlag = true;
     }

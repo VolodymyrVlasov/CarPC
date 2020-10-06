@@ -49,14 +49,12 @@ public class ClientSocket {
 //        }
     }
 
-    public String readLine() throws IOException {
-//        String message = "";
-//        if (reader.hasNextLine()) {
-//            message = reader.nextLine();
-//        }
-//        String message = "";
-//        message = reader.readLine();
-        return  reader.nextLine();
+    public String readLine() {
+        String message = null;
+        if (reader.hasNextLine()) {
+            message = reader.nextLine();
+        }
+        return  message;
     }
 
     public void setSoTimeout(int secondsTimeout) {

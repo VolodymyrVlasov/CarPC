@@ -27,13 +27,16 @@ public class SpeedometerWidget extends Fragment {
     }
 
     public void updateSpeed(final Integer currentSpeed) {
-        if (speedToSet <= currentSpeed) {
-            speedToSet += 1;
-            speedTextView.setText(String.valueOf(speedToSet));
-        }
-        if (speedToSet > currentSpeed) {
-            speedToSet -= 1;
-            speedTextView.setText(String.valueOf(speedToSet));
-        }
+
+            if (speedToSet <= currentSpeed) {
+                speedToSet += 1;
+                speedTextView.setText(String.valueOf(speedToSet));
+            }
+            if (speedToSet > currentSpeed) {
+                speedToSet -= 1;
+                speedTextView.setText(String.valueOf(speedToSet));
+            }
+
+
     }
 }
