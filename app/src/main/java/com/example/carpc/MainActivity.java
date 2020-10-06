@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                         final Scanner scanner = new Scanner(socket.getInputStream());
                         final PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
-                        /* input stream thread */
+                        /*  input stream thread  */
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
