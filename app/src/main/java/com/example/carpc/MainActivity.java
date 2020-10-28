@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.carpc.instruments.DataBase;
 import com.example.carpc.instruments.DataParser;
 import com.example.carpc.settings.SettingsWidget;
 import com.example.carpc.settings.tabs.TerminalTab;
@@ -21,12 +22,18 @@ import com.example.carpc.widgets.IconStatusRightWidget;
 import com.example.carpc.widgets.SpeedometerWidget;
 import com.example.carpc.widgets.TripManagerWidget;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "myLogs";
@@ -38,7 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private static IconStatusLeftWidget iconStatusLeftWidget;
     private static SettingsWidget settingsWidget;
     private static TerminalTab terminalTab;
-    public static DataParser parser;
+    private static DataParser parser;
+    private DataBase dataBase;
+
     public static Boolean connectionStateFlag = false;
     private Socket socket;
     private androidx.fragment.app.FragmentTransaction fTrans;
@@ -49,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     public static String message;
     private static final String UNSUBSCRIBE = "@a0";
     private static final String SUBSCRIBE = "@a1";
+    TreeMap<String, String> dataBaseValues = new TreeMap<>();
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -60,8 +70,7 @@ public class MainActivity extends AppCompatActivity {
 //        ConnectionTab connectionTab = new ConnectionTab();
 //        address = connectionTab.getServerAddress();
 //        port = connectionTab.getServerPort();
-        address = "192.168.1.7";
-        port = 8000;
+
 
         if (address != null && port > 0) {
             flagAutoConnect = true;
@@ -88,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void initParams() {
         parser = new DataParser();
+        dataBase = new DataBase();
         speedometerWidget = new SpeedometerWidget();
         batteryManagerWidget = new BatteryManagerWidget();
         tripManagerWidget = new TripManagerWidget();
@@ -96,6 +106,13 @@ public class MainActivity extends AppCompatActivity {
         settingsWidget = new SettingsWidget();
         batteryWidget = new BatteryWidget();
         terminalTab = new TerminalTab();
+
+        createFileWithDefaultValues("DATA_BASE.txt");
+
+        dataBaseValues = readDataBase("DATA_BASE.txt");
+
+        address = dataBaseValues.get("IP");
+        port = Integer.parseInt(dataBaseValues.get("PORT"));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -106,6 +123,17 @@ public class MainActivity extends AppCompatActivity {
         List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
         for (Fragment f : fragmentList) {
             fTrans.attach(f);
+        }
+
+        for (Map.Entry<String, String> e : dataBaseValues.entrySet()) {
+            System.out.println(e.getKey() + " - " + e.getValue());
+        }
+
+        dataBaseValues.put("AH", "25252525");
+        writeDataBase("DATA_BASE.txt");
+        readDataBase("DATA_BASE.txt");
+        for (Map.Entry<String, String> e : dataBaseValues.entrySet()) {
+            System.out.println(e.getKey() + " - " + e.getValue());
         }
     }
 
@@ -301,6 +329,83 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void createFileWithDefaultValues(String fileName) {
+
+        Map<String, String> valueList = new TreeMap<>();
+        valueList.put("AH", "15");
+        valueList.put("WH THIS TRIP", "100");
+        valueList.put("WH TOTAL TRIP", "0");
+        valueList.put("WH THIS CHARGE", "2000");
+        valueList.put("AVG CONSUMPTION", "160");
+        valueList.put("AVG SPEED", "0");
+        valueList.put("TRIP SERVICE", "0");
+        valueList.put("IP", "192.168.1.7");
+        valueList.put("PORT", "8000");
+        valueList.put("SSID", "PORSCHE924EV");
+
+
+        File file = new File(MainActivity.this.getFilesDir(), "text");
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        try {
+            File gpxfile = new File(file, fileName);
+            FileWriter writer = new FileWriter(gpxfile);
+
+            for (Map.Entry<String, String> e : valueList.entrySet()) {
+                writer.write(e.getKey() + "," + e.getValue() + "\n");
+            }
+
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void writeDataBase(String dataBaseName) {
+        File file = new File(MainActivity.this.getFilesDir(), "text");
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        try {
+            File gpxfile = new File(file, dataBaseName);
+            FileWriter writer = new FileWriter(gpxfile);
+
+            for (Map.Entry<String, String> e : dataBaseValues.entrySet()) {
+                writer.write(e.getKey() + "," + e.getValue() + "\n");
+            }
+
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private TreeMap readDataBase(String dataBaseName) {
+        Map<String, String> readValueList = new TreeMap<>();
+
+        File path = new File(MainActivity.this.getFilesDir(), "text");
+        if (!path.exists()) {
+            path.mkdir();
+        }
+        File file = new File(path, dataBaseName);
+        try (FileReader fr = new FileReader(file);
+             BufferedReader br = new BufferedReader(fr)) {
+            String st;
+
+            while ((st = br.readLine()) != null) {
+                String[] temp = st.split(",");
+                readValueList.put(temp[0], (temp[1]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return (TreeMap) readValueList;
+    }
+
+
     public void startCommunicationWithNewParams(final String newAddress, final int newPort) {
         address = newAddress;
         port = newPort;
@@ -369,5 +474,4 @@ public class MainActivity extends AppCompatActivity {
         message = messageToSend;
         sendMessageFlag = true;
     }
-
 }
