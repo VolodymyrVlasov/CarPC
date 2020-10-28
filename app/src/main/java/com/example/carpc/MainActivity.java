@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         for (Map.Entry<String, String> e : dataBaseValues.entrySet()) {
             System.out.println(e.getKey() + " - " + e.getValue());
         }
-
+/**/
         dataBaseValues.put("AH", "25252525");
         writeDataBase("DATA_BASE.txt");
         readDataBase("DATA_BASE.txt");
