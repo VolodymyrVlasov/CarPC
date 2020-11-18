@@ -18,19 +18,31 @@
     <string name="ADDRESS">192.168.1.7</string>
     <string name="input_message">Input message</string>
 
-    <string-array name="inputTypesAnalog">
-        <item>AI 0</item>
-        <item>AI 1</item>
-        <item>AI 2</item>
-        <item>AI 3</item>
-        <item>AI 4</item>
-        <item>AI 5</item>
-        <item>AI 6</item>
-        <item>AI 7</item>
-        <item>AI 8</item>
-        <item>AI 9</item>
-        <item>AI 10</item>
-        <item>AI 11</item>
+    <string-array name="configurationGroupList">
+        <item>Levels (BMS)</item>
+        <item>Current</item>
+        <item>Charger</item>
+        <item>Charging</item>
+        <item>Ignition</item>
+        <item>Power</item>
+        <item>Precharge</item>
+        <item>Main contactor</item>
+        <item>Charge Current Max</item>
+        <item>Discharge Current Max</item>
+        <item>Thermostat</item>
+        <item>Temperature Sensor Types</item>
+        <item>Interface</item>
+        <item>Speed</item>
+        <item>RPM</item>
+        <item>Battery</item>
+        <item>Charging temperature</item>
+        <item>Power temperature</item>
+        <item>CAN</item>
+        <item>Accelerator</item>
+        <item>Alarm</item>
+        <item>Flags</item>
+        <item>Buttons</item>
+        <item>Gauge</item>
     </string-array>
 
     <string-array name="inputTypesSpeed">

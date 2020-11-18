@@ -30,6 +30,12 @@
         <item name="strokeColor">@android:color/darker_gray</item>
     </style>
 
+    <style name="mySpinnerItemStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>
 
 
