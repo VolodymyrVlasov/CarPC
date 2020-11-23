@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.carpc.MainActivity;
 import com.example.carpc.R;
 
 public class ConfiguratorTab extends Fragment {
@@ -57,7 +58,7 @@ public class ConfiguratorTab extends Fragment {
     private void createConfigurationFragment(String item) {
         switch (item) {
             case "Levels (BMS)":
-                Toast.makeText(getActivity().getApplicationContext(), item, Toast.LENGTH_SHORT).show();
+                addBMSConfig();
                 break;
             case "Current":
                 break;
@@ -111,6 +112,7 @@ public class ConfiguratorTab extends Fragment {
 
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     private void addBatteryConfig() {
+        configContainer.removeAllViewsInLayout();
         Context context = getActivity().getApplicationContext();
         Drawable myDrawable = null;
         Resources res = getResources();
@@ -129,17 +131,19 @@ public class ConfiguratorTab extends Fragment {
         myLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT));
 
-        myLayout.setBackgroundColor(Color.RED);
-
-
         TextView description = new TextView(context);
         description.setTextColor(Color.GRAY);
-        description.setTextSize(1, 15);
+        description.setTextSize(15);
         description.setText("Set battery capacity (Ah)");
 
-        Button write = new Button(context);
-        Button read = new Button(context);
+        LayoutInflater factory = LayoutInflater.from(context);
+        View btnLayout = factory.inflate(R.layout.read_write_buttons, null);
 
+        myLayout.addView(btnLayout);
+
+        Button write = btnLayout.findViewById(R.id.btn_write);
+        Button read = btnLayout.findViewById(R.id.btn_read);
+/*
         write.setLayoutParams(new LinearLayout.LayoutParams(0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 1));
@@ -169,11 +173,92 @@ public class ConfiguratorTab extends Fragment {
         buttonsLayout.addView(write);
 
         myLayout.addView(description);
-        myLayout.addView(buttonsLayout);
+        myLayout.addView(buttonsLayout);*/
 
         configContainer.addView(myLayout);
 
     }
 
+    @SuppressLint({"ResourceAsColor", "ResourceType"})
+    private void addBMSConfig() {
+        String description = "Lorem ipsum";
 
+
+        configContainer.removeAllViewsInLayout();
+        final Context context = getActivity().getApplicationContext();
+
+        final LinearLayout configLayout = new LinearLayout(context);
+        configLayout.setOrientation(LinearLayout.VERTICAL);
+        configLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
+
+
+
+        LayoutInflater factory = LayoutInflater.from(context);
+        View paramLayout1 = factory.inflate(R.layout.config_line, null);
+        View paramLayout2 = factory.inflate(R.layout.config_line, null);
+        View btnLayout = factory.inflate(R.layout.read_write_buttons, null);
+
+
+        TextView  numParam1 = paramLayout1.findViewById(R.id.parameter_num);
+        TextView  descriptionParam1 = paramLayout1.findViewById(R.id.config_description);
+        TextView  valueParam1 = paramLayout1.findViewById(R.id.config_value);
+
+        TextView  numParam2 = paramLayout2.findViewById(R.id.parameter_num);
+        TextView  descriptionParam2 = paramLayout2.findViewById(R.id.config_description);
+        final TextView  valueParam2 = paramLayout2.findViewById(R.id.config_value);
+
+        numParam2.setText("2");
+        descriptionParam2.setText("Cell quantity");
+
+
+        Button write = btnLayout.findViewById(R.id.btn_write);
+        Button read = btnLayout.findViewById(R.id.btn_read);
+
+/*
+        write.setLayoutParams(new LinearLayout.LayoutParams(0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1));
+        read.setLayoutParams(new LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1));
+
+
+        read.setBackground(myDrawable);
+        read.setTextColor(Color.GRAY);
+
+        write.setBackground(myDrawable);
+        write.setTextColor(Color.GRAY);
+
+        read.setText("READ PARAMS");
+        write.setText("WRITE PARAMS");
+
+
+        LinearLayout buttonsLayout = new LinearLayout(context);
+        buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
+        buttonsLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+        buttonsLayout.setBackgroundColor(Color.GREEN);
+
+        buttonsLayout.addView(read);
+        buttonsLayout.addView(write);
+
+        myLayout.addView(description);
+        myLayout.addView(buttonsLayout);*/
+
+        configLayout.addView(paramLayout1);
+        configLayout.addView(paramLayout2);
+        configLayout.addView(btnLayout);
+        configContainer.addView(configLayout);
+
+        write.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        valueParam2.getText().toString(), Toast.LENGTH_SHORT).show();
+                MainActivity.hideKeyboard(getActivity());
+            }
+        });
+    }
 }
