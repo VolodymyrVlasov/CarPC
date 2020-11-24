@@ -19,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
 
+import java.util.Objects;
+
 public class ConfiguratorTab extends Fragment {
     ScrollView configContainer;
 
@@ -241,9 +243,9 @@ public class ConfiguratorTab extends Fragment {
                         param7 + valueParam7.getText().toString() + "\n" +
                         syncCommand + "\n";
 
-                Toast.makeText(getActivity().getApplicationContext(),
+                Toast.makeText(getContext(),
                         resultCommand[0], Toast.LENGTH_SHORT).show();
-                MainActivity.hideKeyboard(getActivity());
+                MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
             }
         });
     }
@@ -381,18 +383,18 @@ public class ConfiguratorTab extends Fragment {
                         valueParam4.getText().toString() + ":" +
                         valueParam5.getText().toString();
 
-                Toast.makeText(getActivity().getApplicationContext(),
+                Toast.makeText(getContext(),
                         resultCommand[0], Toast.LENGTH_SHORT).show();
-                MainActivity.hideKeyboard(getActivity());
+                MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
             }
         });
 
         read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity().getApplicationContext(),
+                Toast.makeText(getContext(),
                         "TODO this func", Toast.LENGTH_SHORT).show();
-                MainActivity.hideKeyboard(getActivity());
+                MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
             }
         });
     }

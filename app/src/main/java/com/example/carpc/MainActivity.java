@@ -405,7 +405,6 @@ public class MainActivity extends AppCompatActivity {
         return (TreeMap) readValueList;
     }
 
-
     public void startCommunicationWithNewParams(final String newAddress, final int newPort) {
         address = newAddress;
         port = newPort;
