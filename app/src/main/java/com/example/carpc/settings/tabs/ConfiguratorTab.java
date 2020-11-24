@@ -283,7 +283,6 @@ public class ConfiguratorTab extends Fragment {
         final String param3 = "ZERO LEVEL (mv)",
                 defaultValue3 = "2012";
         final String param4 = "AMPER ON VOLT",
-
                 defaultValue4 = "192";
         final String param5 = "MIN FIXED CURRENT",
                 defaultValue5 = "500";
