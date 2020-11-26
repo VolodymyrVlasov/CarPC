@@ -111,10 +111,11 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
     }
 
     public void showNewMessage(String inputData) {
-//        System.out.println("showNewMessage " + inputData);
+        System.out.println("showNewMessage " + inputData);
         if (updateFlag) {
             if (!inputData.equals("")) {
-                receivedMessages.append("\n" + inputData);
+                receivedMessages.append("\n>");
+                receivedMessages.append(inputData);
                 inputDataScrollView.fullScroll(View.FOCUS_DOWN);
             }
         }

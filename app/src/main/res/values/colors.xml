@@ -6,5 +6,6 @@
     <color name="black">#000000</color>
     <color name="materialGreen">#03dac5</color>
     <color name="materialGray">#aaa</color>
+    <color name="materialGrayHint">#374649</color>
 
 </resources>

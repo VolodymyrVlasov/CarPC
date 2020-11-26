@@ -29,8 +29,8 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     private EditText serverAddress, serverPort;
     private TextView myNetworkAddress;
     private Button btnConnect, btnDisconnect;
-    String address = "192.168.1.7";
-    int port = 8000;
+    String address = "192.168.1.90";
+    int port = 8080;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -37,6 +37,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
+            android:backgroundTint="@android:color/darker_gray"
+            android:textColorHint="@color/materialGrayHint"
             android:layout_weight="1"
             android:inputType="numberDecimal"
             android:textAlignment="center"

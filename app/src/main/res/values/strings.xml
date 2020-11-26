@@ -14,8 +14,8 @@
     <string name="ip_address">IP address</string>
     <string name="port">PORT</string>
     <string name="passed">PASSED</string>
-    <string name="PORT">8000</string>
-    <string name="ADDRESS">192.168.1.7</string>
+    <string name="PORT">8080</string>
+    <string name="ADDRESS">192.168.1.90</string>
     <string name="input_message">Input message</string>
 
     <string-array name="configurationGroupList">

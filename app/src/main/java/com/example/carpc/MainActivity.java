@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                                     try {
                                         socket.setSoTimeout(0);
                                         if (scanner.hasNextLine()) {
-                                            inputData = scanner.nextLine();
+                                            inputData = inputData + "\n" + scanner.nextLine();
                                         } else {
                                             setParamsFlag = false;
                                             throw new IOException();
@@ -339,8 +339,8 @@ public class MainActivity extends AppCompatActivity {
         valueList.put("AVG CONSUMPTION", "160");
         valueList.put("AVG SPEED", "0");
         valueList.put("TRIP SERVICE", "0");
-        valueList.put("IP", "192.168.1.7");
-        valueList.put("PORT", "8000");
+        valueList.put("IP", "192.168.1.90");
+        valueList.put("PORT", "8080");
         valueList.put("SSID", "PORSCHE924EV");
 
 
@@ -413,6 +413,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void setParameters(String inputData) throws NullPointerException {
+        System.out.println(">>>>>>>>>>>>>>>> " + inputData);
         parser.parseInputData(inputData);
 
         if (settingsWidget.isVisible() && TerminalTab.updateFlag) {

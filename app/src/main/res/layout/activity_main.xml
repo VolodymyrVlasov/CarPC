@@ -18,7 +18,7 @@
             android:background="@android:color/transparent"
             android:onClick="onClick"
             android:text="@string/btnSettingsScreen"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/materialGrayHint"
             tools:ignore="MissingConstraints" />
 
         <Button
@@ -29,7 +29,7 @@
             android:background="@android:color/transparent"
             android:onClick="onClick"
             android:text="@string/btnChargeScreen"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/materialGrayHint"
             tools:ignore="MissingConstraints" />
 
         <Button
@@ -40,7 +40,7 @@
             android:background="@android:color/transparent"
             android:onClick="onClick"
             android:text="@string/btnDashboardScreen"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/materialGrayHint"
             tools:ignore="MissingConstraints" />
 
     </LinearLayout>
