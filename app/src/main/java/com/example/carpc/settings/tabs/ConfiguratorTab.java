@@ -414,7 +414,6 @@ public class ConfiguratorTab extends Fragment {
                     e.printStackTrace();
                 }
                 MainActivity.sendMessage("current");
-                //MainActivity.sendMessage("current");
                 String currentConfig = parser.getCurrentConfig();
 
                 Toast.makeText(getContext(),
