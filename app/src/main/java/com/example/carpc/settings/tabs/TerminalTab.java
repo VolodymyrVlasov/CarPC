@@ -91,11 +91,13 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
                 if (!temp.equals("")) {
                     sendMessage(message.getText().toString());
                 }
+                message.setText("");
                 Toast.makeText(getContext(), "Button SEND clicked", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnClearTermTab:
                 receivedMessages.setText("");
                 transceiverMessages.setText("");
+                message.setText("");
                 Toast.makeText(getContext(), "Button CLEAR clicked", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnSubscribe:
@@ -111,7 +113,8 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
     }
 
     public void showNewMessage(String inputData) {
-        System.out.println("showNewMessage " + inputData);
+        //System.out.println("showNewMessage " + inputData);
+
         if (updateFlag) {
             if (!inputData.equals("")) {
                 receivedMessages.append("\n>");

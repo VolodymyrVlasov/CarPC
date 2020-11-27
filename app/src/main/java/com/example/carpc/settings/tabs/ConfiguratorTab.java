@@ -2,6 +2,7 @@ package com.example.carpc.settings.tabs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +19,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
+import com.example.carpc.instruments.DataParser;
 
 import java.util.Objects;
 
 public class ConfiguratorTab extends Fragment {
     ScrollView configContainer;
+    DataParser parser = (DataParser) MainActivity.getParser();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,7 +112,6 @@ public class ConfiguratorTab extends Fragment {
                 break;
         }
     }
-
 
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     private void addBMSConfig() {
@@ -256,26 +258,26 @@ public class ConfiguratorTab extends Fragment {
                 "To configure you need to use the terminal on the next tab";
         String description2 =
                 "1. INP TYPE:\n" +
-                "   0 — Undefined\n" +
-                "   1 — ADC\n" +
-                "   2 — USART\n" +
-                "   3 — RS485\n" +
+                        "   0 — Undefined\n" +
+                        "   1 — ADC\n" +
+                        "   2 — USART\n" +
+                        "   3 — RS485\n" +
 
-                "\n2. INP NUMBER\n" +
-                "for ADC only, else - 0\n" +
+                        "\n2. INP NUMBER\n" +
+                        "for ADC only, else - 0\n" +
 
-                "\n3. ZERO LEVEL\n" +
-                "   The value corresponding to zero current. Less is negative current. More is positive.\n" +
-                "   For a USART input, this is the ADC value. It can be recognized by the diag / current command. In brackets is the value of the ADC.\n" +
+                        "\n3. ZERO LEVEL\n" +
+                        "   The value corresponding to zero current. Less is negative current. More is positive.\n" +
+                        "   For a USART input, this is the ADC value. It can be recognized by the diag / current command. In brackets is the value of the ADC.\n" +
 
-                "\n4. AMPER ON VOLT\n" +
-                "   For ADC input, this is the multiplier of the transducer output voltage to current conversion. For example, we know that a 10 milliVolt (0.01 volt) change in voltage at the sensor output corresponds to a current of 1 Ampere. So the value of this parameter is equal to sts (1 / 0.01 = 100).\n" +
-                "   For USART and RS485 input, this is the M multiplier in the formula C = M * Adc. ADC capacity (Adc) - 4096. If the sensor measures current from -400 to + 400A, we get a range of 800A. 800/4096 = 0.195. Those. 195 mA per ADC unit. Considering that the return value in milliAmperes, this parameter is 195.\n" +
+                        "\n4. AMPER ON VOLT\n" +
+                        "   For ADC input, this is the multiplier of the transducer output voltage to current conversion. For example, we know that a 10 milliVolt (0.01 volt) change in voltage at the sensor output corresponds to a current of 1 Ampere. So the value of this parameter is equal to sts (1 / 0.01 = 100).\n" +
+                        "   For USART and RS485 input, this is the M multiplier in the formula C = M * Adc. ADC capacity (Adc) - 4096. If the sensor measures current from -400 to + 400A, we get a range of 800A. 800/4096 = 0.195. Those. 195 mA per ADC unit. Considering that the return value in milliAmperes, this parameter is 195.\n" +
 
-                "5. MIN FIXED CURRENT\n" +
-                "    Current value in milliAmperes. The minimum current value that is taken into account. For example, the current less than 1 ampere is not taken into account due to the sensor error. Temperature drift of the used electronic components leads to the fact that in the absence of real current, the device will \\\"catch\\\" a current of 0.5A or -0.7A. With a measured range of currents from -200A to + 200A, the minimum current in 1A will be 0.5%. Which matches the accuracy of most measuring instruments. The value is always rounded up to 100mA. The max parameter value is 25000mA.";
+                        "\n5. MIN FIXED CURRENT\n" +
+                        "    Current value in milliAmperes. The minimum current value that is taken into account. For example, the current less than 1 ampere is not taken into account due to the sensor error. Temperature drift of the used electronic components leads to the fact that in the absence of real current, the device will \\\"catch\\\" a current of 0.5A or -0.7A. With a measured range of currents from -200A to + 200A, the minimum current in 1A will be 0.5%. Which matches the accuracy of most measuring instruments. The value is always rounded up to 100mA. The max parameter value is 25000mA.";
 
-        final String commandName = "current ";
+        final String commandName = "current";
         final String param1 = "INP TYPE:",
                 defaultValue1 = "2";
         final String param2 = "INP NUMBER",
@@ -352,7 +354,6 @@ public class ConfiguratorTab extends Fragment {
 
         groupDescription.setText(description);
 
-
         numParam1.setText("1");
         numParam2.setText("2");
         numParam3.setText("3");
@@ -371,12 +372,14 @@ public class ConfiguratorTab extends Fragment {
         valueParam4.setHint(defaultValue4);
         valueParam5.setHint(defaultValue5);
 
+        configDescription.setTextColor(Color.argb(255, 90, 90, 90));
         configDescription.setText(description2);
 
         write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resultCommand[0] = commandName +
+
+                resultCommand[0] = commandName + " " +
                         valueParam1.getText().toString() + ":" +
                         valueParam2.getText().toString() + ":" +
                         valueParam3.getText().toString() + ":" +
@@ -386,15 +389,47 @@ public class ConfiguratorTab extends Fragment {
                 Toast.makeText(getContext(),
                         resultCommand[0], Toast.LENGTH_SHORT).show();
                 MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
+
+                MainActivity.sendMessage("..");
+                MainActivity.sendMessage("config");
+                MainActivity.sendMessage(resultCommand[0]);
+
             }
         });
 
         read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                MainActivity.sendMessage("..");
+                try {
+                    Thread.currentThread().sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                MainActivity.sendMessage("config");
+                try {
+                    Thread.currentThread().sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                MainActivity.sendMessage("current");
+                //MainActivity.sendMessage("current");
+                String currentConfig = parser.getCurrentConfig();
+
                 Toast.makeText(getContext(),
-                        "TODO this func", Toast.LENGTH_SHORT).show();
+                        currentConfig, Toast.LENGTH_SHORT).show();
                 MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
+                if (!currentConfig.equals("Please try again")) {
+                    String[] arrVal = currentConfig.split(commandName);
+                    currentConfig = arrVal[1];
+                    String[] arr = currentConfig.split(":");
+                    valueParam1.setText(arr[0].substring(3));
+                    valueParam2.setText(arr[1]);
+                    valueParam3.setText(arr[2]);
+                    valueParam4.setText(arr[3]);
+                    valueParam5.setText(arr[4]);
+                }
             }
         });
     }

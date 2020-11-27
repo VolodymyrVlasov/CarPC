@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                                     try {
                                         socket.setSoTimeout(0);
                                         if (scanner.hasNextLine()) {
-                                            inputData = inputData + "\n" + scanner.nextLine();
+                                            inputData = scanner.nextLine();
                                         } else {
                                             setParamsFlag = false;
                                             throw new IOException();
@@ -275,7 +275,8 @@ public class MainActivity extends AppCompatActivity {
                                 while (connectionState) {
                                     try {
                                         if (sendMessageFlag) {
-                                            writer.println(message);
+                                            System.out.println("Message to send: " + message);
+                                                    writer.println(message);
                                             sendMessageFlag = false;
                                         }
                                         Thread.sleep(2);
@@ -362,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private void writeDataBase(String dataBaseName) {
         File file = new File(MainActivity.this.getFilesDir(), "text");
         if (!file.exists()) {
@@ -469,9 +471,13 @@ public class MainActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static void sendMessage(String messageToSend) {
-        System.out.println("Message to send: " + messageToSend);
+    public static synchronized void sendMessage(String messageToSend) {
+        //System.out.println("Message to send: " + messageToSend);
         message = messageToSend;
         sendMessageFlag = true;
+    }
+
+    public static DataParser getParser() {
+        return parser;
     }
 }

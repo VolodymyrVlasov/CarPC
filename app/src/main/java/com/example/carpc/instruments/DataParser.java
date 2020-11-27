@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class DataParser {
 
+
     public static String inputData;
 
     private static HashMap<String, Double> valueArray = new HashMap<>();
@@ -13,7 +14,9 @@ public class DataParser {
     private static HashMap<String, String> valueTempSensorArray = new HashMap<>();
     private static HashMap<String, String> cellInfo = new HashMap<>();
 
-    private static Boolean analogInputFlag = false,  tempSensorFlag = false, capacityFlag = false;
+    private static Boolean analogInputFlag = false, tempSensorFlag = false, capacityFlag = false;
+
+    private String currentConfig = "Please try again";
 
 
     public DataParser() {
@@ -29,7 +32,14 @@ public class DataParser {
     }
 
     public void parseInputData(String inputData) throws NullPointerException {
+        System.out.println("Received message:" + inputData);
+        if (inputData.contains("current")) {
+
+            System.out.println("????????parseInputData:" );
+        }
+
         try {
+
             if (inputData.substring(1, 2).equals("m") || inputData.substring(1, 2).equals("n")) {
                 //SET FLAGS
                 analogInputFlag = false;
@@ -52,8 +62,10 @@ public class DataParser {
                 analogInputFlag = false;
                 cellInfo.put(inputData.substring(1, 2),
                         inputData.substring(3));
-            } else if (inputData.substring(1,3).equals("l")) {
+            } else if (inputData.substring(1, 3).equals("l")) {
                 capacityFlag = true;
+            } else if (inputData.contains("current")) {
+                currentConfig = inputData;
             }
             if (!inputData.substring(1, 2).equals("q") &&
                     !inputData.substring(1, 3).equals("t:") &&
@@ -71,8 +83,8 @@ public class DataParser {
         }
     }
 
-    public static String getInputMessage () {
-        return  inputData != null ? inputData : ">";
+    public static String getInputMessage() {
+        return inputData != null ? inputData : ">";
     }
 
     public Integer getSpeed() {
@@ -177,6 +189,10 @@ public class DataParser {
 
     public Boolean isCapacityChanged() {
         return capacityFlag;
+    }
+
+    public String getCurrentConfig() {
+        return currentConfig;
     }
 
 }

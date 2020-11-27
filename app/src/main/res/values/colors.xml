@@ -5,7 +5,7 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="black">#000000</color>
     <color name="materialGreen">#03dac5</color>
-    <color name="materialGray">#aaa</color>
-    <color name="materialGrayHint">#374649</color>
+    <color name="materialGray">#aaaaaa</color>
+    <color name="materialGrayHint">#5a5a5a</color>
 
 </resources>
