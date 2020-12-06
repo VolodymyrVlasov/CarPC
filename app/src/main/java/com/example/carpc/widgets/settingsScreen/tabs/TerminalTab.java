@@ -1,4 +1,4 @@
-package com.example.carpc.settings.tabs;
+package com.example.carpc.widgets.settingsScreen.tabs;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -28,6 +28,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
     EditText message;
     Button btnSend, btnClear, btnSubscribe, btnUnsubscribe;
     public static boolean updateFlag = false;
+    StringBuilder temp = new StringBuilder();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,7 +38,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         outputDataScrollView = v.findViewById(R.id.outputDataScrollView);
 
         receivedMessages = v.findViewById(R.id.inputMessages);
-        receivedMessages.setLines(20);
+
         transceiverMessages = v.findViewById(R.id.outputMessages);
         transceiverMessages.setLines(3);
         message = v.findViewById(R.id.myMessage);
@@ -47,6 +48,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         btnUnsubscribe = v.findViewById(R.id.btnUnsubscribe);
         setRetainInstance(true);
         System.out.println("Create TERMINAL TAB");
+
         return v;
     }
 
@@ -65,13 +67,6 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         updateFlag = true;
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
     }
 
     @Override
@@ -107,26 +102,20 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
             case R.id.btnUnsubscribe:
                 sendMessage("@a0");
                 break;
-            default:
-                break;
         }
     }
 
     public void showNewMessage(String inputData) {
-        //System.out.println("showNewMessage " + inputData);
-
-        if (updateFlag) {
-            if (!inputData.equals("")) {
-                receivedMessages.append("\n>");
-                receivedMessages.append(inputData);
-                inputDataScrollView.fullScroll(View.FOCUS_DOWN);
-            }
+        if (!inputData.equals("")) {
+            receivedMessages.setLines(15);
+            receivedMessages.setText(inputData + "\n");
         }
+        inputDataScrollView.fullScroll(View.FOCUS_DOWN);
     }
 
     private void sendMessage(String message) {
-        transceiverMessages.append("\n" + this.message.getText().toString());
-        outputDataScrollView.fullScroll(View.FOCUS_DOWN);
-        MainActivity.sendMessage(message);
+//        transceiverMessages.append(this.message.getText().toString() + "\n");
+//        outputDataScrollView.fullScroll(View.FOCUS_DOWN);
+//        MainActivity.sendMessage(message);
     }
 }

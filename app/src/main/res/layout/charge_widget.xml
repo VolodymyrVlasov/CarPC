@@ -3,15 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".widgets.settingsScreen.tabs.UITab">
+    android:background="@android:color/transparent"
+    tools:context=".widgets.chargeScreen.ChargeWidget">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/materialGreen"
-        android:textSize="50sp"
         android:textAlignment="center"
-        android:text="UI TAB" />
+        android:textSize="50sp"
+        android:textColor="@color/materialGreen"
+        android:text="CHARGE WIDGET" />
 
 </FrameLayout>

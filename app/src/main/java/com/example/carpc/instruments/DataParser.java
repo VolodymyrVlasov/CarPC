@@ -1,5 +1,7 @@
 package com.example.carpc.instruments;
 
+import android.util.Log;
+
 import java.util.HashMap;
 
 public class DataParser {
@@ -16,7 +18,8 @@ public class DataParser {
 
     private static Boolean analogInputFlag = false, tempSensorFlag = false, capacityFlag = false;
 
-    private String currentConfig = "Please try again";
+    private String[] currentConfig = {"Please try again", "Please try again"};
+    private String levelsMax, levelsMin, levelsStartbal, levelsBal, levelsChrgd, levelsAllowd, levelsCmin;
 
 
     public DataParser() {
@@ -32,40 +35,74 @@ public class DataParser {
     }
 
     public void parseInputData(String inputData) throws NullPointerException {
-        System.out.println("Received message:" + inputData);
-        if (inputData.contains("current")) {
-
-            System.out.println("????????parseInputData:" );
-        }
-
         try {
-
             if (inputData.substring(1, 2).equals("m") || inputData.substring(1, 2).equals("n")) {
                 //SET FLAGS
                 analogInputFlag = false;
                 //PUT NEW DATA
-                valueMinMaxCellArray.put(inputData.substring(1, 2),
-                        inputData.substring(2));
-            } else if (inputData.substring(1, 2).equals("w") || inputData.substring(1, 2).equals("z")) {
+                valueMinMaxCellArray.put(inputData.substring(1, 2), inputData.substring(2));
+            }
+            if (inputData.substring(1, 2).equals("w") || inputData.substring(1, 2).equals("z")) {
                 analogInputFlag = false;
                 valueMinMaxCellTempArray.put(inputData.substring(1, 2),
                         inputData.substring(2));
-            } else if (inputData.substring(1, 3).equals("i:")) {
+            }
+            if (inputData.substring(1, 3).equals("i:")) {
                 analogInputFlag = true;
                 valueAnalogInputsArray.put(inputData.substring(1, 2),
                         inputData.substring(3));
-            } else if (inputData.substring(1, 3).equals("t:")) {
+            }
+            if (inputData.substring(1, 3).equals("t:")) {
                 analogInputFlag = false;
                 valueTempSensorArray.put(inputData.substring(1, 2),
                         inputData.substring(3));
-            } else if (inputData.substring(1, 3).equals("q")) {
+            }
+            if (inputData.substring(1, 3).equals("q")) {
                 analogInputFlag = false;
                 cellInfo.put(inputData.substring(1, 2),
                         inputData.substring(3));
-            } else if (inputData.substring(1, 3).equals("l")) {
+            }
+            if (inputData.substring(1, 3).equals("l")) {
                 capacityFlag = true;
-            } else if (inputData.contains("current")) {
-                currentConfig = inputData;
+            }
+            if (inputData.contains("current")) {
+                currentConfig = inputData.split("current");
+            }
+            if (inputData.contains("cmi")) {
+                levelsCmin = inputData.substring(10);
+                levelsCmin = levelsCmin.replaceAll("cmin = ", "").trim();
+                Log.i("dataParser", "parsed levelsCmin " + levelsCmin);
+                inputData = null;
+            }
+            if (inputData.contains("max")) {
+                levelsMax = inputData.substring(10);
+                levelsMax = levelsMax.replaceAll("max = ", "").trim();
+                Log.i("dataParser", "parsed levelsMax " + levelsMax);
+            }
+            if (inputData.contains("in")) {
+                levelsMin = inputData.substring(10);
+                levelsMin = levelsMin.replaceAll("min = ", "").trim();
+                Log.i("dataParser", "parsed levelsMin " + levelsMin);
+            }
+            if (inputData.contains("startbal")) {
+                levelsStartbal = inputData.substring(10);
+                levelsStartbal = levelsStartbal.replaceAll("startbal = ", "").trim();
+                Log.i("dataParser", "parsed levelsStartbal " + levelsStartbal);
+            }
+            if (inputData.contains("bal")) {
+                levelsBal = inputData.substring(10);
+                levelsBal = levelsBal.replaceAll("bal = ", "").trim();
+                Log.i("dataParser", "parsed levelsBal " + levelsBal);
+            }
+            if (inputData.contains("chrgd")) {
+                levelsChrgd = inputData.substring(10);
+                levelsChrgd = levelsChrgd.replaceAll("chrgd = ", "").trim();
+                Log.i("dataParser", "parsed levelsChrgd " + levelsChrgd);
+            }
+            if (inputData.contains("allowd")) {
+                levelsAllowd = inputData.substring(10);
+                levelsAllowd = levelsAllowd.replaceAll("allowd = ", "").trim();
+                Log.i("dataParser", "parsed levelsAllowd " + levelsAllowd);
             }
             if (!inputData.substring(1, 2).equals("q") &&
                     !inputData.substring(1, 3).equals("t:") &&
@@ -192,7 +229,48 @@ public class DataParser {
     }
 
     public String getCurrentConfig() {
-        return currentConfig;
+        if (currentConfig[1].contains("try")) {
+            currentConfig[1] = currentConfig[0];
+        } else {
+            currentConfig[1] = currentConfig[1].substring(3);
+        }
+        Log.i("dataParser", "DATAPARSER -> GETCURRENGCONFIG -> currentConfig[1]: " + currentConfig[1]);
+        return currentConfig[1];
+    }
+
+    public String getLevelsMax() {
+//        levelsMax = "4200";
+        return levelsMax;
+    }
+
+    public String getLevelsMin() {
+//        levelsMin = "3000";
+        return levelsMin;
+    }
+
+    public String getLevelsStartbal() {
+//        levelsStartbal = "4100";
+        return levelsStartbal;
+    }
+
+    public String getLevelsBal() {
+//        levelsBal = "4180";
+        return levelsBal;
+    }
+
+    public String getLevelsChrgd() {
+//        levelsChrgd = "4150";
+        return levelsChrgd;
+    }
+
+    public String getLevelsAllowd() {
+//        levelsAllowd = "2850";
+        return levelsAllowd;
+    }
+
+    public String getLevelsCmin() {
+//        levelsCmin = "2700";
+        return levelsCmin;
     }
 
 }

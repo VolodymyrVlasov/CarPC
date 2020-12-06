@@ -1,4 +1,4 @@
-package com.example.carpc.widgets;
+package com.example.carpc.widgets.dashboardScreen.tabs;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

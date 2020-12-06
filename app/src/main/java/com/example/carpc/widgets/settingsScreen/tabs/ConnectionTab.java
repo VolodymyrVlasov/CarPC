@@ -1,6 +1,7 @@
-package com.example.carpc.settings.tabs;
+package com.example.carpc.widgets.settingsScreen.tabs;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.wifi.WifiInfo;
@@ -22,15 +23,22 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
+import com.example.carpc.instruments.ClientSocket;
+import com.example.carpc.widgets.settingsScreen.SettingsWidget;
 
-import java.io.IOException;
+import java.util.Objects;
 
 public class ConnectionTab extends Fragment implements View.OnClickListener {
     private EditText serverAddress, serverPort;
     private TextView myNetworkAddress;
+    private ClientSocket socket;
     private Button btnConnect, btnDisconnect;
     String address = "192.168.1.90";
     int port = 8080;
+
+    public ConnectionTab(ClientSocket socket) {
+        this.socket = socket;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,9 +49,9 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         myNetworkAddress = v.findViewById(R.id.my_server_address);
         btnConnect = v.findViewById(R.id.btnConnect);
         btnDisconnect = v.findViewById(R.id.btnDisconnect);
-        address = serverAddress.getText().toString();
-        port = Integer.parseInt(serverPort.getText().toString());
-        if (MainActivity.getConnectionState()) {
+
+
+        if (socket.getConnectionState()) {
             WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInf = wifiMan.getConnectionInfo();
             int ipAddress = wifiInf.getIpAddress();
@@ -78,20 +86,15 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnConnect:
-                try {
-                    updateConnectionParams();
-                    setConnectionStateIndicator();
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
-                }
+                address = serverAddress.getText().toString();
+                port = Integer.parseInt(serverPort.getText().toString());
+                updateConnectionParams(address, port);
+                setConnectionStateIndicator();
+                MainActivity.hideKeyboard((Activity) Objects.requireNonNull(getContext()));
                 break;
             case R.id.btnDisconnect:
-                try {
-                    closeConnection();
-                    setConnectionStateIndicator();
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
-                }
+                socket.disconnect();
+                setConnectionStateIndicator();
                 break;
             default:
                 break;
@@ -106,16 +109,9 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         return port;
     }
 
-
-    public void updateConnectionParams() throws IOException, InterruptedException {
-        //((MainActivity) (getActivity())).closeCommunication();
-        ((MainActivity) (getActivity())).startCommunicationWithNewParams(
-                serverAddress.getText().toString(),
-                Integer.parseInt(serverPort.getText().toString()));
-    }
-
-    public void closeConnection() throws IOException, InterruptedException {
-        ((MainActivity) getActivity()).closeCommunication();
+    public void updateConnectionParams(String ip, int port) {
+       // socket.disconnect();
+        socket =  new ClientSocket(ip, port, MainActivity.getParser());
     }
 
     public void setConnectionStateIndicator() {
@@ -124,7 +120,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
 
         while (flag) {
             if (SystemClock.uptimeMillis() >= time + 200) {
-                if (MainActivity.getConnectionState()) {
+                if (socket.getConnectionState()) {
                     btnConnect.setTextColor(Color.argb(255, 3, 218, 197));
                     btnConnect.setBackground(ResourcesCompat.getDrawable(getResources(),
                             R.drawable.transparent_bg_bordered_button_active, null));

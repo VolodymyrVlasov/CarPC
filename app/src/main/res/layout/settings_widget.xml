@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@android:color/transparent"
-    tools:context=".settings.SettingsWidget">
+    tools:context=".widgets.settingsScreen.SettingsWidget">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"

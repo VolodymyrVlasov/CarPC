@@ -1,98 +1,122 @@
 package com.example.carpc.instruments;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import android.util.Log;
+
+import java.io.Closeable;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketException;
+import java.util.Objects;
 import java.util.Scanner;
 
-public class ClientSocket {
-    //    public class ClientSocket implements Closeable {
+public class ClientSocket implements Closeable {
     private Socket socket;
-    //    private BufferedReader reader;
-//    private BufferedWriter writer;
-    private Scanner reader;
-    PrintWriter writer;
-    public volatile boolean connectionState;
-    int timeout = 2 * 1000; //ms * 1000
+    private Scanner scanner;
+    private PrintWriter printWriter;
+    private boolean connectionState = false;
+    private boolean reconnect = true;
+    private String inputMessage;
+    private final String TAG = "SOCKET";
+    private static DataParser dataParser;
 
-    public ClientSocket(String ip, int port) {
+    public ClientSocket(final String address, final int port, final DataParser parser) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    System.out.println("run ClientSocket constuctor");
+                    socket = new Socket();
+                    socket.connect(new InetSocketAddress(address, port), 500);
+                    scanner = new Scanner(socket.getInputStream());
+                    dataParser = parser;
+                    System.out.println("connected");
+                    connectionState = true;
+                    Log.i(TAG, "> connection state: " + connectionState);
+                    readInputStream();
+                    sendMessage("@a1");
+                } catch (IOException e) {
+                    connectionState = false;
+                    Log.i(TAG, "> connection state: " + connectionState);
+                    Log.i(TAG, e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+
+    /*  input stream thread  */
+    private void readInputStream() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (connectionState) {
+                    try {
+                        socket.setSoTimeout(0);
+                        if (scanner.hasNextLine()) {
+                            inputMessage = scanner.nextLine();
+                            dataParser.parseInputData(inputMessage);
+                            Log.i(TAG, inputMessage);
+                        }
+                    } catch (Exception e) {
+                        connectionState = false;
+                        Log.i(TAG, Objects.requireNonNull(e.getMessage()));
+                        e.printStackTrace();
+                    }
+                }
+                Log.i(TAG, "> connection state: " + connectionState + "\n" +
+                        "connectionState false -> interrupt input stream Thread");
+                if (!connectionState) Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
+
+    /*  output stream thread  */
+    public void sendMessage(final String message) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    printWriter = new PrintWriter(socket.getOutputStream(), true);
+                    printWriter.println(message);
+                    Log.i(TAG, "OUT: " + message);
+                    Thread.sleep(1);
+                    if (!connectionState) Thread.currentThread().interrupt();
+                } catch (Exception e) {
+                    connectionState = false;
+                    Log.i(TAG, Objects.requireNonNull(e.getMessage()));
+                    e.printStackTrace();
+                    Log.i(TAG, "> connection state: " + connectionState + "\n" +
+                            "connectionState false -> interrupt output stream Thread");
+                    if (!connectionState) Thread.currentThread().interrupt();
+                }
+            }
+        }).start();
+    }
+
+    public void disconnect() {
         try {
-            socket = new Socket();
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Connect to " + ip + ":" + port);
-            socket.connect(new InetSocketAddress(ip, port), timeout);
-            connectionState = true;
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Connected");
-            reader = new Scanner(socket.getInputStream());
-            writer = new PrintWriter(socket.getOutputStream(), true);
-//            reader = createReader();
-//            writer = createWriter();
+            reconnect = false;
+            close();
         } catch (IOException e) {
-            e.printStackTrace();
-            connectionState = false;
-        }
-    }
-
-    public void writeLine(String message) {
-        writer.println(message);
-//        try {
-//            writer.write(message);
-//                       writer.flush();
-//        } catch (IOException e) {
-//            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ClientSocket.writeLine - IOException");
-//            connectionState = false;
-//        }
-    }
-
-    public String readLine() {
-        String message = null;
-        if (reader.hasNextLine()) {
-            message = reader.nextLine();
-        }
-        return  message;
-    }
-
-    public void setSoTimeout(int secondsTimeout) {
-        try {
-            this.socket.setSoTimeout(secondsTimeout * 1000);
-        } catch (SocketException e) {
+            Log.i(TAG, Objects.requireNonNull(e.getMessage()));
             e.printStackTrace();
         }
     }
 
-    public Boolean isOutputShutdown() {
-        return socket.isOutputShutdown();
-    }
-
-    public Boolean isInputShutdown() {
-        return socket.isInputShutdown();
-    }
-
-    private BufferedWriter createWriter() throws IOException {
-        return new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-    }
-
-    private BufferedReader createReader() throws IOException {
-        return new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    public String readMessage() {
+        return inputMessage;
     }
 
     public boolean getConnectionState() {
         return connectionState;
     }
 
+    @Override
     public void close() throws IOException {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ClientSocket.close()");
+        if (socket != null) socket.close();
+        if (printWriter != null) printWriter.close();
         connectionState = false;
-        writer.close();
-        reader.close();
-        socket.close();
-        Thread.currentThread().interrupt();
     }
-
-
 }

@@ -7,7 +7,7 @@
     android:background="@android:color/transparent"
     android:orientation="vertical"
     android:paddingHorizontal="15dp"
-    tools:context=".settings.tabs.ConnectionTab">
+    tools:context=".widgets.settingsScreen.tabs.ConnectionTab">
 
     <ScrollView
         android:layout_width="match_parent"

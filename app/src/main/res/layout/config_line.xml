@@ -23,7 +23,7 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/config_description"
+            android:id="@+id/config_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="7dp"

@@ -5,45 +5,6 @@
     android:id="@+id/LinearLayout1"
     style="@style/ParentLayout">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnSettings"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:onClick="onClick"
-            android:text="@string/btnSettingsScreen"
-            android:textColor="@android:color/darker_gray"
-            tools:ignore="MissingConstraints" />
-
-        <Button
-            android:id="@+id/btnCharge"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:onClick="onClick"
-            android:text="@string/btnChargeScreen"
-            android:textColor="@android:color/darker_gray"
-            tools:ignore="MissingConstraints" />
-
-        <Button
-            android:id="@+id/btnDashboard"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:onClick="onClick"
-            android:text="@string/btnDashboardScreen"
-            android:textColor="@android:color/darker_gray"
-            tools:ignore="MissingConstraints" />
-    </LinearLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frgmCont"
         android:layout_width="match_parent"
@@ -60,7 +21,7 @@
             tools:ignore="MissingConstraints">
 
             <FrameLayout
-                android:id="@+id/leftUpCont"
+                android:id="@+id/dashboardLeftUpCont"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -74,7 +35,7 @@
                 android:orientation="vertical" />
 
             <FrameLayout
-                android:id="@+id/rightUpCont"
+                android:id="@+id/dashboardRightUpCont"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -89,21 +50,21 @@
             app:layout_constraintTop_toBottomOf="@+id/top_panel">
 
             <FrameLayout
-                android:id="@+id/leftCont"
+                android:id="@+id/dashboardLeftCont"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical" />
 
             <FrameLayout
-                android:id="@+id/centerCont"
+                android:id="@+id/dashboardCenterCont"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.2"
                 android:orientation="vertical" />
 
             <FrameLayout
-                android:id="@+id/rightCont"
+                android:id="@+id/dashboardRightCont"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -118,7 +79,7 @@
             app:layout_constraintTop_toBottomOf="@+id/center_panel">
 
             <FrameLayout
-                android:id="@+id/bottomLeftCont"
+                android:id="@+id/dashboardBottomLeftCont"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -132,7 +93,7 @@
                 android:orientation="vertical" />
 
             <FrameLayout
-                android:id="@+id/bottomRightCont"
+                android:id="@+id/dashboardBottomRightCont"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

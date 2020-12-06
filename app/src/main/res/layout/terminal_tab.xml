@@ -6,7 +6,7 @@
     android:background="@android:color/transparent"
     android:orientation="vertical"
     android:paddingHorizontal="15dp"
-    tools:context=".settings.tabs.TerminalTab">
+    tools:context=".widgets.settingsScreen.tabs.TerminalTab">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="480dp"
             android:background="@android:color/transparent"
             android:orientation="vertical">
 
@@ -29,7 +29,7 @@
                 android:layout_marginTop="7dp"
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
-                android:layout_weight="4"
+                android:layout_weight="5"
                 android:background="@drawable/transparent_bg_bordered_button"
                 android:orientation="horizontal">
 
@@ -82,7 +82,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="7dp"
-                        android:text="outputData"
                         android:textColor="@android:color/darker_gray"
                         android:textSize="15sp" />
 
