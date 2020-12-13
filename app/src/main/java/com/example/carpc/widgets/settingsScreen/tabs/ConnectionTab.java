@@ -35,9 +35,9 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     private int port;
     private DataBase dataBase;
 
-    public ConnectionTab(ClientSocket socket, DataBase dataBase) {
+    public ConnectionTab(ClientSocket socket) {
         this.socket = socket;
-        this.dataBase = dataBase;
+        this.dataBase = MainActivity.getDataBase();
         port = dataBase.getPort();
         address = dataBase.getIP();
     }
@@ -85,9 +85,6 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
                 updateConnectionParams(
                         address = serverAddress.getText().toString(),
                         port = Integer.parseInt(serverPort.getText().toString()));
-                dataBase.setPort(port);
-                dataBase.setIP(address);
-                setConnectionStateIndicator();
                 MainActivity.hideKeyboard((Activity) Objects.requireNonNull(getContext()));
                 break;
             case R.id.btnDisconnect:
@@ -106,7 +103,10 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     }
 
     public void updateConnectionParams(String ip, int port) {
+        dataBase.setPort(port);
+        dataBase.setIP(ip);
         socket = new ClientSocket(ip, port, MainActivity.getParser(), false);
+        setConnectionStateIndicator();
     }
 
     public void setConnectionStateIndicator() {

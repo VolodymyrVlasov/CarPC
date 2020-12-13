@@ -33,7 +33,7 @@ public class SettingsWidget extends Fragment {
         viewPager = v.findViewById(R.id.viewpager);
         tabLayout = v.findViewById(R.id.tabs);
         dataBase = MainActivity.getDataBase();
-        connectWithNewParam(dataBase.getIP(), dataBase.getPort());
+        connect(dataBase.getIP(), dataBase.getPort());
         setRetainInstance(true);
         return v;
     }
@@ -60,14 +60,14 @@ public class SettingsWidget extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(new ConnectionTab(socket, dataBase), "CONNECTION");
+        viewPagerAdapter.addFragment(new ConnectionTab(socket), "CONNECTION");
         viewPagerAdapter.addFragment(new ConfiguratorTab(socket, MainActivity.getParser()), "CONFIGURATOR");
         viewPagerAdapter.addFragment(new TerminalTab(socket), "TERMINAL");
         viewPagerAdapter.addFragment(new UITab(), "UI");
         viewPager.setAdapter(viewPagerAdapter);
     }
 
-    public void connectWithNewParam(String ip, int port) {
+    public void connect(String ip, int port) {
         socket = new ClientSocket(ip, port, MainActivity.getParser());
     }
 

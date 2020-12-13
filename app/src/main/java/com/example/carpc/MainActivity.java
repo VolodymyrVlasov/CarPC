@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         parser = new DataParser();
         message = new Message();
-        db = new DataBase("car_pc_db", this);
+        db = new DataBase("car_pc_db.txt", this);
         dashboardWidget = new DashboardWidget();
         settingsWidget = new SettingsWidget();
         chargeWidget = new ChargeWidget();

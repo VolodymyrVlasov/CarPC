@@ -91,7 +91,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
                         @Override
                         public void run() {
                             if (message.hasNewMessage()) {
-                                messages.setText(message.getMessage() + "\n");
+                                messages.setText(message.getMessage());
                                 inputDataScrollView.fullScroll(View.FOCUS_DOWN);
                             }
                         }
@@ -101,7 +101,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         };
         Timer timer = new Timer("Timer");
         long delay = 1L;
-        long period = 1L;
+        long period = 10L;
         timer.scheduleAtFixedRate(repeatedTask, delay, period);
     }
 
@@ -109,7 +109,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         this.message.setMessage("\t\t\t\tOUT>>\t\t" + message, true);
         socket.sendMessage(message);
         messageToSend.setText("");
-        messageToSend.setFocusable(true);
+      //  messageToSend.setFocusable(true);
         inputDataScrollView.fullScroll(View.FOCUS_DOWN);
     }
 

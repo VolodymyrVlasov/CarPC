@@ -7,16 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.fragment.app.Fragment;
-
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
 import com.example.carpc.instruments.DataParser;
-
 import java.util.Timer;
 import java.util.TimerTask;
-
 
 public class SpeedometerWidget extends Fragment {
 
@@ -58,7 +54,7 @@ public class SpeedometerWidget extends Fragment {
         };
         Timer timer = new Timer("Timer");
         long delay = 50L;
-        long period = 10L;
+        long period = 50L;
         timer.scheduleAtFixedRate(repeatedTask, delay, period);
     }
 }
