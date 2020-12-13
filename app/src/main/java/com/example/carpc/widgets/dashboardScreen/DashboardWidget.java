@@ -56,7 +56,7 @@ public class DashboardWidget extends Fragment {
         fragmentTransaction.setCustomAnimations(R.animator.left_in, R.animator.right_in).replace(R.id.dashboardLeftCont, batteryManagerWidget);
         fragmentTransaction.setCustomAnimations(R.animator.left_out, R.animator.right_out).replace(R.id.dashboardRightCont, tripManagerWidget);
         fragmentTransaction.commit();
-        socket = new ClientSocket("192.168.1.7", 8080, MainActivity.getParser());
+        socket = new ClientSocket("192.168.1.90", 8080, MainActivity.getParser(), true);
         return v;
     }
 

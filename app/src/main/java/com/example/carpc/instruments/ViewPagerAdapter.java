@@ -11,6 +11,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     List<Fragment> fragmentList = new ArrayList<>();
     List<String> fragmentTitles = new ArrayList<>();
 
+    @SuppressWarnings("deprecation")
     public ViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
     }

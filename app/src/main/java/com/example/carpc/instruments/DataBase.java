@@ -1,15 +1,6 @@
 package com.example.carpc.instruments;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.os.Build;
-import android.widget.Toast;
-
-import androidx.annotation.RequiresApi;
-
 import com.example.carpc.MainActivity;
-import com.google.android.material.internal.ContextUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,75 +10,87 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static java.security.AccessController.getContext;
-
 public class DataBase {
+    public final String UNSUBSCRIBE = "@a0";
+    public final String SUBSCRIBE = "@a1";
+    private TreeMap<String, String> dataBaseValues = new TreeMap<>();
 
 
-//    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-//    public TreeMap readFile(String fileName) {
-////        File file = new File(fileName);
-////        if (!file.exists()) {
-////            createFileWithDefaultValues(fileName);
-////        }
-////
-////        try (FileReader fr = new FileReader(file);
-////             BufferedReader br = new BufferedReader(fr)) {
-////            String st;
-////
-////            while ((st = br.readLine()) != null) {
-////                String[] temp = st.split(",");
-////                valueList.put(temp[0], (temp[1]));
-////            }
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-////        return (TreeMap) valueList;
-//    }
+    public void createFileWithDefaultValues(String fileName) {
 
-//    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-//    public void writeToFile(String fileName) {
-////        File file = new File(fileName);
-////        if (!file.exists()) {
-////            createFileWithDefaultValues(fileName);
-////        }
-////
-////        try (FileWriter myWriter = new FileWriter(fileName);) {
-////            for (Map.Entry<String, String> e : valueList.entrySet()) {
-////                myWriter.write(e.getKey() + "," + e.getValue() + "\n");
-////            }
-////        } catch (IOException e) {
-////            System.out.println("An error occurred.");
-////            e.printStackTrace();
-////        }
-//    }
+        Map<String, String> valueList = new TreeMap<>();
+        valueList.put("AH", "15");
+        valueList.put("WH THIS TRIP", "100");
+        valueList.put("WH TOTAL TRIP", "0");
+        valueList.put("WH THIS CHARGE", "2000");
+        valueList.put("AVG CONSUMPTION", "160");
+        valueList.put("AVG SPEED", "0");
+        valueList.put("TRIP SERVICE", "0");
+        valueList.put("IP", "192.168.1.90");
+        valueList.put("PORT", "8080");
+        valueList.put("SSID", "PORSCHE924EV");
 
-//    public void createFileWithDefaultValues(String fileName) {
 
-//        File file = new File("/data/CarPC/DATA_BASE.txt");
-//        if (!file.exists()) {
-//            try {
-//                file.createNewFile();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        valueList.put("AH", "0");
-//        valueList.put("WH THIS TRIP", "0");
-//        valueList.put("WH TOTAL TRIP", "0");
-//        valueList.put("WH THIS CHARGE", "0");
-//        valueList.put("AVG CONSUMPTION", "160");
-//        valueList.put("AVG SPEED", "0");
-//
-//        valueList.put("TRIP SERVICE", "0");
-//
-//        valueList.put("IP", "192.168.1.7");
-//        valueList.put("PORT", "8000");
-//        valueList.put("SSID", "PORSCHE924EV");
+        File file = new File(MainActivity.getContext().getFilesDir(), "text");
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        try {
+            File gpxfile = new File(file, fileName);
+            FileWriter writer = new FileWriter(gpxfile);
 
-        //writeToFile(fileName);
+            for (Map.Entry<String, String> e : valueList.entrySet()) {
+                writer.write(e.getKey() + "," + e.getValue() + "\n");
+            }
 
-//    }
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeDataBase(String dataBaseName) {
+        File file = new File(MainActivity.getContext().getFilesDir(), "text");
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        try {
+            File gpxfile = new File(file, dataBaseName);
+            FileWriter writer = new FileWriter(gpxfile);
+
+            for (Map.Entry<String, String> e : dataBaseValues.entrySet()) {
+                writer.write(e.getKey() + "," + e.getValue() + "\n");
+            }
+
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private TreeMap readDataBase(String dataBaseName) {
+        Map<String, String> readValueList = new TreeMap<>();
+
+        File path = new File(MainActivity.getContext().getFilesDir(), "text");
+        if (!path.exists()) {
+            path.mkdir();
+        }
+        File file = new File(path, dataBaseName);
+        try (FileReader fr = new FileReader(file);
+             BufferedReader br = new BufferedReader(fr)) {
+            String st;
+
+            while ((st = br.readLine()) != null) {
+                String[] temp = st.split(",");
+                readValueList.put(temp[0], (temp[1]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return (TreeMap) readValueList;
+    }
 }
 

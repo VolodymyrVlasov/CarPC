@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -22,6 +23,9 @@ public class SettingsWidget extends Fragment {
     ViewPager viewPager;
     TabLayout tabLayout;
     private ClientSocket socket;
+    TerminalTab terminalTab;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,7 +33,7 @@ public class SettingsWidget extends Fragment {
         View v = inflater.inflate(R.layout.settings_widget, container, false);
         viewPager = v.findViewById(R.id.viewpager);
         tabLayout = v.findViewById(R.id.tabs);
-        connectWithNewParam("192.168.1.7", 8000);
+        connectWithNewParam("192.168.1.90", 8080);
         setRetainInstance(true);
         return v;
     }
@@ -57,8 +61,8 @@ public class SettingsWidget extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addFragment(new ConnectionTab(socket), "CONNECTION");
-        viewPagerAdapter.addFragment(new ConfiguratorTab(), "CONFIGURATOR");
-        viewPagerAdapter.addFragment(new TerminalTab(), "TERMINAL");
+        viewPagerAdapter.addFragment(new ConfiguratorTab(socket, MainActivity.getParser()), "CONFIGURATOR");
+        viewPagerAdapter.addFragment(terminalTab, "TERMINAL");
         viewPagerAdapter.addFragment(new UITab(), "UI");
         viewPager.setAdapter(viewPagerAdapter);
     }
@@ -67,13 +71,10 @@ public class SettingsWidget extends Fragment {
         socket = new ClientSocket(ip, port, MainActivity.getParser());
     }
 
-    public ClientSocket getSocket(){
-        return socket;
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         socket.disconnect();
     }
+
 }

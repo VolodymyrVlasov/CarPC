@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Car PC</string>
 
+    <string name="SUBSCRIBE">@a1</string>
+    <string name="UNSUBSCRIBE">@a0</string>
+
     <string name="frag1_text">DASHBOARD SCREEN</string>
     <string name="frag2_text">CHARGE SCREEN</string>
     <string name="frag3_text">SETTINGS SCREEN</string>

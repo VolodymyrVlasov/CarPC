@@ -1,48 +1,50 @@
 package com.example.carpc.widgets.settingsScreen.tabs;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.carpc.R;
+import com.example.carpc.instruments.ClientSocket;
+import com.example.carpc.instruments.DataParser;
 import com.example.carpc.widgets.settingsScreen.tabs.configTabs.ChargerConfig;
 import com.example.carpc.widgets.settingsScreen.tabs.configTabs.CurrentConfig;
 import com.example.carpc.widgets.settingsScreen.tabs.configTabs.LevelsConfig;
 
 public class ConfiguratorTab extends Fragment {
-    FrameLayout configContainer;
-    private androidx.fragment.app.FragmentTransaction fragmentTransaction;
+
     private static final String TAG = "GroupConfig";
-    Spinner spinner;
+
+    private androidx.fragment.app.FragmentTransaction fragmentTransaction;
+    private ClientSocket socket;
+    private DataParser parser;
+
+    public ConfiguratorTab(final ClientSocket socket, final DataParser parser) {
+        this.socket = socket;
+        this.parser = parser;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.car_pc_configuration, container, false);
-        spinner = v.findViewById(R.id.configurationGroupList);
-        spinnerSetSelector();
+        Spinner spinner = v.findViewById(R.id.configurationGroupList);
+        setOnItemSelectedListener(spinner);
         setRetainInstance(true);
-        System.out.println("Create CONFIGURATOR TAB");
         return v;
     }
 
-    private void spinnerSetSelector() {
+    private void setOnItemSelectedListener(Spinner spinner) {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent,
                                        View itemSelected, int selectedItemPosition, long selectedId) {
                 String[] choose = getResources().getStringArray(R.array.configurationGroupList);
                 createConfigurationFragment(choose[selectedItemPosition]);
-                Log.i(TAG, "Selected on spinner: "  + choose[selectedItemPosition]);
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -55,17 +57,12 @@ public class ConfiguratorTab extends Fragment {
         switch (item) {
             case "Levels (BMS)":
                 fragmentTransaction.replace(R.id.frameForConfigFragments, new LevelsConfig());
-                fragmentTransaction.commit();
-                //addBMSConfig();
                 break;
             case "Current":
-                fragmentTransaction.replace(R.id.frameForConfigFragments, new CurrentConfig());
-                fragmentTransaction.commit();
-                // addCurrentConfig();
+                fragmentTransaction.replace(R.id.frameForConfigFragments, new CurrentConfig(socket, parser));
                 break;
             case "Charger":
                 fragmentTransaction.replace(R.id.frameForConfigFragments, new ChargerConfig());
-                fragmentTransaction.commit();
                 break;
             case "Charging":
                 break;
@@ -110,27 +107,6 @@ public class ConfiguratorTab extends Fragment {
             case "Battery":
                 break;
         }
-    }
-
-    @SuppressLint({"ResourceAsColor", "ResourceType"})
-    private void addBatteryConfig() {
-    }
-
-    public Context getContext() {
-        return getActivity().getApplicationContext();
-    }
-
-    private LinearLayout initConfigContainer() {
-        LinearLayout configLayout = new LinearLayout(getContext());
-        try {
-            configContainer.removeAllViewsInLayout();
-            configLayout.setOrientation(LinearLayout.VERTICAL);
-            configLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return configLayout;
+        fragmentTransaction.commit();
     }
 }

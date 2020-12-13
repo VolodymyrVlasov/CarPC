@@ -2,6 +2,8 @@ package com.example.carpc.instruments;
 
 import android.util.Log;
 
+import com.example.carpc.MainActivity;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,54 +18,69 @@ public class ClientSocket implements Closeable {
     private PrintWriter printWriter;
     private boolean connectionState = false;
     private boolean reconnect = true;
-    private String inputMessage;
     private final String TAG = "SOCKET";
     private static DataParser dataParser;
+    private DataBase db;
+    Message message = MainActivity.getMessage();
+
+    public static String inputMessage;
+    public static boolean newMessageFlag = false;
 
     public ClientSocket(final String address, final int port, final DataParser parser) {
+        createConnection(address, port, parser, false);
+    }
+
+    public ClientSocket(final String address, final int port, final DataParser parser, boolean subscribe) {
+        createConnection(address, port, parser, subscribe);
+    }
+
+    private void createConnection(final String address, final int port, final DataParser parser, final boolean subscribe) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    System.out.println("run ClientSocket constuctor");
                     socket = new Socket();
+                    dataParser = parser;
+                    db = new DataBase();
                     socket.connect(new InetSocketAddress(address, port), 500);
                     scanner = new Scanner(socket.getInputStream());
-                    dataParser = parser;
-                    System.out.println("connected");
-                    connectionState = true;
-                    Log.i(TAG, "> connection state: " + connectionState);
+                    if (subscribe) {
+                        sendMessage(db.SUBSCRIBE);
+                    } else {
+                        sendMessage(db.UNSUBSCRIBE);
+                    }
                     readInputStream();
-                    sendMessage("@a1");
+                    connectionState = true;
                 } catch (IOException e) {
                     connectionState = false;
-                    Log.i(TAG, "> connection state: " + connectionState);
-                    Log.i(TAG, e.getMessage());
+                    if (reconnect) createConnection(address, port, parser, subscribe);
                     e.printStackTrace();
                 }
             }
         }).start();
-
     }
 
-    /*  input stream thread  */
-    private void readInputStream() {
+    public void readInputStream() {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                int i = 0;
                 while (connectionState) {
                     try {
                         socket.setSoTimeout(0);
                         if (scanner.hasNextLine()) {
-                            inputMessage = scanner.nextLine();
+                            i++;
+                            newMessageFlag = true;
+                          //  inputMessage = scanner.nextLine();
+                            message.setMessage(scanner.nextLine());
                             dataParser.parseInputData(inputMessage);
-                            Log.i(TAG, inputMessage);
                         }
                     } catch (Exception e) {
                         connectionState = false;
                         Log.i(TAG, Objects.requireNonNull(e.getMessage()));
                         e.printStackTrace();
                     }
+//                    Log.i(TAG, i + " > " + inputMessage);
                 }
                 Log.i(TAG, "> connection state: " + connectionState + "\n" +
                         "connectionState false -> interrupt input stream Thread");
@@ -95,22 +112,28 @@ public class ClientSocket implements Closeable {
         }).start();
     }
 
+    /*  input stream thread  */
+    public String readMessage() {
+        return inputMessage;
+    }
+
+    public boolean isConnected() {
+        return connectionState;
+    }
+
+    public void setReconnect(boolean flag) {
+        reconnect = flag;
+    }
+
     public void disconnect() {
         try {
             reconnect = false;
+            sendMessage(db.UNSUBSCRIBE);
             close();
         } catch (IOException e) {
             Log.i(TAG, Objects.requireNonNull(e.getMessage()));
             e.printStackTrace();
         }
-    }
-
-    public String readMessage() {
-        return inputMessage;
-    }
-
-    public boolean getConnectionState() {
-        return connectionState;
     }
 
     @Override

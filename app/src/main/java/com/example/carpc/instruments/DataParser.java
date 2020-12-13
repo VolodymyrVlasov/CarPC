@@ -2,6 +2,9 @@ package com.example.carpc.instruments;
 
 import android.util.Log;
 
+import com.example.carpc.widgets.settingsScreen.SettingsWidget;
+import com.example.carpc.widgets.settingsScreen.tabs.TerminalTab;
+
 import java.util.HashMap;
 
 public class DataParser {
@@ -16,7 +19,8 @@ public class DataParser {
     private static HashMap<String, String> valueTempSensorArray = new HashMap<>();
     private static HashMap<String, String> cellInfo = new HashMap<>();
 
-    private static Boolean analogInputFlag = false, tempSensorFlag = false, capacityFlag = false;
+    private static Boolean analogInputFlag = false, tempSensorFlag = false, capacityFlag = false,
+    hasNewMessage = false;
 
     private String[] currentConfig = {"Please try again", "Please try again"};
     private String levelsMax, levelsMin, levelsStartbal, levelsBal, levelsChrgd, levelsAllowd, levelsCmin;
@@ -35,6 +39,9 @@ public class DataParser {
     }
 
     public void parseInputData(String inputData) throws NullPointerException {
+        DataParser.inputData = inputData;
+        hasNewMessage = true;
+
         try {
             if (inputData.substring(1, 2).equals("m") || inputData.substring(1, 2).equals("n")) {
                 //SET FLAGS
@@ -120,8 +127,12 @@ public class DataParser {
         }
     }
 
-    public static String getInputMessage() {
-        return inputData != null ? inputData : ">";
+    public void messageReceived() {
+        hasNewMessage = false;
+    }
+
+    public boolean hasNewMessage() {
+        return hasNewMessage;
     }
 
     public Integer getSpeed() {
@@ -239,12 +250,10 @@ public class DataParser {
     }
 
     public String getLevelsMax() {
-//        levelsMax = "4200";
         return levelsMax;
     }
 
     public String getLevelsMin() {
-//        levelsMin = "3000";
         return levelsMin;
     }
 
@@ -272,5 +281,4 @@ public class DataParser {
 //        levelsCmin = "2700";
         return levelsCmin;
     }
-
 }

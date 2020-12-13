@@ -17,12 +17,21 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
+import com.example.carpc.instruments.ClientSocket;
+import com.example.carpc.instruments.DataParser;
 
 import java.util.Objects;
 
 public class CurrentConfig extends Fragment {
     private static final String TAG = "GroupConfig";
-    LinearLayout configContainer;
+    private LinearLayout configContainer;
+    private ClientSocket socket;
+    private DataParser parser;
+
+    public CurrentConfig(final ClientSocket socket, final DataParser parser) {
+        this.socket = socket;
+        this.parser = parser;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,11 +43,6 @@ public class CurrentConfig extends Fragment {
         return v;
     }
 
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        onDestroy();
-//    }
 
     @Override
     public void onDestroy() {
@@ -97,53 +101,53 @@ public class CurrentConfig extends Fragment {
         configDescription.setTextColor(Color.argb(255, 90, 90, 90));
         configDescription.setText(description2);
 
-//        write.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try {
-//                    String resultCommand = commandName[0] + " ";
-//
-//                    for (int i = 0; i < paramQuantity; i++) {
-//                        resultCommand = resultCommand + valueParam[i].getText().toString() + ":";
-//                    }
-//
-//                    MainActivity.sendMessage("..");
-//                    Thread.sleep(3);
-//                    MainActivity.sendMessage("config");
-//                    Thread.sleep(3);
-//                    MainActivity.sendMessage(resultCommand);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
-//            }
-//        });
-//
-//        read.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try {
-//                    MainActivity.sendMessage("..");
-//                    Thread.sleep(3);
-//                    MainActivity.sendMessage("config");
-//                    Thread.sleep(3);
-//                    MainActivity.sendMessage(commandName[0]);
-//                    Thread.sleep(100);
-//                    String newConfig = MainActivity.getParser().getCurrentConfig();
-//                    Log.i("io/tag", "currentConfig: " + newConfig);
-//                    if (!newConfig.contains("try")) {
-//                        String[] arr = newConfig.split(":");
-//
-//                        for (int i = 0; i < paramQuantity; i++) {
-//                            valueParam[i].setText(arr[i]);
-//                        }
-//                    }
-//                    Toast.makeText(getContext(), newConfig, Toast.LENGTH_SHORT).show();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
-//            }
-//        });
+        write.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String resultCommand = commandName[0] + " ";
+
+                    for (int i = 0; i < paramQuantity; i++) {
+                        resultCommand = resultCommand + valueParam[i].getText().toString() + ":";
+                    }
+
+                    socket.sendMessage("..");
+                    Thread.sleep(3);
+                    socket.sendMessage("config");
+                    Thread.sleep(3);
+                    socket.sendMessage(resultCommand);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
+            }
+        });
+
+        read.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    socket.sendMessage("..");
+                    Thread.sleep(3);
+                    socket.sendMessage("config");
+                    Thread.sleep(3);
+                    socket.sendMessage(commandName[0]);
+                    Thread.sleep(100);
+                    String newConfig = parser.getCurrentConfig();
+                    Log.i("io/tag", "currentConfig: " + newConfig);
+                    if (!newConfig.contains("try")) {
+                        String[] arr = newConfig.split(":");
+
+                        for (int i = 0; i < paramQuantity; i++) {
+                            valueParam[i].setText(arr[i]);
+                        }
+                    }
+                    Toast.makeText(getContext(), newConfig, Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
+            }
+        });
     }
 }

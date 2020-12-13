@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment;
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
 import com.example.carpc.instruments.ClientSocket;
-import com.example.carpc.widgets.settingsScreen.SettingsWidget;
 
 import java.util.Objects;
 
@@ -49,9 +48,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         myNetworkAddress = v.findViewById(R.id.my_server_address);
         btnConnect = v.findViewById(R.id.btnConnect);
         btnDisconnect = v.findViewById(R.id.btnDisconnect);
-
-
-        if (socket.getConnectionState()) {
+        if (socket.isConnected()) {
             WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInf = wifiMan.getConnectionInfo();
             int ipAddress = wifiInf.getIpAddress();
@@ -75,28 +72,20 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         btnDisconnect.setOnClickListener(this);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        System.out.println("Destroy CONNECTION TAB");
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnConnect:
-                address = serverAddress.getText().toString();
-                port = Integer.parseInt(serverPort.getText().toString());
-                updateConnectionParams(address, port);
+                updateConnectionParams(
+                        address = serverAddress.getText().toString(),
+                        port = Integer.parseInt(serverPort.getText().toString()));
                 setConnectionStateIndicator();
                 MainActivity.hideKeyboard((Activity) Objects.requireNonNull(getContext()));
                 break;
             case R.id.btnDisconnect:
                 socket.disconnect();
                 setConnectionStateIndicator();
-                break;
-            default:
                 break;
         }
     }
@@ -110,8 +99,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     }
 
     public void updateConnectionParams(String ip, int port) {
-       // socket.disconnect();
-        socket =  new ClientSocket(ip, port, MainActivity.getParser());
+        socket = new ClientSocket(ip, port, MainActivity.getParser(), false);
     }
 
     public void setConnectionStateIndicator() {
@@ -120,7 +108,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
 
         while (flag) {
             if (SystemClock.uptimeMillis() >= time + 200) {
-                if (socket.getConnectionState()) {
+                if (socket.isConnected()) {
                     btnConnect.setTextColor(Color.argb(255, 3, 218, 197));
                     btnConnect.setBackground(ResourcesCompat.getDrawable(getResources(),
                             R.drawable.transparent_bg_bordered_button_active, null));
