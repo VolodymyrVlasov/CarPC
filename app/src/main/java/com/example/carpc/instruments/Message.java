@@ -26,7 +26,7 @@ public class Message {
         if (!message.equals("")){
             this.messageCount++;
             newMessageFlag = newMessage;
-            this.msg.append("IN" + messageCount + ":\t\t" + message + "\n");
+            this.msg.append(messageCount + ":\t\t" + message + "\n");
         }
     }
 

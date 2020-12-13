@@ -22,6 +22,8 @@ import androidx.fragment.app.Fragment;
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
 import com.example.carpc.instruments.ClientSocket;
+import com.example.carpc.instruments.DataBase;
+
 import java.util.Objects;
 
 public class ConnectionTab extends Fragment implements View.OnClickListener {
@@ -29,11 +31,15 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     private TextView myNetworkAddress;
     private ClientSocket socket;
     private Button btnConnect, btnDisconnect;
-    private String address = "192.168.1.90";
-    private int port = 8080;
+    private String address;
+    private int port;
+    private DataBase dataBase;
 
-    public ConnectionTab(ClientSocket socket) {
+    public ConnectionTab(ClientSocket socket, DataBase dataBase) {
         this.socket = socket;
+        this.dataBase = dataBase;
+        port = dataBase.getPort();
+        address = dataBase.getIP();
     }
 
     @Override
@@ -45,6 +51,8 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         myNetworkAddress = v.findViewById(R.id.my_server_address);
         btnConnect = v.findViewById(R.id.btnConnect);
         btnDisconnect = v.findViewById(R.id.btnDisconnect);
+        serverAddress.setText(address);
+        serverPort.setText(String.valueOf(port));
         if (socket.isConnected()) {
             WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(
                     Context.WIFI_SERVICE);
@@ -77,6 +85,8 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
                 updateConnectionParams(
                         address = serverAddress.getText().toString(),
                         port = Integer.parseInt(serverPort.getText().toString()));
+                dataBase.setPort(port);
+                dataBase.setIP(address);
                 setConnectionStateIndicator();
                 MainActivity.hideKeyboard((Activity) Objects.requireNonNull(getContext()));
                 break;

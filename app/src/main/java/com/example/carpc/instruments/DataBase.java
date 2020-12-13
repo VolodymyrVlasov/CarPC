@@ -1,5 +1,7 @@
 package com.example.carpc.instruments;
 
+import android.content.Context;
+
 import com.example.carpc.MainActivity;
 
 import java.io.BufferedReader;
@@ -8,33 +10,49 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class DataBase {
-    public final String UNSUBSCRIBE = "@a0";
-    public final String SUBSCRIBE = "@a1";
-    private TreeMap<String, String> dataBaseValues = new TreeMap<>();
+    private final String FILENAME;
+    public final String UNSUBSCRIBE;
+    public final String SUBSCRIBE;
+    private TreeMap<String, String> dataBaseValues;
+    private Context context;
 
+    public DataBase(String dataBaseName, Context context) {
+        UNSUBSCRIBE = "@a0";
+        SUBSCRIBE = "@a1";
+        FILENAME = dataBaseName;
+        dataBaseValues = new TreeMap<>();
+        this.context = context;
 
-    public void createFileWithDefaultValues(String fileName) {
+        //TODO
+        // if file not found ->
+        //      create file with default values
+        //      createFile(String fileName)
+        // else ->
+        //      read file
+        //      readDataBase(String dataBaseName)
 
+        createFile(FILENAME);
+        readDataBase();
+    }
+
+    private void createFile(String fileName) {
         Map<String, String> valueList = new TreeMap<>();
-        valueList.put("AH", "15");
-        valueList.put("WH THIS TRIP", "100");
-        valueList.put("WH TOTAL TRIP", "0");
-        valueList.put("WH THIS CHARGE", "2000");
-        valueList.put("AVG CONSUMPTION", "160");
-        valueList.put("AVG SPEED", "0");
-        valueList.put("TRIP SERVICE", "0");
-        valueList.put("IP", "192.168.1.90");
-        valueList.put("PORT", "8080");
-        valueList.put("SSID", "PORSCHE924EV");
+        valueList.put("ip", "192.168.1.7");
+        valueList.put("port", "8080");
+        valueList.put("battery_total_capacity_a/h", "0");
+        valueList.put("used_battery_capacity_a/h", "0");
+        valueList.put("battery_total_capacity_wh", "0");
+        valueList.put("used_this_trip_battery_capacity_wh", "0");
+        valueList.put("used_this_charge_battery_capacity_wh", "0");
+        valueList.put("used_total_battery_capacity_wh", "0");
+        valueList.put("average_consumption_wh/km", "0");
 
-
-        File file = new File(MainActivity.getContext().getFilesDir(), "text");
-        if (!file.exists()) {
-            file.mkdir();
-        }
+        File file = new File(context.getFilesDir(), "text");
+        if (!file.exists()) file.mkdir();
         try {
             File gpxfile = new File(file, fileName);
             FileWriter writer = new FileWriter(gpxfile);
@@ -42,7 +60,6 @@ public class DataBase {
             for (Map.Entry<String, String> e : valueList.entrySet()) {
                 writer.write(e.getKey() + "," + e.getValue() + "\n");
             }
-
             writer.flush();
             writer.close();
         } catch (Exception e) {
@@ -50,13 +67,13 @@ public class DataBase {
         }
     }
 
-    private void writeDataBase(String dataBaseName) {
+    public void writeDataBase() {
         File file = new File(MainActivity.getContext().getFilesDir(), "text");
         if (!file.exists()) {
             file.mkdir();
         }
         try {
-            File gpxfile = new File(file, dataBaseName);
+            File gpxfile = new File(file, FILENAME);
             FileWriter writer = new FileWriter(gpxfile);
 
             for (Map.Entry<String, String> e : dataBaseValues.entrySet()) {
@@ -71,26 +88,111 @@ public class DataBase {
 
     }
 
-    private TreeMap readDataBase(String dataBaseName) {
-        Map<String, String> readValueList = new TreeMap<>();
+    private TreeMap readDataBase() {
 
-        File path = new File(MainActivity.getContext().getFilesDir(), "text");
+        File path = new File(context.getFilesDir(), "text");
         if (!path.exists()) {
             path.mkdir();
         }
-        File file = new File(path, dataBaseName);
+        File file = new File(path, FILENAME);
         try (FileReader fr = new FileReader(file);
              BufferedReader br = new BufferedReader(fr)) {
             String st;
 
             while ((st = br.readLine()) != null) {
                 String[] temp = st.split(",");
-                readValueList.put(temp[0], (temp[1]));
+                dataBaseValues.put(temp[0], (temp[1]));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return (TreeMap) readValueList;
+        return dataBaseValues;
+    }
+
+    //TODO getters
+    public TreeMap getAllValues() {
+        return (TreeMap) readDataBase();
+    }
+
+    public String getIP() {
+        return dataBaseValues.get("ip");
+    }
+
+    public Integer getPort() {
+        return Integer.parseInt(Objects.requireNonNull(
+                dataBaseValues.get("port")));
+    }
+
+    public double getBatteryTotalCapacityAH() {
+        return Double.parseDouble(Objects.requireNonNull(
+                dataBaseValues.get("battery_total_capacity_a/h")));
+    }
+
+    public double getUsedCapacityAH() {
+        return Double.parseDouble(Objects.requireNonNull(
+                dataBaseValues.get("used_battery_capacity_a/h")));
+    }
+
+    public double getBatteryTotalCapacityWH() {
+        return Double.parseDouble(Objects.requireNonNull(
+                dataBaseValues.get("battery_total_capacity_wh")));
+    }
+
+    public double getThisTripUsedCapacityWH() {
+        return Double.parseDouble(Objects.requireNonNull(
+                dataBaseValues.get("used_this_trip_battery_capacity_wh")));
+    }
+
+    public double getThisChargeUsedCapacityWH() {
+        return Double.parseDouble(Objects.requireNonNull(
+                dataBaseValues.get("used_this_charge_battery_capacity_wh")));
+    }
+
+    public double getTotalUsedBatteryCapacity() {
+        return Double.parseDouble(Objects.requireNonNull(
+                dataBaseValues.get("used_total_battery_capacity_wh")));
+    }
+
+    public int getConsumption() {
+        return Integer.parseInt(Objects.requireNonNull(
+                dataBaseValues.get("average_consumption_wh/km")));
+    }
+
+    //TODO setters
+    public void setIP(String value) {
+        dataBaseValues.put("ip", value);
+    }
+
+    public void setPort(int value) {
+        dataBaseValues.put("port", String.valueOf(value));
+    }
+
+    public void setBatteryTotalCapacityAH(String value) {
+        dataBaseValues.put("battery_total_capacity_a/h", value);
+    }
+
+    public void setUsedCapacityAH(String value) {
+        dataBaseValues.put("used_battery_capacity_a/h", value);
+    }
+
+    public void setBatteryTotalCapacityWH(String value) {
+        dataBaseValues.put("battery_total_capacity_wh", value);
+    }
+
+    public void setThisTripUsedCapacityWH(String value) {
+        dataBaseValues.put("used_this_trip_battery_capacity_wh", value);
+    }
+
+    public void setThisChargeUsedCapacityWH(String value) {
+        dataBaseValues.put("used_this_charge_battery_capacity_wh", value);
+    }
+
+    public void setTotalUsedBatteryCapacity(String value) {
+        dataBaseValues.put("used_total_battery_capacity_wh", value);
+    }
+
+    public void setConsumption(String value) {
+        dataBaseValues.put("average_consumption_wh/km", value);
     }
 }
 

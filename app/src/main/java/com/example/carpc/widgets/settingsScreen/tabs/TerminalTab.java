@@ -1,6 +1,8 @@
 package com.example.carpc.widgets.settingsScreen.tabs;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,6 @@ import java.util.TimerTask;
 
 public class TerminalTab extends Fragment implements View.OnClickListener {
     private ClientSocket socket;
-    private DataParser parser;
     private ScrollView inputDataScrollView;
     private EditText messageToSend;
     private TextView messages;
@@ -32,7 +33,6 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
 
     public TerminalTab(ClientSocket socket) {
         this.socket = socket;
-        this.parser = MainActivity.getParser();
     }
 
     @Override
@@ -49,6 +49,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         messages.setLines(50);
         message.clearAllText();
         update();
+        //TODO set Enter key onclick listener to send message
         setRetainInstance(true);
         return v;
     }
@@ -73,10 +74,10 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
                 clearAllText();
                 break;
             case R.id.btnSubscribe:
-                sendMessage(getString(R.string.SUBSCRIBE));
+                sendMessage("@a1");
                 break;
             case R.id.btnUnsubscribe:
-                sendMessage(getString(R.string.UNSUBSCRIBE));
+                sendMessage("@a0");
                 break;
         }
     }
@@ -86,6 +87,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
             public void run() {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void run() {
                             if (message.hasNewMessage()) {
@@ -104,10 +106,10 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
     }
 
     private void sendMessage(String message) {
-        //messages.append(">> " + message + "\n");
-        this.message.setMessage("OUT>>\t\t" + message, true);
+        this.message.setMessage("\t\t\t\tOUT>>\t\t" + message, true);
         socket.sendMessage(message);
         messageToSend.setText("");
+        messageToSend.setFocusable(true);
         inputDataScrollView.fullScroll(View.FOCUS_DOWN);
     }
 
@@ -116,5 +118,4 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         messageToSend.setText("");
         message.clearAllText();
     }
-
 }

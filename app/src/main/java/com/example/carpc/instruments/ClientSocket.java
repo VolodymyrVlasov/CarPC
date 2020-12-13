@@ -16,15 +16,13 @@ public class ClientSocket implements Closeable {
     private Socket socket;
     private Scanner scanner;
     private PrintWriter printWriter;
+    private DataBase db;
+    private Message message = MainActivity.getMessage();
     private boolean connectionState = false;
     private boolean reconnect = true;
     private final String TAG = "SOCKET";
     private static DataParser dataParser;
-    private DataBase db;
-    Message message = MainActivity.getMessage();
-
-    public static String inputMessage;
-    public static boolean newMessageFlag = false;
+    private static String inputMessage;
 
     public ClientSocket(final String address, final int port, final DataParser parser) {
         createConnection(address, port, parser, false);
@@ -41,7 +39,7 @@ public class ClientSocket implements Closeable {
                 try {
                     socket = new Socket();
                     dataParser = parser;
-                    db = new DataBase();
+                    db = MainActivity.getDataBase();
                     socket.connect(new InetSocketAddress(address, port), 500);
                     scanner = new Scanner(socket.getInputStream());
                     if (subscribe) {
@@ -68,17 +66,14 @@ public class ClientSocket implements Closeable {
                     try {
                         socket.setSoTimeout(0);
                         if (scanner.hasNextLine()) {
-                            newMessageFlag = true;
                             inputMessage = scanner.nextLine();
                             message.setMessage(inputMessage, true);
                             dataParser.parseInputData(inputMessage);
                         }
                     } catch (Exception e) {
                         connectionState = false;
-                        Log.i(TAG, Objects.requireNonNull(e.getMessage()));
                         e.printStackTrace();
                     }
-//                    Log.i(TAG, i + " > " + inputMessage);
                 }
                 Log.i(TAG, "> connection state: " + connectionState + "\n" +
                         "connectionState false -> interrupt input stream Thread");
@@ -95,16 +90,12 @@ public class ClientSocket implements Closeable {
                 try {
                     printWriter = new PrintWriter(socket.getOutputStream(), true);
                     printWriter.println(message);
-                    Log.i(TAG, "OUT: " + message);
                     Thread.sleep(1);
                     if (!connectionState) Thread.currentThread().interrupt();
                 } catch (Exception e) {
                     connectionState = false;
-                    Log.i(TAG, Objects.requireNonNull(e.getMessage()));
                     e.printStackTrace();
-                    Log.i(TAG, "> connection state: " + connectionState + "\n" +
-                            "connectionState false -> interrupt output stream Thread");
-                    if (!connectionState) Thread.currentThread().interrupt();
+                    Thread.currentThread().interrupt();
                 }
             }
         }).start();
@@ -129,7 +120,6 @@ public class ClientSocket implements Closeable {
             sendMessage(db.UNSUBSCRIBE);
             close();
         } catch (IOException e) {
-            Log.i(TAG, Objects.requireNonNull(e.getMessage()));
             e.printStackTrace();
         }
     }

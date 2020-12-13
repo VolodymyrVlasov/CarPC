@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
 import com.example.carpc.instruments.ClientSocket;
+import com.example.carpc.instruments.DataBase;
 import com.example.carpc.instruments.DataParser;
 import com.example.carpc.widgets.dashboardScreen.tabs.BatteryManagerWidget;
 import com.example.carpc.widgets.dashboardScreen.tabs.BatteryWidget;
@@ -36,6 +37,7 @@ public class DashboardWidget extends Fragment {
     private IconStatusLeftWidget iconStatusLeftWidget;
     private androidx.fragment.app.FragmentTransaction fragmentTransaction;
     private ClientSocket socket;
+    private DataBase dataBase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +49,7 @@ public class DashboardWidget extends Fragment {
         iconStatusRightWidget = new IconStatusRightWidget();
         iconStatusLeftWidget = new IconStatusLeftWidget();
         batteryWidget = new BatteryWidget();
+        dataBase = MainActivity.getDataBase();
         fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.replace(R.id.dashboardCenterCont, speedometerWidget);
@@ -56,7 +59,7 @@ public class DashboardWidget extends Fragment {
         fragmentTransaction.setCustomAnimations(R.animator.left_in, R.animator.right_in).replace(R.id.dashboardLeftCont, batteryManagerWidget);
         fragmentTransaction.setCustomAnimations(R.animator.left_out, R.animator.right_out).replace(R.id.dashboardRightCont, tripManagerWidget);
         fragmentTransaction.commit();
-        socket = new ClientSocket("192.168.1.90", 8080, MainActivity.getParser(), true);
+        socket = new ClientSocket(dataBase.getIP(), dataBase.getPort(), MainActivity.getParser(), true);
         return v;
     }
 
