@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         fTrans.replace(R.id.frgmCont, dashboardWidget);
         fTrans.commit();
         map = db.getAllValues();
-
         for (Map.Entry<String, String> entry : map.entrySet()) {
             System.out.println("Key: " + entry.getKey() + " - " + entry.getValue());
         }
