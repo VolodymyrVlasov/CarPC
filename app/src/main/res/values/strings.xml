@@ -12,7 +12,6 @@
     <string name="btnSettingsScreen">SETTINGS</string>
     <string name="stack">add to Back Stack</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">EMPTY</string>
     <string name="ip_address">IP address</string>
     <string name="port">PORT</string>

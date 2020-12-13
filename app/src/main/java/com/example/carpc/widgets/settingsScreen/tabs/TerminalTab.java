@@ -47,6 +47,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         btnSubscribe = v.findViewById(R.id.btnSubscribe);
         btnUnsubscribe = v.findViewById(R.id.btnUnsubscribe);
         messages.setLines(25);
+        update();
         setRetainInstance(true);
         return v;
     }
@@ -78,21 +79,6 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
                 break;
         }
     }
-
-    public void update(String temp) {
-        messages.append(socket.readMessage() + "\n");
-//        if (getActivity() != null) {
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                }
-//            });
-//        }
-//        inputDataScrollView.fullScroll(View.FOCUS_DOWN);
-    }
-
-
 
     public void update() {
         TimerTask repeatedTask = new TimerTask() {
