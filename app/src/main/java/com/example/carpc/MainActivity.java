@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         fTrans.replace(R.id.frgmCont, dashboardWidget);
         fTrans.commit();
         message = new Message();
-//      dataBase = new DataBase();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
