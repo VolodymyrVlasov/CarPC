@@ -21,7 +21,6 @@ import com.example.carpc.widgets.settingsScreen.tabs.TerminalTab;
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "myLogs";
     private static DataParser parser;
-
     private DashboardWidget dashboardWidget;
     private static SettingsWidget settingsWidget;
     private ChargeWidget chargeWidget;
@@ -232,10 +231,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static Message getMessage() {
         return message;
-    }
-
-    public static SettingsWidget getSettingsWidget () {
-        return settingsWidget;
     }
 
 }

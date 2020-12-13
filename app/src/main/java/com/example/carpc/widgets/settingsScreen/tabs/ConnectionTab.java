@@ -15,16 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
 import com.example.carpc.instruments.ClientSocket;
-
 import java.util.Objects;
 
 public class ConnectionTab extends Fragment implements View.OnClickListener {
@@ -32,8 +29,8 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     private TextView myNetworkAddress;
     private ClientSocket socket;
     private Button btnConnect, btnDisconnect;
-    String address = "192.168.1.90";
-    int port = 8080;
+    private String address = "192.168.1.90";
+    private int port = 8080;
 
     public ConnectionTab(ClientSocket socket) {
         this.socket = socket;
@@ -49,7 +46,8 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         btnConnect = v.findViewById(R.id.btnConnect);
         btnDisconnect = v.findViewById(R.id.btnDisconnect);
         if (socket.isConnected()) {
-            WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(
+                    Context.WIFI_SERVICE);
             WifiInfo wifiInf = wifiMan.getConnectionInfo();
             int ipAddress = wifiInf.getIpAddress();
             @SuppressLint("DefaultLocale") String ip = String.format("%d.%d.%d.%d",
@@ -61,7 +59,6 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         }
         setConnectionStateIndicator();
         setRetainInstance(true);
-        System.out.println("Create CONNECTION TAB");
         return v;
     }
 

@@ -46,7 +46,8 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
         btnClear = v.findViewById(R.id.btnClearTermTab);
         btnSubscribe = v.findViewById(R.id.btnSubscribe);
         btnUnsubscribe = v.findViewById(R.id.btnUnsubscribe);
-        messages.setLines(25);
+        messages.setLines(50);
+        message.clearAllText();
         update();
         setRetainInstance(true);
         return v;
@@ -87,16 +88,10 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
                             if (message.hasNewMessage()) {
-                                messages.append(message.getMessage() + "\n");
+                                messages.setText(message.getMessage() + "\n");
                                 inputDataScrollView.fullScroll(View.FOCUS_DOWN);
                             }
-//                            if (socket.newMessageFlag) {
-//                                socket.newMessageFlag = false;
-//                                messages.append(socket.inputMessage + "\n");
-//                                inputDataScrollView.fullScroll(View.FOCUS_DOWN);
-//                            }
                         }
                     });
                 }
@@ -109,14 +104,17 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
     }
 
     private void sendMessage(String message) {
+        //messages.append(">> " + message + "\n");
+        this.message.setMessage("OUT>>\t\t" + message, true);
         socket.sendMessage(message);
         messageToSend.setText("");
-        messages.append(">> " + message + "\n");
+        inputDataScrollView.fullScroll(View.FOCUS_DOWN);
     }
 
     private void clearAllText() {
         messages.setText("");
         messageToSend.setText("");
+        message.clearAllText();
     }
 
 }

@@ -64,15 +64,13 @@ public class ClientSocket implements Closeable {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int i = 0;
                 while (connectionState) {
                     try {
                         socket.setSoTimeout(0);
                         if (scanner.hasNextLine()) {
-                            i++;
                             newMessageFlag = true;
-                          //  inputMessage = scanner.nextLine();
-                            message.setMessage(scanner.nextLine());
+                            inputMessage = scanner.nextLine();
+                            message.setMessage(inputMessage, true);
                             dataParser.parseInputData(inputMessage);
                         }
                     } catch (Exception e) {

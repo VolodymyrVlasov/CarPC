@@ -1,27 +1,38 @@
 package com.example.carpc.instruments;
-
 import android.util.Log;
-
-import com.example.carpc.MainActivity;
-import com.example.carpc.widgets.settingsScreen.tabs.TerminalTab;
 
 public class Message {
     private static final String TAG = "Message";
     private String message;
-    private int messageCount = 0;
+    private int messageCount;
     private boolean newMessageFlag = false;
+
+    private StringBuilder msg;
+
+    public Message() {
+        this.messageCount = 0;
+        this.msg = new StringBuilder();
+        msg.setLength(100);
+    }
 
     public void setMessage(String message) {
         this.message = message;
         this.messageCount++;
         Log.i(TAG, getCountMessage());
         newMessageFlag = true;
-        System.out.println(getCountMessage());
+    }
+
+    public void setMessage(String message, boolean newMessage) {
+        if (!message.equals("")){
+            this.messageCount++;
+            newMessageFlag = newMessage;
+            this.msg.append("IN" + messageCount + ":\t\t" + message + "\n");
+        }
     }
 
     public String getMessage() {
         newMessageFlag = false;
-        return message;
+        return msg.toString();
     }
 
     public int getMessageCount() {
@@ -34,6 +45,10 @@ public class Message {
 
     public boolean hasNewMessage() {
         return newMessageFlag;
+    }
+
+    public void clearAllText() {
+        msg.delete(0, msg.length());
     }
 
 }

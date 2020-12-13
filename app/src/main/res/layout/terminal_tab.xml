@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="480dp"
+            android:layout_height="400dp"
             android:background="@android:color/transparent"
             android:orientation="vertical">
 
@@ -29,18 +29,18 @@
                 android:layout_marginTop="7dp"
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
-                android:layout_weight="5"
+                android:layout_weight="4"
+                android:gravity="bottom"
                 android:background="@drawable/transparent_bg_bordered_button"
                 android:orientation="horizontal">
 
                 <ScrollView
                     android:id="@+id/inputDataScrollView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fillViewport="true"
                     android:gravity="bottom"
                     android:padding="10dp">
-
 
                     <TextView
                         android:id="@+id/inputMessages"
@@ -50,8 +50,6 @@
                         android:scrollbars="vertical"
                         android:textColor="@android:color/darker_gray"
                         android:textSize="15sp" />
-
-
                 </ScrollView>
 
             </LinearLayout>
@@ -62,7 +60,7 @@
                 android:layout_height="0dp"
                 android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"
-                android:layout_weight="1"
+                android:layout_weight="0.8"
                 android:orientation="horizontal">
 
                 <TextView

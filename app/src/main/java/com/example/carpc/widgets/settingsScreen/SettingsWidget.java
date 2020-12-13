@@ -23,9 +23,6 @@ public class SettingsWidget extends Fragment {
     ViewPager viewPager;
     TabLayout tabLayout;
     private ClientSocket socket;
-    TerminalTab terminalTab;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,7 +59,7 @@ public class SettingsWidget extends Fragment {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addFragment(new ConnectionTab(socket), "CONNECTION");
         viewPagerAdapter.addFragment(new ConfiguratorTab(socket, MainActivity.getParser()), "CONFIGURATOR");
-        viewPagerAdapter.addFragment(terminalTab, "TERMINAL");
+        viewPagerAdapter.addFragment(new TerminalTab(socket), "TERMINAL");
         viewPagerAdapter.addFragment(new UITab(), "UI");
         viewPager.setAdapter(viewPagerAdapter);
     }
