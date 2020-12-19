@@ -11,44 +11,44 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.carpc.instruments.DataBase;
-import com.example.carpc.instruments.DataParser;
-import com.example.carpc.instruments.Message;
+import com.example.carpc.models.DataPrefs;
+import com.example.carpc.utils.DataParser;
+import com.example.carpc.models.Message;
 import com.example.carpc.widgets.chargeScreen.ChargeWidget;
 import com.example.carpc.widgets.dashboardScreen.DashboardWidget;
 import com.example.carpc.widgets.settingsScreen.SettingsWidget;
-import com.example.carpc.widgets.settingsScreen.tabs.TerminalTab;
 
 import java.util.Map;
-import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "myLogs";
     private static DataParser parser;
     private static Message message;
-    private static DataBase db;
     private DashboardWidget dashboardWidget;
     private SettingsWidget settingsWidget;
     private ChargeWidget chargeWidget;
     private androidx.fragment.app.FragmentTransaction fTrans;
-    private Map<String, String> map;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         parser = new DataParser();
         message = new Message();
-        db = new DataBase("car_pc_db.txt", this);
+
+        // fragments
         dashboardWidget = new DashboardWidget();
         settingsWidget = new SettingsWidget();
         chargeWidget = new ChargeWidget();
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.frgmCont, dashboardWidget);
         fTrans.commit();
-        map = db.getAllValues();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
+
+//        FOR TESTING
+        Map<String, ?> allData = DataPrefs.getInstance(getApplicationContext()).GetAll();
+        for (Map.Entry<String, ?> entry : allData.entrySet()) {
             System.out.println("Key: " + entry.getKey() + " - " + entry.getValue());
         }
     }
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        db.writeDataBase();
     }
 
     public void onClick(View v) {
@@ -94,12 +93,7 @@ public class MainActivity extends AppCompatActivity {
         return message;
     }
 
-    public static Context getContext() {
-        return getContext();
-    }
-
-    public static DataBase getDataBase() {
-        return db;
-    }
-
+//    public static Context getContext() {
+//        return getContext();
+//    }
 }

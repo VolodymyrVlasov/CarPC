@@ -1,4 +1,4 @@
-package com.example.carpc.instruments;
+package com.example.carpc.models;
 import android.util.Log;
 
 public class Message {

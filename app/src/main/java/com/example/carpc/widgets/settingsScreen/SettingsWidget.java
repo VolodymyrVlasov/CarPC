@@ -11,9 +11,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.instruments.ClientSocket;
-import com.example.carpc.instruments.DataBase;
-import com.example.carpc.instruments.ViewPagerAdapter;
+import com.example.carpc.network.ClientSocket;
+import com.example.carpc.adapters.ViewPagerAdapter;
+import com.example.carpc.models.DataPrefs;
 import com.example.carpc.widgets.settingsScreen.tabs.ConfiguratorTab;
 import com.example.carpc.widgets.settingsScreen.tabs.ConnectionTab;
 import com.example.carpc.widgets.settingsScreen.tabs.TerminalTab;
@@ -24,7 +24,7 @@ public class SettingsWidget extends Fragment {
     ViewPager viewPager;
     TabLayout tabLayout;
     private ClientSocket socket;
-    private DataBase dataBase;
+    private DataPrefs dataPrefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,8 +32,12 @@ public class SettingsWidget extends Fragment {
         View v = inflater.inflate(R.layout.settings_widget, container, false);
         viewPager = v.findViewById(R.id.viewpager);
         tabLayout = v.findViewById(R.id.tabs);
-        dataBase = MainActivity.getDataBase();
-        connect(dataBase.getIP(), dataBase.getPort());
+
+        // data
+        dataPrefs = DataPrefs.getInstance(getContext());
+
+        // get connection
+        socket = new ClientSocket(dataPrefs.getIP(), dataPrefs.getPort(), MainActivity.getParser());
         setRetainInstance(true);
         return v;
     }
@@ -65,10 +69,6 @@ public class SettingsWidget extends Fragment {
         viewPagerAdapter.addFragment(new TerminalTab(socket), "TERMINAL");
         viewPagerAdapter.addFragment(new UITab(), "UI");
         viewPager.setAdapter(viewPagerAdapter);
-    }
-
-    public void connect(String ip, int port) {
-        socket = new ClientSocket(ip, port, MainActivity.getParser());
     }
 
     @Override

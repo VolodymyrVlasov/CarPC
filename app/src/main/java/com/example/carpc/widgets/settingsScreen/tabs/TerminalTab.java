@@ -2,7 +2,6 @@ package com.example.carpc.widgets.settingsScreen.tabs;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.instruments.ClientSocket;
-import com.example.carpc.instruments.DataParser;
-import com.example.carpc.instruments.Message;
+import com.example.carpc.utils.AppConstants;
+import com.example.carpc.network.ClientSocket;
+import com.example.carpc.models.Message;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -74,10 +73,10 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
                 clearAllText();
                 break;
             case R.id.btnSubscribe:
-                sendMessage("@a1");
+                sendMessage(AppConstants.SUBSCRIBE);
                 break;
             case R.id.btnUnsubscribe:
-                sendMessage("@a0");
+                sendMessage(AppConstants.UNSUBSCRIBE);
                 break;
         }
     }

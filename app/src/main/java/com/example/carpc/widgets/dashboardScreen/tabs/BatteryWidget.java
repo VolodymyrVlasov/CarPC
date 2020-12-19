@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.instruments.DataParser;
-import com.example.carpc.instruments.DrawView;
+import com.example.carpc.utils.DataParser;
+import com.example.carpc.utils.plotter.DrawView;
 
 import java.util.Timer;
 import java.util.TimerTask;

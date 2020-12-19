@@ -1,9 +1,6 @@
-package com.example.carpc.instruments;
+package com.example.carpc.utils;
 
 import android.util.Log;
-
-import com.example.carpc.widgets.settingsScreen.SettingsWidget;
-import com.example.carpc.widgets.settingsScreen.tabs.TerminalTab;
 
 import java.util.HashMap;
 

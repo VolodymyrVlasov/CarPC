@@ -1,22 +1,23 @@
-package com.example.carpc.instruments;
+package com.example.carpc.network;
 
 import android.util.Log;
 
 import com.example.carpc.MainActivity;
+import com.example.carpc.models.Message;
+import com.example.carpc.utils.AppConstants;
+import com.example.carpc.utils.DataParser;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class ClientSocket implements Closeable {
     private Socket socket;
     private Scanner scanner;
     private PrintWriter printWriter;
-    private DataBase db;
     private Message message = MainActivity.getMessage();
     private boolean connectionState = false;
     private boolean reconnect = true;
@@ -39,13 +40,12 @@ public class ClientSocket implements Closeable {
                 try {
                     socket = new Socket();
                     dataParser = parser;
-                    db = MainActivity.getDataBase();
                     socket.connect(new InetSocketAddress(address, port), 500);
                     scanner = new Scanner(socket.getInputStream());
                     if (subscribe) {
-                        sendMessage(db.SUBSCRIBE);
+                        sendMessage(AppConstants.SUBSCRIBE);
                     } else {
-                        sendMessage(db.UNSUBSCRIBE);
+                        sendMessage(AppConstants.UNSUBSCRIBE);
                     }
                     readInputStream();
                     connectionState = true;
@@ -117,7 +117,7 @@ public class ClientSocket implements Closeable {
     public void disconnect() {
         try {
             reconnect = false;
-            sendMessage(db.UNSUBSCRIBE);
+            sendMessage(AppConstants.UNSUBSCRIBE);
             close();
         } catch (IOException e) {
             e.printStackTrace();

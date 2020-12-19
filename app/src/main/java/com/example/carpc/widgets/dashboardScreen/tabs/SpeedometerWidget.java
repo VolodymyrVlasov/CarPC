@@ -10,22 +10,24 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.instruments.DataParser;
+import com.example.carpc.utils.DataParser;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class SpeedometerWidget extends Fragment {
+    private static final long DELAY = 50L;
+    private static final long PERIOD = 50L;
+    private static int speedToSet = 0;
 
-    public static TextView speedTextView;
-    public static int speedToSet = 0;
-    DataParser parser;
+    public TextView speedTextView;
+    private DataParser parser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.speedometer_widget, null);
         speedTextView = v.findViewById(R.id.speedDashboard);
-        parser = (DataParser) MainActivity.getParser();
+        parser = MainActivity.getParser();
         update();
         setRetainInstance(true);
         return v;
@@ -52,9 +54,10 @@ public class SpeedometerWidget extends Fragment {
                 }
             }
         };
+
         Timer timer = new Timer("Timer");
-        long delay = 50L;
-        long period = 50L;
-        timer.scheduleAtFixedRate(repeatedTask, delay, period);
+//        long delay = 50L;
+//        long period = 50L;
+        timer.scheduleAtFixedRate(repeatedTask, DELAY, PERIOD);
     }
 }

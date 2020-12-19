@@ -1,4 +1,4 @@
-package com.example.carpc.instruments;
+package com.example.carpc.adapters;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

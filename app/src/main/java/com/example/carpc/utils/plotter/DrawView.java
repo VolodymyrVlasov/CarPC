@@ -1,4 +1,4 @@
-package com.example.carpc.instruments;
+package com.example.carpc.utils.plotter;
 
 import android.content.Context;
 import android.view.SurfaceHolder;

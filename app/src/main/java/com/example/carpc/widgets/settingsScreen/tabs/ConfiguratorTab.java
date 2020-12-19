@@ -10,8 +10,8 @@ import android.widget.Spinner;
 import androidx.fragment.app.Fragment;
 
 import com.example.carpc.R;
-import com.example.carpc.instruments.ClientSocket;
-import com.example.carpc.instruments.DataParser;
+import com.example.carpc.network.ClientSocket;
+import com.example.carpc.utils.DataParser;
 import com.example.carpc.widgets.settingsScreen.tabs.configTabs.ChargerConfig;
 import com.example.carpc.widgets.settingsScreen.tabs.configTabs.CurrentConfig;
 import com.example.carpc.widgets.settingsScreen.tabs.configTabs.LevelsConfig;
