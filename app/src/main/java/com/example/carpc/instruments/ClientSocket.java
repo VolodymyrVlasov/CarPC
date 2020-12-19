@@ -3,6 +3,7 @@ package com.example.carpc.instruments;
 import android.util.Log;
 
 import com.example.carpc.MainActivity;
+import com.example.carpc.constants.AppConstants;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -16,7 +17,6 @@ public class ClientSocket implements Closeable {
     private Socket socket;
     private Scanner scanner;
     private PrintWriter printWriter;
-    private DataBase db;
     private Message message = MainActivity.getMessage();
     private boolean connectionState = false;
     private boolean reconnect = true;
@@ -39,13 +39,13 @@ public class ClientSocket implements Closeable {
                 try {
                     socket = new Socket();
                     dataParser = parser;
-                    db = MainActivity.getDataBase();
+//                    db = MainActivity.getDataBase();
                     socket.connect(new InetSocketAddress(address, port), 500);
                     scanner = new Scanner(socket.getInputStream());
                     if (subscribe) {
-                        sendMessage(db.SUBSCRIBE);
+                        sendMessage(AppConstants.SUBSCRIBE);
                     } else {
-                        sendMessage(db.UNSUBSCRIBE);
+                        sendMessage(AppConstants.UNSUBSCRIBE);
                     }
                     readInputStream();
                     connectionState = true;
@@ -117,7 +117,7 @@ public class ClientSocket implements Closeable {
     public void disconnect() {
         try {
             reconnect = false;
-            sendMessage(db.UNSUBSCRIBE);
+            sendMessage(AppConstants.UNSUBSCRIBE);
             close();
         } catch (IOException e) {
             e.printStackTrace();

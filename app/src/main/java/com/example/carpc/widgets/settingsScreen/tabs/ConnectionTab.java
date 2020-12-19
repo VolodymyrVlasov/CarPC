@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
 import com.example.carpc.instruments.ClientSocket;
-import com.example.carpc.instruments.DataBase;
+import com.example.carpc.io.DataPrefs;
 
 import java.util.Objects;
 
@@ -31,28 +31,28 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     private TextView myNetworkAddress;
     private ClientSocket socket;
     private Button btnConnect, btnDisconnect;
-    private String address;
-    private int port;
-    private DataBase dataBase;
+    private DataPrefs dataPrefs;
 
     public ConnectionTab(ClientSocket socket) {
         this.socket = socket;
-        this.dataBase = MainActivity.getDataBase();
-        port = dataBase.getPort();
-        address = dataBase.getIP();
+        this.dataPrefs = DataPrefs.getInstance(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.connection_tab, null);
+
         serverAddress = v.findViewById(R.id.server_address);
         serverPort = v.findViewById(R.id.server_port);
         myNetworkAddress = v.findViewById(R.id.my_server_address);
         btnConnect = v.findViewById(R.id.btnConnect);
         btnDisconnect = v.findViewById(R.id.btnDisconnect);
-        serverAddress.setText(address);
-        serverPort.setText(String.valueOf(port));
+
+        // set values
+        serverAddress.setText(dataPrefs.getIP());
+        serverPort.setText(String.valueOf(dataPrefs.getPort()));
+
         if (socket.isConnected()) {
             WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(
                     Context.WIFI_SERVICE);
@@ -82,9 +82,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnConnect:
-                updateConnectionParams(
-                        address = serverAddress.getText().toString(),
-                        port = Integer.parseInt(serverPort.getText().toString()));
+                updateConnectionParams(serverAddress.getText().toString(), Integer.parseInt(serverPort.getText().toString()));
                 MainActivity.hideKeyboard((Activity) Objects.requireNonNull(getContext()));
                 break;
             case R.id.btnDisconnect:
@@ -94,17 +92,10 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         }
     }
 
-    public String getServerAddress() {
-        return address;
-    }
-
-    public Integer getServerPort() {
-        return port;
-    }
-
     public void updateConnectionParams(String ip, int port) {
-        dataBase.setPort(port);
-        dataBase.setIP(ip);
+        dataPrefs.setIP(ip);
+        dataPrefs.setPort(port);
+        // TODO: add commit to data prefs
         socket = new ClientSocket(ip, port, MainActivity.getParser(), false);
         setConnectionStateIndicator();
     }

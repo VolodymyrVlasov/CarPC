@@ -15,14 +15,14 @@ import java.util.TreeMap;
 
 public class DataBase {
     private final String FILENAME;
-    public final String UNSUBSCRIBE;
-    public final String SUBSCRIBE;
+//    public final String UNSUBSCRIBE;
+//    public final String SUBSCRIBE;
     private TreeMap<String, String> dataBaseValues;
     private Context context;
 
     public DataBase(String dataBaseName, Context context) {
-        UNSUBSCRIBE = "@a0";
-        SUBSCRIBE = "@a1";
+//        UNSUBSCRIBE = "@a0";
+//        SUBSCRIBE = "@a1";
         FILENAME = dataBaseName;
         dataBaseValues = new TreeMap<>();
         this.context = context;

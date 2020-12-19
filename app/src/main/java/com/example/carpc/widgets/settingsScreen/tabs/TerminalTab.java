@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
+import com.example.carpc.constants.AppConstants;
 import com.example.carpc.instruments.ClientSocket;
 import com.example.carpc.instruments.DataParser;
 import com.example.carpc.instruments.Message;
@@ -74,10 +75,10 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
                 clearAllText();
                 break;
             case R.id.btnSubscribe:
-                sendMessage("@a1");
+                sendMessage(AppConstants.SUBSCRIBE);
                 break;
             case R.id.btnUnsubscribe:
-                sendMessage("@a0");
+                sendMessage(AppConstants.UNSUBSCRIBE);
                 break;
         }
     }
