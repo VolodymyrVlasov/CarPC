@@ -1,4 +1,4 @@
-package com.example.carpc.constants;
+package com.example.carpc.utils;
 
 public class AppConstants {
     public static final String UNSUBSCRIBE = "@a0";

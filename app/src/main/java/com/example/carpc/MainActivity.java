@@ -2,7 +2,6 @@ package com.example.carpc;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -12,9 +11,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.carpc.instruments.DataParser;
-import com.example.carpc.instruments.Message;
-import com.example.carpc.io.DataPrefs;
+import com.example.carpc.models.DataPrefs;
+import com.example.carpc.utils.DataParser;
+import com.example.carpc.models.Message;
 import com.example.carpc.widgets.chargeScreen.ChargeWidget;
 import com.example.carpc.widgets.dashboardScreen.DashboardWidget;
 import com.example.carpc.widgets.settingsScreen.SettingsWidget;
@@ -48,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
         fTrans.commit();
 
 //        FOR TESTING
-//        Map<String, ?> allData = DataPrefs.getInstance(getContext()).GetAll();
-//        for (Map.Entry<String, ?> entry : allData.entrySet()) {
-//            System.out.println("Key: " + entry.getKey() + " - " + entry.getValue());
-//        }
+        Map<String, ?> allData = DataPrefs.getInstance(getApplicationContext()).GetAll();
+        for (Map.Entry<String, ?> entry : allData.entrySet()) {
+            System.out.println("Key: " + entry.getKey() + " - " + entry.getValue());
+        }
     }
 
     @Override
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         return message;
     }
 
-    public static Context getContext() {
-        return getContext();
-    }
+//    public static Context getContext() {
+//        return getContext();
+//    }
 }

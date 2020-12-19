@@ -11,9 +11,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.instruments.ClientSocket;
-import com.example.carpc.instruments.ViewPagerAdapter;
-import com.example.carpc.io.DataPrefs;
+import com.example.carpc.network.ClientSocket;
+import com.example.carpc.adapters.ViewPagerAdapter;
+import com.example.carpc.models.DataPrefs;
 import com.example.carpc.widgets.settingsScreen.tabs.ConfiguratorTab;
 import com.example.carpc.widgets.settingsScreen.tabs.ConnectionTab;
 import com.example.carpc.widgets.settingsScreen.tabs.TerminalTab;

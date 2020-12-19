@@ -1,13 +1,13 @@
-package com.example.carpc.io;
+package com.example.carpc.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.example.carpc.constants.AppConstants;
+import com.example.carpc.utils.AppConstants;
 
 import java.util.Map;
 
-import static com.example.carpc.constants.AppConstants.DATA_IP;
-import static com.example.carpc.constants.AppConstants.DATA_PORT;
+import static com.example.carpc.utils.AppConstants.DATA_IP;
+import static com.example.carpc.utils.AppConstants.DATA_PORT;
 
 public class DataPrefs {
     private SharedPreferences sharedPref;
@@ -27,7 +27,7 @@ public class DataPrefs {
     }
 
     public String getIP() {
-        return sharedPref.getString(DATA_IP, "192.168.1.7");
+        return sharedPref.getString(DATA_IP, "127.0.0.1");
     }
 
     public void setIP(String IP) {

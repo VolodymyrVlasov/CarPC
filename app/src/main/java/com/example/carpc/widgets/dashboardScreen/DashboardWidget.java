@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.instruments.ClientSocket;
-import com.example.carpc.io.DataPrefs;
+import com.example.carpc.network.ClientSocket;
+import com.example.carpc.models.DataPrefs;
 import com.example.carpc.widgets.dashboardScreen.tabs.BatteryManagerWidget;
 import com.example.carpc.widgets.dashboardScreen.tabs.BatteryWidget;
 import com.example.carpc.widgets.dashboardScreen.tabs.IconStatusLeftWidget;

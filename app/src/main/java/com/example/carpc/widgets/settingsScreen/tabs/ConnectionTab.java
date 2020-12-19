@@ -21,8 +21,8 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.instruments.ClientSocket;
-import com.example.carpc.io.DataPrefs;
+import com.example.carpc.network.ClientSocket;
+import com.example.carpc.models.DataPrefs;
 
 import java.util.Objects;
 

@@ -1,16 +1,17 @@
-package com.example.carpc.instruments;
+package com.example.carpc.network;
 
 import android.util.Log;
 
 import com.example.carpc.MainActivity;
-import com.example.carpc.constants.AppConstants;
+import com.example.carpc.models.Message;
+import com.example.carpc.utils.AppConstants;
+import com.example.carpc.utils.DataParser;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class ClientSocket implements Closeable {
@@ -39,7 +40,6 @@ public class ClientSocket implements Closeable {
                 try {
                     socket = new Socket();
                     dataParser = parser;
-//                    db = MainActivity.getDataBase();
                     socket.connect(new InetSocketAddress(address, port), 500);
                     scanner = new Scanner(socket.getInputStream());
                     if (subscribe) {
