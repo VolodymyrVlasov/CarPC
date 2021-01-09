@@ -1,7 +1,6 @@
 package com.example.carpc;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.carpc.models.DataPrefs;
+import com.example.carpc.utils.Counter;
 import com.example.carpc.utils.DataParser;
 import com.example.carpc.models.Message;
 import com.example.carpc.widgets.chargeScreen.ChargeWidget;
@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "myLogs";
     private static DataParser parser;
     private static Message message;
+    private static Counter counter;
+    private DataPrefs dataPrefs;
     private DashboardWidget dashboardWidget;
     private SettingsWidget settingsWidget;
     private ChargeWidget chargeWidget;
@@ -37,11 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
         parser = new DataParser();
         message = new Message();
-
+        counter = new Counter();
+        dataPrefs = DataPrefs.getInstance(this);
+        Counter.setUsedAH(dataPrefs.getUsedAmpereHour());
+        Counter.setUsedWH(dataPrefs.getUsedWattHour());
         // fragments
         dashboardWidget = new DashboardWidget();
         settingsWidget = new SettingsWidget();
         chargeWidget = new ChargeWidget();
+
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.frgmCont, dashboardWidget);
         fTrans.commit();
@@ -54,8 +60,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dataPrefs.setUsedAmpereHour(Counter.getUsedAH());
+        dataPrefs.setUsedWattHour(Counter.getUsedWH());
     }
 
     public void onClick(View v) {
@@ -93,7 +107,4 @@ public class MainActivity extends AppCompatActivity {
         return message;
     }
 
-//    public static Context getContext() {
-//        return getContext();
-//    }
 }
