@@ -7,10 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.network.ClientSocket;
-import com.example.carpc.models.DataPrefs;
 import com.example.carpc.widgets.dashboardScreen.tabs.BatteryManagerWidget;
 import com.example.carpc.widgets.dashboardScreen.tabs.BatteryWidget;
 import com.example.carpc.widgets.dashboardScreen.tabs.IconStatusLeftWidget;
@@ -26,7 +23,6 @@ public class DashboardWidget extends Fragment {
     private IconStatusRightWidget iconStatusRightWidget;
     private IconStatusLeftWidget iconStatusLeftWidget;
     private androidx.fragment.app.FragmentTransaction fragmentTransaction;
-    private ClientSocket socket;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,15 +45,12 @@ public class DashboardWidget extends Fragment {
         fragmentTransaction.setCustomAnimations(R.animator.left_in, R.animator.right_in).replace(R.id.dashboardLeftCont, batteryManagerWidget);
         fragmentTransaction.setCustomAnimations(R.animator.left_out, R.animator.right_out).replace(R.id.dashboardRightCont, tripManagerWidget);
         fragmentTransaction.commit();
-
-        DataPrefs data = DataPrefs.getInstance(getContext());
-        socket = new ClientSocket(data.getIP(), data.getPort(), MainActivity.getParser(), true);
         return v;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        socket.disconnect();
+//        socket.disconnect();
     }
 }

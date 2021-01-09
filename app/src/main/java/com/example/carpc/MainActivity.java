@@ -1,7 +1,6 @@
 package com.example.carpc;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +21,6 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "myLogs";
-    private static DataParser parser;
     private static Message message;
     private DashboardWidget dashboardWidget;
     private SettingsWidget settingsWidget;
@@ -35,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        parser = new DataParser();
+
         message = new Message();
 
         // fragments
@@ -85,15 +83,7 @@ public class MainActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static DataParser getParser() {
-        return parser;
-    }
-
     public static Message getMessage() {
         return message;
     }
-
-//    public static Context getContext() {
-//        return getContext();
-//    }
 }

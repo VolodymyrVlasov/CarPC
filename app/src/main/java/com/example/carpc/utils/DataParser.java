@@ -1,11 +1,10 @@
 package com.example.carpc.utils;
 
 import android.util.Log;
-
 import java.util.HashMap;
 
 public class DataParser {
-
+    private static DataParser instance = null;
 
     public static String inputData;
 
@@ -22,8 +21,7 @@ public class DataParser {
     private String[] currentConfig = {"Please try again", "Please try again"};
     private String levelsMax, levelsMin, levelsStartbal, levelsBal, levelsChrgd, levelsAllowd, levelsCmin;
 
-
-    public DataParser() {
+    private DataParser() {
         String[] chars = new String[]{"V", "v", "l", "R", "q", "z", "w", "c", "F", "f", "d", "e", "r"};
         for (String e : chars) valueArray.put(e, 0.0);
         valueMinMaxCellArray.put("n", "0:0.000");
@@ -33,6 +31,14 @@ public class DataParser {
         valueMinMaxCellTempArray.put("w", "0:0.000");
         valueMinMaxCellTempArray.put("z", "0:0.000");
         cellInfo.put("q", "0:0000:000:000:0:1");
+    }
+
+    public static DataParser getInstance() {
+        if (instance == null) {
+            instance = new DataParser();
+        }
+
+        return instance;
     }
 
     public void parseInputData(String inputData) throws NullPointerException {
@@ -133,6 +139,7 @@ public class DataParser {
     }
 
     public Integer getSpeed() {
+        // todo: can be errors
         return (int) Math.round(valueArray.get("V"));
     }
 

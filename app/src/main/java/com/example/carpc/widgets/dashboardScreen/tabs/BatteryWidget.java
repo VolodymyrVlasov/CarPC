@@ -37,7 +37,7 @@ public class BatteryWidget extends Fragment {
         surfaceView.addView(batteryIcon = new DrawView(context));
         range = v.findViewById(R.id.range);
         tempOutside = v.findViewById(R.id.temp_outside);
-        parser = (DataParser) MainActivity.getParser();
+        parser = DataParser.getInstance();
         update();
         setRetainInstance(true);
         return v;

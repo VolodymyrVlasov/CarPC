@@ -27,7 +27,7 @@ public class SpeedometerWidget extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.speedometer_widget, null);
         speedTextView = v.findViewById(R.id.speedDashboard);
-        parser = MainActivity.getParser();
+        parser = DataParser.getInstance();
         update();
         setRetainInstance(true);
         return v;

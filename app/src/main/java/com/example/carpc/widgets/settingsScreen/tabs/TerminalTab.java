@@ -16,23 +16,20 @@ import androidx.fragment.app.Fragment;
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
 import com.example.carpc.utils.AppConstants;
-import com.example.carpc.network.ClientSocket;
+import com.example.carpc.network.TCPClient;
 import com.example.carpc.models.Message;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class TerminalTab extends Fragment implements View.OnClickListener {
-    private ClientSocket socket;
     private ScrollView inputDataScrollView;
     private EditText messageToSend;
     private TextView messages;
     private Button btnSend, btnClear, btnSubscribe, btnUnsubscribe;
     private Message message = MainActivity.getMessage();
 
-    public TerminalTab(ClientSocket socket) {
-        this.socket = socket;
-    }
+    public TerminalTab() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,7 +103,7 @@ public class TerminalTab extends Fragment implements View.OnClickListener {
 
     private void sendMessage(String message) {
         this.message.setMessage("\t\t\t\tOUT>>\t\t" + message, true);
-        socket.sendMessage(message);
+        TCPClient.getInstance(getContext()).sendMessage(message);
         messageToSend.setText("");
       //  messageToSend.setFocusable(true);
         inputDataScrollView.fullScroll(View.FOCUS_DOWN);

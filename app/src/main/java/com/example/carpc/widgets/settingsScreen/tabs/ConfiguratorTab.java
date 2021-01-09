@@ -10,24 +10,15 @@ import android.widget.Spinner;
 import androidx.fragment.app.Fragment;
 
 import com.example.carpc.R;
-import com.example.carpc.network.ClientSocket;
-import com.example.carpc.utils.DataParser;
 import com.example.carpc.widgets.settingsScreen.tabs.configTabs.ChargerConfig;
 import com.example.carpc.widgets.settingsScreen.tabs.configTabs.CurrentConfig;
 import com.example.carpc.widgets.settingsScreen.tabs.configTabs.LevelsConfig;
 
 public class ConfiguratorTab extends Fragment {
-
     private static final String TAG = "GroupConfig";
-
     private androidx.fragment.app.FragmentTransaction fragmentTransaction;
-    private ClientSocket socket;
-    private DataParser parser;
 
-    public ConfiguratorTab(final ClientSocket socket, final DataParser parser) {
-        this.socket = socket;
-        this.parser = parser;
-    }
+    public ConfiguratorTab() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,7 +50,7 @@ public class ConfiguratorTab extends Fragment {
                 fragmentTransaction.replace(R.id.frameForConfigFragments, new LevelsConfig());
                 break;
             case "Current":
-                fragmentTransaction.replace(R.id.frameForConfigFragments, new CurrentConfig(socket, parser));
+                fragmentTransaction.replace(R.id.frameForConfigFragments, new CurrentConfig());
                 break;
             case "Charger":
                 fragmentTransaction.replace(R.id.frameForConfigFragments, new ChargerConfig());

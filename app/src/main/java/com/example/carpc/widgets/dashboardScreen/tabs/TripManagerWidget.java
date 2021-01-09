@@ -41,7 +41,7 @@ public class TripManagerWidget extends Fragment {
 
         totalTripTextView = v.findViewById(R.id.value_total_trip);
         totalEnergyTextView = v.findViewById(R.id.value_total_energy);
-        parser = (DataParser) MainActivity.getParser();
+        parser = DataParser.getInstance();
         update();
         setRetainInstance(true);
         return v;
