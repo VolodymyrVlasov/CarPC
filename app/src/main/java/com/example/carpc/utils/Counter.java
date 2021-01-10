@@ -1,7 +1,5 @@
 package com.example.carpc.utils;
 
-import com.example.carpc.MainActivity;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,7 +18,7 @@ public class Counter {
     private static double wattHour;
 
     public Counter() {
-        parser = (DataParser) MainActivity.getParser();
+        parser = DataParser.getInstance();
         update();
     }
 
