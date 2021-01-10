@@ -14,65 +14,62 @@
 
         <LinearLayout
             android:id="@+id/top_panel"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints">
 
             <FrameLayout
                 android:id="@+id/dashboardLeftUpCont"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical" />
 
             <FrameLayout
                 android:id="@+id/dashboardRightUpCont"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/center_panel"
-            app:layout_constraintTop_toBottomOf="@+id/top_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/top_panel">
 
             <FrameLayout
                 android:id="@+id/dashboardCenterCont"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.2"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
             <FrameLayout
                 android:id="@+id/dashboardRightCont"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
                 android:orientation="vertical" />
 
             <FrameLayout
                 android:id="@+id/dashboardLeftCont"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
                 android:orientation="vertical" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/bottom_panel"
-            app:layout_constraintTop_toBottomOf="@+id/center_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/center_panel">
 
             <FrameLayout
                 android:id="@+id/dashboardBottomLeftCont"
@@ -84,10 +81,10 @@
 
         <LinearLayout
             android:id="@+id/bottom2_panel"
-            app:layout_constraintTop_toBottomOf="@+id/bottom_panel"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-            android:layout_height="wrap_content">
+            app:layout_constraintTop_toBottomOf="@+id/bottom_panel">
 
             <FrameLayout
                 android:id="@+id/dashboardBottomRightCont"

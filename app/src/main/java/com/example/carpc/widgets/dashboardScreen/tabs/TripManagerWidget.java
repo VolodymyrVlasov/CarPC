@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
+import com.example.carpc.utils.Counter;
 import com.example.carpc.utils.DataParser;
 
 import java.util.Timer;
@@ -54,6 +55,7 @@ public class TripManagerWidget extends Fragment {
             public void run() {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
+                        @SuppressLint("DefaultLocale")
                         @Override
                         public void run() {
                             double totalTrip = parser.getTotalDistance();
@@ -61,6 +63,11 @@ public class TripManagerWidget extends Fragment {
                                     parser.getLastChargePassedDistance())));
                             rangeDistanceTextView.setText(String.valueOf((int) Math.round(
                                     parser.getRange())));
+                            if (Counter.getUsedAH() < 10) {
+                                ampereHourTextView.setText(String.format("%.1f", Counter.getUsedAH()));
+                            } else {
+                                ampereHourTextView.setText(String.format("%.0f", Counter.getUsedAH()));
+                            }
                             if (totalTripToSet <= totalTrip) {
                                 totalTripToSet += 1;
                                 totalTripTextView.setText(String.valueOf((int) Math.round(totalTripToSet)));

@@ -27,7 +27,7 @@ public class DataPrefs {
     }
 
     public String getIP() {
-        return sharedPref.getString(DATA_IP, "10.0.2.2");
+        return sharedPref.getString(DATA_IP, "127.0.0.1");
     }
 
     public void setIP(String IP) {
@@ -44,5 +44,39 @@ public class DataPrefs {
 
     public Map<String, ?> GetAll() {
         return sharedPref.getAll();
+    }
+
+    public double getUsedAmpereHour() {
+        int temp = sharedPref.getInt(AppConstants.DATA_BATTERY_USED_AH, 0);
+        return temp != 0 ? (double) (temp / 10) : 0;
+    }
+
+    public double getUsedWattHour() {
+        int temp = sharedPref.getInt(AppConstants.DATA_BATTERY_USED_WH, 0);
+        return temp != 0 ? (double) (temp / 10) : 0;
+    }
+
+    public double getTotalAmpereHour() {
+        int temp = sharedPref.getInt(AppConstants.DATA_BATTERY_CAPACITY_AH, 0);
+        return temp != 0 ? (double) (temp / 10) : 0;
+    }
+
+    public double getTotalWattHour() {
+        int temp = sharedPref.getInt(AppConstants.DATA_BATTERY_CAPACITY_WH, 0);
+        return temp != 0 ? (double) (temp / 10) : 0;
+    }
+
+    public void setUsedAmpereHour(Double ampereHour) {
+        sharedPref.edit().putInt(AppConstants.DATA_BATTERY_USED_AH, (int) (ampereHour * 10)).apply();
+
+    }
+
+    public void setUsedWattHour(Double ampereHour) {
+        sharedPref.edit().putInt(AppConstants.DATA_BATTERY_USED_WH, (int) (ampereHour * 10)).apply();
+    }
+
+    public void commit() {
+        sharedPref.edit().apply();
+
     }
 }
