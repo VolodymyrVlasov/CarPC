@@ -12,7 +12,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.carpc.models.DataPrefs;
 import com.example.carpc.utils.Counter;
-import com.example.carpc.utils.DataParser;
 import com.example.carpc.models.Message;
 import com.example.carpc.widgets.chargeScreen.ChargeWidget;
 import com.example.carpc.widgets.dashboardScreen.DashboardWidget;
@@ -21,10 +20,7 @@ import com.example.carpc.widgets.settingsScreen.SettingsWidget;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String LOG_TAG = "myLogs";
-    private static DataParser parser;
     private static Message message;
-    private static Counter counter;
     private DataPrefs dataPrefs;
     private DashboardWidget dashboardWidget;
     private SettingsWidget settingsWidget;
@@ -37,9 +33,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        parser = new DataParser();
+
         message = new Message();
-        counter = new Counter();
         dataPrefs = DataPrefs.getInstance(this);
         Counter.setUsedAH(dataPrefs.getUsedAmpereHour());
         Counter.setUsedWH(dataPrefs.getUsedWattHour());
@@ -97,10 +92,6 @@ public class MainActivity extends AppCompatActivity {
         }
         assert imm != null;
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    public static DataParser getParser() {
-        return parser;
     }
 
     public static Message getMessage() {

@@ -42,7 +42,7 @@ public class BatteryManagerWidget extends Fragment {
         minCellVoltage = v.findViewById(R.id.value_cell_min_voltage);
         maxCellNumber = v.findViewById(R.id.value_cell_max_id);
         maxCellVoltage = v.findViewById(R.id.value_cell_max_voltage);
-        parser = (DataParser) MainActivity.getParser();
+        parser = DataParser.getInstance();
         update();
         setRetainInstance(true);
         return v;

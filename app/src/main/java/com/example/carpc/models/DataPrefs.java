@@ -2,7 +2,6 @@ package com.example.carpc.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.example.carpc.utils.AppConstants;
 
 import java.util.Map;
@@ -28,11 +27,11 @@ public class DataPrefs {
     }
 
     public String getIP() {
-        return sharedPref.getString(DATA_IP, "192.168.1.7");
+        return sharedPref.getString(DATA_IP, "127.0.0.1");
     }
 
     public void setIP(String IP) {
-        sharedPref.edit().putString(AppConstants.DATA_IP, IP).apply();
+        sharedPref.edit().putString(AppConstants.DATA_IP, IP);
     }
 
     public int getPort() {
@@ -40,7 +39,7 @@ public class DataPrefs {
     }
 
     public void setPort(int port) {
-        sharedPref.edit().putInt(AppConstants.DATA_PORT, port).apply();
+        sharedPref.edit().putInt(AppConstants.DATA_PORT, port);
     }
 
     public Map<String, ?> GetAll() {

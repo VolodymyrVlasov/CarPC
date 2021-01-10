@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.network.ClientSocket;
+import com.example.carpc.network.TCPClient;
 import com.example.carpc.utils.DataParser;
 
 import java.util.Objects;
@@ -25,12 +25,10 @@ import java.util.Objects;
 public class CurrentConfig extends Fragment {
     private static final String TAG = "GroupConfig";
     private LinearLayout configContainer;
-    private ClientSocket socket;
-    private DataParser parser;
+    private TCPClient tcpClient;
 
-    public CurrentConfig(final ClientSocket socket, final DataParser parser) {
-        this.socket = socket;
-        this.parser = parser;
+    public CurrentConfig() {
+        tcpClient = TCPClient.getInstance(getContext());
     }
 
     @Override
@@ -111,11 +109,11 @@ public class CurrentConfig extends Fragment {
                         resultCommand = resultCommand + valueParam[i].getText().toString() + ":";
                     }
 
-                    socket.sendMessage("..");
+                    tcpClient.sendMessage("..");
                     Thread.sleep(3);
-                    socket.sendMessage("config");
+                    tcpClient.sendMessage("config");
                     Thread.sleep(3);
-                    socket.sendMessage(resultCommand);
+                    tcpClient.sendMessage(resultCommand);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -127,13 +125,13 @@ public class CurrentConfig extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    socket.sendMessage("..");
+                    tcpClient.sendMessage("..");
                     Thread.sleep(3);
-                    socket.sendMessage("config");
+                    tcpClient.sendMessage("config");
                     Thread.sleep(3);
-                    socket.sendMessage(commandName[0]);
+                    tcpClient.sendMessage(commandName[0]);
                     Thread.sleep(100);
-                    String newConfig = parser.getCurrentConfig();
+                    String newConfig = DataParser.getInstance().getCurrentConfig();
                     Log.i("io/tag", "currentConfig: " + newConfig);
                     if (!newConfig.contains("try")) {
                         String[] arr = newConfig.split(":");

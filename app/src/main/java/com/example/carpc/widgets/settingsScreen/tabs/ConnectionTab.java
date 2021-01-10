@@ -1,11 +1,7 @@
 package com.example.carpc.widgets.settingsScreen.tabs;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -21,7 +17,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.network.ClientSocket;
+import com.example.carpc.network.TCPClient;
 import com.example.carpc.models.DataPrefs;
 
 import java.util.Objects;
@@ -29,12 +25,14 @@ import java.util.Objects;
 public class ConnectionTab extends Fragment implements View.OnClickListener {
     private EditText serverAddress, serverPort;
     private TextView myNetworkAddress;
-    private ClientSocket socket;
     private Button btnConnect, btnDisconnect;
     private DataPrefs dataPrefs;
 
-    public ConnectionTab(ClientSocket socket) {
-        this.socket = socket;
+    private TCPClient tcpClient;
+
+
+    public ConnectionTab() {
+        this.tcpClient = TCPClient.getInstance(getContext());
         this.dataPrefs = DataPrefs.getInstance(getContext());
     }
 
@@ -53,17 +51,9 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         serverAddress.setText(dataPrefs.getIP());
         serverPort.setText(String.valueOf(dataPrefs.getPort()));
 
-        if (socket.isConnected()) {
-            WifiManager wifiMan = (WifiManager) getContext().getApplicationContext().getSystemService(
-                    Context.WIFI_SERVICE);
-            WifiInfo wifiInf = wifiMan.getConnectionInfo();
-            int ipAddress = wifiInf.getIpAddress();
-            @SuppressLint("DefaultLocale") String ip = String.format("%d.%d.%d.%d",
-                    (ipAddress & 0xff),
-                    (ipAddress >> 8 & 0xff),
-                    (ipAddress >> 16 & 0xff),
-                    (ipAddress >> 24 & 0xff));
-            myNetworkAddress.setText(ip);
+        if (tcpClient.isConnected()) {
+            String localIpAddress = tcpClient.getLocalNetworkAddress(getContext());
+            myNetworkAddress.setText(localIpAddress);
         }
         setConnectionStateIndicator();
         setRetainInstance(true);
@@ -86,7 +76,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
                 MainActivity.hideKeyboard((Activity) Objects.requireNonNull(getContext()));
                 break;
             case R.id.btnDisconnect:
-                socket.disconnect();
+                tcpClient.disconnect();
                 setConnectionStateIndicator();
                 break;
         }
@@ -96,7 +86,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         dataPrefs.setIP(ip);
         dataPrefs.setPort(port);
         // TODO: add commit to data prefs
-        socket = new ClientSocket(ip, port, MainActivity.getParser(), false);
+        tcpClient.createConnection(ip, port, false);
         setConnectionStateIndicator();
     }
 
@@ -106,7 +96,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
 
         while (flag) {
             if (SystemClock.uptimeMillis() >= time + 200) {
-                if (socket.isConnected()) {
+                if (tcpClient.isConnected()) {
                     btnConnect.setTextColor(Color.argb(255, 3, 218, 197));
                     btnConnect.setBackground(ResourcesCompat.getDrawable(getResources(),
                             R.drawable.transparent_bg_bordered_button_active, null));

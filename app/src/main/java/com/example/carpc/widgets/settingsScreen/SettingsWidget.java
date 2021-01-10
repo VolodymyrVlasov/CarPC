@@ -9,11 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.network.ClientSocket;
 import com.example.carpc.adapters.ViewPagerAdapter;
-import com.example.carpc.models.DataPrefs;
 import com.example.carpc.widgets.settingsScreen.tabs.ConfiguratorTab;
 import com.example.carpc.widgets.settingsScreen.tabs.ConnectionTab;
 import com.example.carpc.widgets.settingsScreen.tabs.TerminalTab;
@@ -23,8 +20,6 @@ import com.google.android.material.tabs.TabLayout;
 public class SettingsWidget extends Fragment {
     ViewPager viewPager;
     TabLayout tabLayout;
-    private ClientSocket socket;
-    private DataPrefs dataPrefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,11 +28,6 @@ public class SettingsWidget extends Fragment {
         viewPager = v.findViewById(R.id.viewpager);
         tabLayout = v.findViewById(R.id.tabs);
 
-        // data
-        dataPrefs = DataPrefs.getInstance(getContext());
-
-        // get connection
-        socket = new ClientSocket(dataPrefs.getIP(), dataPrefs.getPort(), MainActivity.getParser());
         setRetainInstance(true);
         return v;
     }
@@ -64,9 +54,9 @@ public class SettingsWidget extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(new ConnectionTab(socket), "CONNECTION");
-        viewPagerAdapter.addFragment(new ConfiguratorTab(socket, MainActivity.getParser()), "CONFIGURATOR");
-        viewPagerAdapter.addFragment(new TerminalTab(socket), "TERMINAL");
+        viewPagerAdapter.addFragment(new ConnectionTab(), "CONNECTION");
+        viewPagerAdapter.addFragment(new ConfiguratorTab(), "CONFIGURATOR");
+        viewPagerAdapter.addFragment(new TerminalTab(), "TERMINAL");
         viewPagerAdapter.addFragment(new UITab(), "UI");
         viewPager.setAdapter(viewPagerAdapter);
     }
@@ -74,7 +64,7 @@ public class SettingsWidget extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        socket.disconnect();
+//        socket.disconnect();
     }
 
 }

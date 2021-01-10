@@ -1,8 +1,13 @@
 package com.example.carpc.network;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.example.carpc.MainActivity;
+import com.example.carpc.models.DataPrefs;
 import com.example.carpc.models.Message;
 import com.example.carpc.utils.AppConstants;
 import com.example.carpc.utils.DataParser;
@@ -14,7 +19,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class ClientSocket implements Closeable {
+public class TCPClient implements Closeable {
+    private static TCPClient instance = null;
+
     private Socket socket;
     private Scanner scanner;
     private PrintWriter printWriter;
@@ -25,21 +32,42 @@ public class ClientSocket implements Closeable {
     private static DataParser dataParser;
     private static String inputMessage;
 
-    public ClientSocket(final String address, final int port, final DataParser parser) {
-        createConnection(address, port, parser, false);
+
+//    public interface NetworkHandler {
+//        public void OnDataRecieve()
+//    }
+
+    public static TCPClient getInstance(Context ctx) {
+        if (instance == null) {
+            DataPrefs data = DataPrefs.getInstance(ctx);
+            instance = new TCPClient(data.getIP(), data.getPort());
+        }
+
+        return instance;
     }
 
-    public ClientSocket(final String address, final int port, final DataParser parser, boolean subscribe) {
-        createConnection(address, port, parser, subscribe);
+    private TCPClient(final String address, final int port) {
+        createConnection(address, port, false);
     }
 
-    private void createConnection(final String address, final int port, final DataParser parser, final boolean subscribe) {
+    public String getLocalNetworkAddress(Context ctx) {
+        WifiManager wifiMan = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInf = wifiMan.getConnectionInfo();
+        int ipAddress = wifiInf.getIpAddress();
+        @SuppressLint("DefaultLocale") String ip = String.format("%d.%d.%d.%d",
+                (ipAddress & 0xff),
+                (ipAddress >> 8 & 0xff),
+                (ipAddress >> 16 & 0xff),
+                (ipAddress >> 24 & 0xff));
+        return ip;
+    }
+
+    public void createConnection(final String address, final int port, final boolean subscribe) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     socket = new Socket();
-                    dataParser = parser;
                     socket.connect(new InetSocketAddress(address, port), 500);
                     scanner = new Scanner(socket.getInputStream());
                     if (subscribe) {
@@ -51,7 +79,7 @@ public class ClientSocket implements Closeable {
                     connectionState = true;
                 } catch (IOException e) {
                     connectionState = false;
-                    if (reconnect) createConnection(address, port, parser, subscribe);
+                    if (reconnect) createConnection(address, port, subscribe);
                     e.printStackTrace();
                 }
             }
@@ -68,7 +96,9 @@ public class ClientSocket implements Closeable {
                         if (scanner.hasNextLine()) {
                             inputMessage = scanner.nextLine();
                             message.setMessage(inputMessage, true);
-                            dataParser.parseInputData(inputMessage);
+
+
+                            DataParser.getInstance().parseInputData(inputMessage);
                         }
                     } catch (Exception e) {
                         connectionState = false;
