@@ -41,7 +41,7 @@ public class DataParser {
         return instance;
     }
 
-    public void parseInputData(String inputData) throws NullPointerException {
+    public DataParser parseInputData(String inputData) throws NullPointerException {
         DataParser.inputData = inputData;
         hasNewMessage = true;
 
@@ -128,6 +128,8 @@ public class DataParser {
             }
         } catch (NullPointerException | StringIndexOutOfBoundsException | NumberFormatException e) {
         }
+
+        return this;
     }
 
     public void messageReceived() {

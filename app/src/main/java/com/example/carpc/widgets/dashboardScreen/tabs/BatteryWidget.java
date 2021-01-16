@@ -22,7 +22,7 @@ import java.util.TimerTask;
 public class BatteryWidget extends Fragment {
     DrawView batteryIcon;
     LinearLayout surfaceView;
-    TextView range;
+    TextView rangeTextView;
     TextView tempOutside;
     Context context;
     DataParser parser;
@@ -35,33 +35,40 @@ public class BatteryWidget extends Fragment {
         surfaceView = (LinearLayout) v.findViewById(R.id.for_battery_canvas);
         context = getContext();
         surfaceView.addView(batteryIcon = new DrawView(context));
-        range = v.findViewById(R.id.range);
+        rangeTextView = v.findViewById(R.id.range);
         tempOutside = v.findViewById(R.id.temp_outside);
         parser = DataParser.getInstance();
-        update();
+//        update();
         setRetainInstance(true);
         return v;
     }
 
-    @SuppressLint("SetTextI18n")
-    public void update() {
-        TimerTask repeatedTask = new TimerTask() {
-            public void run() {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            range.setText((int) Math.round(parser.getRange()) + " km");
-                            tempOutside.setText(Math.round(parser.getFirstTempSensorValue()) / 10 + "°C");
-                            batteryIcon.updateCapacity(parser.getBatteryCapacity());
-                        }
-                    });
-                }
-            }
-        };
-        Timer timer = new Timer("Timer");
-        long delay = 50L;
-        long period = 10L;
-        timer.scheduleAtFixedRate(repeatedTask, delay, period);
+    public void updateWidgetUI(Double batteryRange, Double firstTempSensor, Double batteryCapacity) {
+        rangeTextView.setText((int) Math.round(batteryRange) + " km");
+        tempOutside.setText(Math.round(firstTempSensor) / 10 + "°C");
+        batteryIcon.updateCapacity(batteryCapacity);
     }
+
+//
+//    @SuppressLint("SetTextI18n")
+//    public void update() {
+//        TimerTask repeatedTask = new TimerTask() {
+//            public void run() {
+//                if (getActivity() != null) {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            range.setText((int) Math.round(parser.getRange()) + " km");
+//                            tempOutside.setText(Math.round(parser.getFirstTempSensorValue()) / 10 + "°C");
+//                            batteryIcon.updateCapacity(parser.getBatteryCapacity());
+//                        }
+//                    });
+//                }
+//            }
+//        };
+//        Timer timer = new Timer("Timer");
+//        long delay = 50L;
+//        long period = 10L;
+//        timer.scheduleAtFixedRate(repeatedTask, delay, period);
+//    }
 }

@@ -32,10 +32,15 @@ public class TCPClient implements Closeable {
     private static DataParser dataParser;
     private static String inputMessage;
 
+    private TCPClientListener listener;
 
-//    public interface NetworkHandler {
-//        public void OnDataRecieve()
-//    }
+    public interface TCPClientListener {
+        public void OnDataReceive(DataParser data);
+    }
+
+    public void setTCPClientListener(TCPClientListener listener) {
+        this.listener = listener;
+    }
 
     public static TCPClient getInstance(Context ctx) {
         if (instance == null) {
@@ -98,7 +103,10 @@ public class TCPClient implements Closeable {
                             message.setMessage(inputMessage, true);
 
 
-                            DataParser.getInstance().parseInputData(inputMessage);
+                            DataParser data = DataParser.getInstance().parseInputData(inputMessage);
+                            if(listener != null) {
+                                listener.OnDataReceive(data);
+                            }
                         }
                     } catch (Exception e) {
                         connectionState = false;

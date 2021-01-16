@@ -3,6 +3,7 @@ package com.example.carpc;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -11,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.carpc.models.DataPrefs;
+import com.example.carpc.network.TCPClient;
 import com.example.carpc.utils.Counter;
 import com.example.carpc.models.Message;
+import com.example.carpc.utils.DataParser;
 import com.example.carpc.widgets.chargeScreen.ChargeWidget;
 import com.example.carpc.widgets.dashboardScreen.DashboardWidget;
 import com.example.carpc.widgets.settingsScreen.SettingsWidget;
@@ -52,6 +55,18 @@ public class MainActivity extends AppCompatActivity {
         for (Map.Entry<String, ?> entry : allData.entrySet()) {
             System.out.println("Key: " + entry.getKey() + " - " + entry.getValue());
         }
+
+        TCPClient.getInstance(this).setTCPClientListener(new TCPClient.TCPClientListener() {
+            @Override
+            public void OnDataReceive(DataParser data) {
+                Log.i("MAIN", "dashboard fragment is visisble" + dashboardWidget.isVisible());
+
+                if (dashboardWidget.isVisible()) {
+                    dashboardWidget.getSpeedometerWidget().setSpeedText(data.getSpeed());
+                    dashboardWidget.getBatteryWidget().updateWidgetUI(data.getRange(), data.getFirstTempSensorValue(), data.getBatteryCapacity());
+                }
+            }
+        });
     }
 
     @Override

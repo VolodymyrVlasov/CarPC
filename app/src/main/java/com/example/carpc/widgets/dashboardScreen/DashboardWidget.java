@@ -48,6 +48,14 @@ public class DashboardWidget extends Fragment {
         return v;
     }
 
+    public SpeedometerWidget getSpeedometerWidget() {
+        return speedometerWidget;
+    }
+
+    public BatteryWidget getBatteryWidget() {
+        return batteryWidget;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
