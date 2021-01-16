@@ -24,13 +24,20 @@ public class SpeedometerWidget extends Fragment {
     }
 
     public void setSpeedText(int speed) {
+
+
         if (speedToSet <= speed) {
             speedToSet += 1;
-            speedTextView.setText(String.valueOf(speedToSet));
         }
         if (speedToSet > speed) {
             speedToSet -= 1;
-            speedTextView.setText(String.valueOf(speedToSet));
         }
+        speedTextView.post(new Runnable() {
+                               @Override
+                               public void run() {
+                                   speedTextView.setText(String.valueOf(speedToSet));
+                               }
+                           }
+        );
     }
 }
