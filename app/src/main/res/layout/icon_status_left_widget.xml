@@ -22,7 +22,7 @@
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/ico_12v_battery"
-            android:visibility="visible"/>
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/head_light"
@@ -31,7 +31,7 @@
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/ico_doors"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/up_head_light"
@@ -40,7 +40,7 @@
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/ico_brakes"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/fog_light"
@@ -49,7 +49,7 @@
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/ico_rear_widnow_heater"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/drive"
@@ -58,7 +58,7 @@
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/ico_glass_heater"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/reverse"
@@ -67,7 +67,7 @@
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/ico_left_signal"
-            android:visibility="visible" />
+            android:visibility="invisible" />
     </LinearLayout>
 
 </FrameLayout>

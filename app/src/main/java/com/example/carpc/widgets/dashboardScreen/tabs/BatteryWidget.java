@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
+
 import com.example.carpc.R;
 import com.example.carpc.utils.plotter.DrawView;
 
@@ -29,28 +31,23 @@ public class BatteryWidget extends Fragment {
     }
 
     public void updateWidgetUI(final Double batteryRange, final Double firstTempSensor, final Double batteryCapacity) {
-
         rangeTextView.post(new Runnable() {
-                               @Override
-                               public void run() {
-                                   rangeTextView.setText(String.valueOf(batteryRange));
-                               }
-                           }
-        );
-
+            @Override
+            public void run() {
+                rangeTextView.setText(String.valueOf(batteryRange));
+            }
+        });
         tempOutside.post(new Runnable() {
-                             @Override
-                             public void run() {
-                                 tempOutside.setText(String.valueOf(firstTempSensor));
-                             }
-                         }
-        );
+            @Override
+            public void run() {
+                tempOutside.setText(String.valueOf(firstTempSensor));
+            }
+        });
         batteryIcon.post(new Runnable() {
-                             @Override
-                             public void run() {
-                                 batteryIcon.updateCapacity(batteryCapacity);
-                             }
-                         }
-        );
+            @Override
+            public void run() {
+                batteryIcon.updateCapacity(batteryCapacity);
+            }
+        });
     }
 }

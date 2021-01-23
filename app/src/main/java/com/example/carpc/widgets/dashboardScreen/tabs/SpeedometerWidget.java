@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
+
 import com.example.carpc.R;
 
 public class SpeedometerWidget extends Fragment {
@@ -24,14 +26,9 @@ public class SpeedometerWidget extends Fragment {
     }
 
     public void setSpeedText(int speed) {
+        if (speedToSet <= speed) speedToSet += 1;
+        if (speedToSet > speed) speedToSet -= 1;
 
-
-        if (speedToSet <= speed) {
-            speedToSet += 1;
-        }
-        if (speedToSet > speed) {
-            speedToSet -= 1;
-        }
         speedTextView.post(new Runnable() {
                                @Override
                                public void run() {

@@ -7,14 +7,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.carpc.models.DataPrefs;
-import com.example.carpc.network.TCPClient;
-import com.example.carpc.utils.Counter;
 import com.example.carpc.models.Message;
+import com.example.carpc.network.TCPClient;
+import com.example.carpc.utils.AppConstants;
+import com.example.carpc.utils.Counter;
 import com.example.carpc.utils.DataParser;
 import com.example.carpc.widgets.chargeScreen.ChargeWidget;
 import com.example.carpc.widgets.dashboardScreen.DashboardWidget;
@@ -36,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         message = new Message();
         dataPrefs = DataPrefs.getInstance(this);
         Counter.setUsedAH(dataPrefs.getUsedAmpereHour());
@@ -55,23 +56,19 @@ public class MainActivity extends AppCompatActivity {
         for (Map.Entry<String, ?> entry : allData.entrySet()) {
             System.out.println("Key: " + entry.getKey() + " - " + entry.getValue());
         }
-
+        TCPClient.getInstance(this).sendMessage(AppConstants.SUBSCRIBE);
         TCPClient.getInstance(this).setTCPClientListener(new TCPClient.TCPClientListener() {
             @Override
             public void OnDataReceive(DataParser data) {
                 Log.i("MAIN", "dashboard fragment is visisble" + dashboardWidget.isVisible());
-
                 if (dashboardWidget.isVisible()) {
                     dashboardWidget.getSpeedometerWidget().setSpeedText(data.getSpeed());
                     dashboardWidget.getBatteryWidget().updateWidgetUI(data.getRange(), data.getFirstTempSensorValue(), data.getBatteryCapacity());
+                    dashboardWidget.getTripManagerWidget().updateWidgetUI(data.getLastChargePassedDistance(), data.getRange(), data.getTotalDistance());
+                    dashboardWidget.getBatteryManagerWidget().updateWidgetUI(data.getCurrent(), data.getVoltage(), data.getBatteryCapacity());
                 }
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
     }
 
@@ -91,15 +88,17 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btnDashboard:
                 if (!dashboardWidget.isVisible()) fTrans.replace(R.id.frgmCont, dashboardWidget);
+                TCPClient.getInstance(this).sendMessage(AppConstants.SUBSCRIBE);
                 break;
             case R.id.btnSettings:
                 if (!settingsWidget.isVisible()) fTrans.replace(R.id.frgmCont, settingsWidget);
+                TCPClient.getInstance(this).sendMessage(AppConstants.UNSUBSCRIBE);
                 break;
         }
         fTrans.commit();
     }
 
-    public static void hideKeyboard(Activity activity) {
+    public static void hideKeyboard(@NonNull Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         View view = activity.getCurrentFocus();
         if (view == null) {
