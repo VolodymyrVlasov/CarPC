@@ -1,13 +1,11 @@
 package com.example.carpc.widgets.settingsScreen.tabs;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.*;
 
 import androidx.fragment.app.Fragment;
 
@@ -36,18 +34,14 @@ public class ConfiguratorTab extends Fragment {
 
         spinnerCategories = getContext().getResources().getStringArray(R.array.configurationGroupList);
 
-
-
         spinner = v.findViewById(R.id.configurationGroupList);
-//        spinner.setAdapter(new ArrayAdapter<String>(getContext(), R.id.spinner_text_item, spinnerCategories));
+        ArrayAdapter<?> adapter =
+                ArrayAdapter.createFromResource(getContext(), R.array.configurationGroupList, R.layout.spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         listView = v.findViewById(R.id.configListView);
-        listView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.config_line, getListConfigData()));
-//
-
-//        setOnItemSelectedListener(spinner);
-//        setRetainInstance(true);
-
+        listView.setAdapter(new ConfigAdapter(getContext(), getListConfigData()));
         return v;
     }
 
@@ -56,78 +50,6 @@ public class ConfiguratorTab extends Fragment {
         data.add(new ConfigData("Item", "300"));
         return data;
     }
-
-//
-//    private void setOnItemSelectedListener(Spinner spinner) {
-//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            public void onItemSelected(AdapterView<?> parent,
-//                                       View itemSelected, int selectedItemPosition, long selectedId) {
-//                String[] choose = getResources().getStringArray(R.array.configurationGroupList);
-////                createConfigurationFragment(choose[selectedItemPosition]);
-//            }
-//
-//            public void onNothingSelected(AdapterView<?> parent) {
-//            }
-//        });
-//    }
-
-//    private void createConfigurationFragment(String item) {
-//        fragmentTransaction = getChildFragmentManager().beginTransaction();
-//        switch (item) {
-//            case "Levels (BMS)":
-//                fragmentTransaction.replace(R.id.frameForConfigFragments, new LevelsConfig());
-//                break;
-//            case "Current":
-//                fragmentTransaction.replace(R.id.frameForConfigFragments, new CurrentConfig());
-//                break;
-//            case "Charger":
-//                fragmentTransaction.replace(R.id.frameForConfigFragments, new ChargerConfig());
-//                break;
-//            case "Charging":
-//                break;
-//            case "Ignition":
-//                break;
-//            case "Power":
-//                break;
-//            case "Precharge":
-//                break;
-//            case "Main contactor":
-//                break;
-//            case "Charge Current Max":
-//                break;
-//            case "Discharge Current Max":
-//                break;
-//            case "Thermostat":
-//                break;
-//            case "Temperature Sensor Types":
-//                break;
-//            case "Interface":
-//                break;
-//            case "Speed":
-//                break;
-//            case "RPM":
-//                break;
-//            case "Charging temperature":
-//                break;
-//            case "Power temperature":
-//                break;
-//            case "CAN":
-//                break;
-//            case "Accelerator":
-//                break;
-//            case "Alarm":
-//                break;
-//            case "Flags":
-//                break;
-//            case "Buttons":
-//                break;
-//            case "Gauge":
-//                break;
-//            case "Battery":
-//                break;
-//        }
-//        fragmentTransaction.commit();
-//    }
 }
 
 class ConfigData {
@@ -153,5 +75,44 @@ class ConfigData {
 
     public void setConfigHint(String configHint) {
         this.configHint = configHint;
+    }
+}
+
+
+class ConfigAdapter extends BaseAdapter {
+    Context context;
+    ArrayList<ConfigData> data;
+    private static LayoutInflater inflater = null;
+
+    public ConfigAdapter(Context context, ArrayList<ConfigData> data) {
+        this.context = context;
+        this.data = data;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    @Override
+    public int getCount() {
+        return data.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return data.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        View v = view;
+        if (v == null) {
+            v = inflater.inflate(R.layout.config_line, null);
+        }
+        TextView text = (TextView) v.findViewById(R.id.parameter_num);
+        text.setText(data.get(i).getConfigItem());
+        return v;
     }
 }
