@@ -1,6 +1,5 @@
 package com.example.carpc.widgets.dashboardScreen.tabs;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +8,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.utils.Counter;
 import com.example.carpc.utils.DataParser;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class TripManagerWidget extends Fragment {
     //LAST CHARGE
@@ -43,64 +37,29 @@ public class TripManagerWidget extends Fragment {
         totalTripTextView = v.findViewById(R.id.value_total_trip);
         totalEnergyTextView = v.findViewById(R.id.value_total_energy);
         parser = DataParser.getInstance();
-        update();
         setRetainInstance(true);
         return v;
     }
 
-
-    @SuppressLint("SetTextI18n")
-    public void update() {
-        TimerTask repeatedTask = new TimerTask() {
+    public void updateWidgetUI(final Double lastChargePassedDistance, final Double range, final Double totalDistance) {
+        System.out.println("Battery manager Widget");
+        passedDistanceTextView.post(new Runnable() {
+            @Override
             public void run() {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @SuppressLint("DefaultLocale")
-                        @Override
-                        public void run() {
-                            double totalTrip = parser.getTotalDistance();
-                            passedDistanceTextView.setText(String.valueOf((int) Math.round(
-                                    parser.getLastChargePassedDistance())));
-                            rangeDistanceTextView.setText(String.valueOf((int) Math.round(
-                                    parser.getRange())));
-                            if (Counter.getUsedAH() < 10) {
-                                ampereHourTextView.setText(String.format("%.1f", Counter.getUsedAH()));
-                            } else {
-                                ampereHourTextView.setText(String.format("%.0f", Counter.getUsedAH()));
-                            }
-                            if (totalTripToSet <= totalTrip) {
-                                totalTripToSet += 1;
-                                totalTripTextView.setText(String.valueOf((int) Math.round(totalTripToSet)));
-                            }
-                            if (totalTripToSet > totalTrip) {
-                                totalTripToSet -= 1;
-                                totalTripTextView.setText(String.valueOf((int) Math.round(totalTripToSet)));
-                            }
-                        }
-                    });
-                }
+                passedDistanceTextView.setText(String.valueOf(lastChargePassedDistance));
             }
-        };
-        Timer timer = new Timer("Timer");
-        long delay = 50L;
-        long period = 10L;
-        timer.scheduleAtFixedRate(repeatedTask, delay, period);
-    }
-
-
-    public void updateParameters(Double passedLC, Double rangeLC, Double totalTrip) {
-        passedDistanceTextView.setText(String.valueOf((int) Math.round(passedLC)));
-        rangeDistanceTextView.setText(String.valueOf((int) Math.round(rangeLC)));
-//        totalTripTextView.setText(String.valueOf((int) Math.round(totalTrip)));
-
-
-        if (totalTripToSet <= totalTrip) {
-            totalTripToSet += 1;
-            totalTripTextView.setText(String.valueOf((int) Math.round(totalTripToSet)));
-        }
-        if (totalTripToSet > totalTrip) {
-            totalTripToSet -= 1;
-            totalTripTextView.setText(String.valueOf((int) Math.round(totalTripToSet)));
-        }
+        });
+        rangeDistanceTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                rangeDistanceTextView.setText(String.valueOf(range));
+            }
+        });
+        totalTripTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                totalTripTextView.setText(String.valueOf(totalDistance));
+            }
+        });
     }
 }

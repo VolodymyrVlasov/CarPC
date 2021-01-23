@@ -1,7 +1,5 @@
 package com.example.carpc.widgets.dashboardScreen.tabs;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,57 +9,45 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.utils.DataParser;
 import com.example.carpc.utils.plotter.DrawView;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class BatteryWidget extends Fragment {
     DrawView batteryIcon;
     LinearLayout surfaceView;
-    TextView range;
+    TextView rangeTextView;
     TextView tempOutside;
-    Context context;
-    DataParser parser;
-    public final String TAG = "batteryWidget";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.battery_widget, container, false);
         surfaceView = (LinearLayout) v.findViewById(R.id.for_battery_canvas);
-        context = getContext();
-        surfaceView.addView(batteryIcon = new DrawView(context));
-        range = v.findViewById(R.id.range);
+        surfaceView.addView(batteryIcon = new DrawView(getContext()));
+        rangeTextView = v.findViewById(R.id.range);
         tempOutside = v.findViewById(R.id.temp_outside);
-        parser = DataParser.getInstance();
-        update();
         setRetainInstance(true);
         return v;
     }
 
-    @SuppressLint("SetTextI18n")
-    public void update() {
-        TimerTask repeatedTask = new TimerTask() {
+    public void updateWidgetUI(final Double batteryRange, final Double firstTempSensor, final Double batteryCapacity) {
+        rangeTextView.post(new Runnable() {
+            @Override
             public void run() {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            range.setText((int) Math.round(parser.getRange()) + " km");
-                            tempOutside.setText(Math.round(parser.getFirstTempSensorValue()) / 10 + "°C");
-                            batteryIcon.updateCapacity(parser.getBatteryCapacity());
-                        }
-                    });
-                }
+                rangeTextView.setText(String.valueOf(batteryRange));
             }
-        };
-        Timer timer = new Timer("Timer");
-        long delay = 50L;
-        long period = 10L;
-        timer.scheduleAtFixedRate(repeatedTask, delay, period);
+        });
+        tempOutside.post(new Runnable() {
+            @Override
+            public void run() {
+                tempOutside.setText(String.valueOf(firstTempSensor));
+            }
+        });
+        batteryIcon.post(new Runnable() {
+            @Override
+            public void run() {
+                batteryIcon.updateCapacity(batteryCapacity);
+            }
+        });
     }
 }

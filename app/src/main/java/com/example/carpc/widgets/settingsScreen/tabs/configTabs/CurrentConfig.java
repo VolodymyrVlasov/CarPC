@@ -42,12 +42,6 @@ public class CurrentConfig extends Fragment {
     }
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "Current config fragment destroyed");
-    }
-
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     private void addCurrentConfig() {
         final int paramQuantity = 5;
@@ -68,6 +62,7 @@ public class CurrentConfig extends Fragment {
                 "192",
                 "500"
         };
+
         LayoutInflater factory = LayoutInflater.from(getContext());
         View descriptionLayout = factory.inflate(R.layout.description_line, null);
         View btnLayout = factory.inflate(R.layout.read_write_buttons, null);

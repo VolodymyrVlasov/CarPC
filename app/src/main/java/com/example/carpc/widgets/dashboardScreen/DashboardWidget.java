@@ -29,12 +29,12 @@ public class DashboardWidget extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.dashboard_widget, container, false);
 
-        speedometerWidget = new SpeedometerWidget();
+        speedometerWidget = new SpeedometerWidget(); //+
         batteryManagerWidget = new BatteryManagerWidget();
-        tripManagerWidget = new TripManagerWidget();
+        tripManagerWidget = new TripManagerWidget(); //+
         iconStatusRightWidget = new IconStatusRightWidget();
         iconStatusLeftWidget = new IconStatusLeftWidget();
-        batteryWidget = new BatteryWidget();
+        batteryWidget = new BatteryWidget(); //+
 
         fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -48,9 +48,19 @@ public class DashboardWidget extends Fragment {
         return v;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        socket.disconnect();
+    public SpeedometerWidget getSpeedometerWidget() {
+        return speedometerWidget;
+    }
+
+    public BatteryWidget getBatteryWidget() {
+        return batteryWidget;
+    }
+
+    public BatteryManagerWidget getBatteryManagerWidget() {
+        return batteryManagerWidget;
+    }
+
+    public TripManagerWidget getTripManagerWidget() {
+        return tripManagerWidget;
     }
 }

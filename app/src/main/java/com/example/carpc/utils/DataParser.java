@@ -41,7 +41,7 @@ public class DataParser {
         return instance;
     }
 
-    public void parseInputData(String inputData) throws NullPointerException {
+    public DataParser parseInputData(String inputData) throws NullPointerException {
         DataParser.inputData = inputData;
         hasNewMessage = true;
 
@@ -78,7 +78,7 @@ public class DataParser {
             if (inputData.contains("current")) {
                 currentConfig = inputData.split("current");
             }
-            if (inputData.contains("cmi")) {
+            if (inputData.contains("cmin")) {
                 levelsCmin = inputData.substring(10);
                 levelsCmin = levelsCmin.replaceAll("cmin = ", "").trim();
                 Log.i("dataParser", "parsed levelsCmin " + levelsCmin);
@@ -89,7 +89,7 @@ public class DataParser {
                 levelsMax = levelsMax.replaceAll("max = ", "").trim();
                 Log.i("dataParser", "parsed levelsMax " + levelsMax);
             }
-            if (inputData.contains("in")) {
+            if (inputData.contains("min")) {
                 levelsMin = inputData.substring(10);
                 levelsMin = levelsMin.replaceAll("min = ", "").trim();
                 Log.i("dataParser", "parsed levelsMin " + levelsMin);
@@ -128,6 +128,8 @@ public class DataParser {
             }
         } catch (NullPointerException | StringIndexOutOfBoundsException | NumberFormatException e) {
         }
+
+        return this;
     }
 
     public void messageReceived() {
