@@ -5,16 +5,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.carpc.R;
-import com.example.carpc.widgets.settingsScreen.tabs.configTabs.ChargerConfig;
-import com.example.carpc.widgets.settingsScreen.tabs.configTabs.CurrentConfig;
-import com.example.carpc.widgets.settingsScreen.tabs.configTabs.LevelsConfig;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ConfiguratorTab extends Fragment {
     private static final String TAG = "GroupConfig";
@@ -22,10 +26,13 @@ public class ConfiguratorTab extends Fragment {
 
     private ListView listView;
     private Spinner spinner;
-    private ArrayAdapter<ConfigData> adapter;
+    private ConfigAdapter adapter;
     private String[] spinnerCategories;
 
-    public ConfiguratorTab() {}
+
+
+    public ConfiguratorTab() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,14 +47,47 @@ public class ConfiguratorTab extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long itemID) {
+                if (position >= 0 && position < spinnerCategories.length) {
+                    getSelectedSpinnerData(position);
+                } else {
+                    Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(),
+                            "Choose true category", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
         listView = v.findViewById(R.id.configListView);
-        listView.setAdapter(new ConfigAdapter(getContext(), getListConfigData()));
+        getSelectedSpinnerData(0);
         return v;
+    }
+
+    private void getSelectedSpinnerData(int configId) {
+        ArrayList<ConfigData> filteredData = new ArrayList<>();
+        for (ConfigData d : getListConfigData()) {
+            if (d.getConfigId() == configId) {
+                filteredData.add(d);
+            }
+        }
+
+        adapter = new ConfigAdapter(getContext(), filteredData);
+        listView.setAdapter(adapter);
     }
 
     private ArrayList<ConfigData> getListConfigData() {
         ArrayList<ConfigData> data = new ArrayList<>();
-        data.add(new ConfigData("Item", "300"));
+        data.add(new ConfigData("Item1", "300",0));
+        data.add(new ConfigData("Item2", "301",0));
+        data.add(new ConfigData("Item3", "302",0));
+        data.add(new ConfigData("Item4", "303",1));
+        data.add(new ConfigData("Item5", "304",1));
+        data.add(new ConfigData("Item6", "305",2));
         return data;
     }
 }
@@ -55,10 +95,20 @@ public class ConfiguratorTab extends Fragment {
 class ConfigData {
     private String configItem;
     private String configHint;
+    private int configId;
 
-    public ConfigData(String configItem, String configHint) {
+    public ConfigData(String configItem, String configHint, int configId) {
         this.configItem = configItem;
         this.configHint = configHint;
+        this.configId = configId;
+    }
+
+    public int getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(int configId) {
+        this.configId = configId;
     }
 
     public String getConfigItem() {
@@ -111,8 +161,16 @@ class ConfigAdapter extends BaseAdapter {
         if (v == null) {
             v = inflater.inflate(R.layout.config_line, null);
         }
-        TextView text = (TextView) v.findViewById(R.id.parameter_num);
-        text.setText(data.get(i).getConfigItem());
+
+        // parameter number text
+        TextView textNumber = (TextView) v.findViewById(R.id.parameter_num);
+        textNumber.setText(String.valueOf(i));
+        // parameter text
+        TextView parameterText = (TextView) v.findViewById(R.id.config_title);
+        parameterText.setText(data.get(i).getConfigItem());
+        //edit text
+        TextView editText = v.findViewById(R.id.config_value);
+
         return v;
     }
 }
