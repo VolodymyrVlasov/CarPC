@@ -61,32 +61,7 @@
         parameter value is 25000mA.</string>
 
 
-    <string-array name="configurationGroupList">
-        <item>Levels (BMS)</item>
-        <item>Current</item>
-        <item>Charger</item>
-        <item>Charging</item>
-        <item>Ignition</item>
-        <item>Power</item>
-        <item>Precharge</item>
-        <item>Main contactor</item>
-        <item>Charge Current Max</item>
-        <item>Discharge Current Max</item>
-        <item>Thermostat</item>
-        <item>Temperature Sensor Types</item>
-        <item>Interface</item>
-        <item>Speed</item>
-        <item>RPM</item>
-        <item>Battery</item>
-        <item>Charging temperature</item>
-        <item>Power temperature</item>
-        <item>CAN</item>
-        <item>Accelerator</item>
-        <item>Alarm</item>
-        <item>Flags</item>
-        <item>Buttons</item>
-        <item>Gauge</item>
-    </string-array>
+
 
     <string-array name="inputTypesSpeed">
         <item>SP 1</item>

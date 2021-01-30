@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.example.carpc.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class ConfiguratorTab extends Fragment {
@@ -30,7 +31,6 @@ public class ConfiguratorTab extends Fragment {
     private String[] spinnerCategories;
 
 
-
     public ConfiguratorTab() {
     }
 
@@ -38,7 +38,6 @@ public class ConfiguratorTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.car_pc_configuration, container, false);
-
         spinnerCategories = getContext().getResources().getStringArray(R.array.configurationGroupList);
 
         spinner = v.findViewById(R.id.configurationGroupList);
@@ -69,10 +68,18 @@ public class ConfiguratorTab extends Fragment {
     }
 
     private void getSelectedSpinnerData(int configId) {
+        HashMap<Integer, String> configurationMap = getConfigurationMap();
+        String arrayKeyName = configurationMap.get(configId);
+        int idName = this.getResources().getIdentifier(arrayKeyName, "array", getContext().getPackageName());
+
+        String[] rawData = getContext().getResources().getStringArray(idName);
         ArrayList<ConfigData> filteredData = new ArrayList<>();
-        for (ConfigData d : getListConfigData()) {
-            if (d.getConfigId() == configId) {
-                filteredData.add(d);
+        for (String s : rawData) {
+            String[] parts = s.split(",");
+            if (parts.length == 2) {
+                filteredData.add(new ConfigData(parts[0], parts[1]));
+            } else {
+                filteredData.add(new ConfigData(parts[0], parts[1], parts[2]));
             }
         }
 
@@ -80,35 +87,37 @@ public class ConfiguratorTab extends Fragment {
         listView.setAdapter(adapter);
     }
 
-    private ArrayList<ConfigData> getListConfigData() {
-        ArrayList<ConfigData> data = new ArrayList<>();
-        data.add(new ConfigData("Item1", "300",0));
-        data.add(new ConfigData("Item2", "301",0));
-        data.add(new ConfigData("Item3", "302",0));
-        data.add(new ConfigData("Item4", "303",1));
-        data.add(new ConfigData("Item5", "304",1));
-        data.add(new ConfigData("Item6", "305",2));
-        return data;
+    private HashMap<Integer, String> getConfigurationMap() {
+        HashMap<Integer, String> configurationMap = new HashMap<>();
+        configurationMap.put(0, "levels");
+        configurationMap.put(1, "current");
+        return configurationMap;
     }
 }
+
 
 class ConfigData {
     private String configItem;
     private String configHint;
-    private int configId;
+    private String cmdName;
 
-    public ConfigData(String configItem, String configHint, int configId) {
+    public ConfigData(String configItem, String configHint) {
         this.configItem = configItem;
         this.configHint = configHint;
-        this.configId = configId;
     }
 
-    public int getConfigId() {
-        return configId;
+    public ConfigData(String configItem, String cmdName, String configHint) {
+        this.configItem = configItem;
+        this.configHint = configHint;
+        this.cmdName = cmdName;
     }
 
-    public void setConfigId(int configId) {
-        this.configId = configId;
+    public String getCmdName() {
+        return cmdName;
+    }
+
+    public void setCmdName(String cmdName) {
+        this.cmdName = cmdName;
     }
 
     public String getConfigItem() {
@@ -142,7 +151,7 @@ class ConfigAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return data.size();
+        return data.size() ;
     }
 
     @Override
@@ -164,12 +173,13 @@ class ConfigAdapter extends BaseAdapter {
 
         // parameter number text
         TextView textNumber = (TextView) v.findViewById(R.id.parameter_num);
-        textNumber.setText(String.valueOf(i));
+        textNumber.setText(String.valueOf(i + 1));
         // parameter text
         TextView parameterText = (TextView) v.findViewById(R.id.config_title);
         parameterText.setText(data.get(i).getConfigItem());
         //edit text
         TextView editText = v.findViewById(R.id.config_value);
+        editText.setText(data.get(i).getConfigHint());
 
         return v;
     }
