@@ -59,12 +59,41 @@
         <item>LOGIC LEVEL (mv),9000</item>
     </string-array>
 
+    <string-array name="ignition">
+        <item>INP TYPE,2</item>
+        <item>INP NUMBER,3</item>
+        <item>LOGIC LEVEL (mv),9000</item>
+    </string-array>
+
     <string-array name="power">
         <item>OUT TYPE,1</item>
         <item>OUT NUMBER,4</item>
         <item>START TIME (ms),2500</item>
         <item>START PWM,0</item>
         <item>HOLD PWM,0</item>
+    </string-array>
+
+    <string-array name="precharge">
+        <item>INP TYPE,1</item>
+        <item>INP NUMBER,5</item>
+        <item>START TIME (ms),1500</item>
+        <item>START PWM,0</item>
+        <item>HOLD PWM,0</item>
+    </string-array>
+
+    <string-array name="maincontactor">
+        <item>OUT TYPE,1</item>
+        <item>OUT NUMBER,4</item>
+        <item>START TIME (ms),2500</item>
+        <item>START PWM,0</item>
+        <item>HOLD PWM,0</item>
+    </string-array>
+
+    chcurrentmax
+    <string-array name="chcurrentmax">
+        <item>INP TYPE,1</item>
+        <item>ZERO LEVEL,1000</item>
+        <item>LEVEL MAX,4000</item>
     </string-array>
 
 </resources>

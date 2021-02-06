@@ -95,6 +95,9 @@ public class ConfiguratorTab extends Fragment {
         configurationMap.put(3, "charging");
         configurationMap.put(4, "ignition");
         configurationMap.put(5, "power");
+        configurationMap.put(6, "maincontactor");
+        configurationMap.put(7, "chcurrentmax");
+
 
 
 
