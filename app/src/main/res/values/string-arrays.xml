@@ -28,6 +28,9 @@
     </string-array>
 
     <string-array name="levels">
+        <item>Description</item>
+        <item>Help</item>
+
         <item>Max voltage level (mv),max,4200</item>
         <item>Min voltage level (mv),min,3000</item>
         <item>Start balancing voltage (mv),startbal,4100</item>
@@ -38,6 +41,9 @@
     </string-array>
 
     <string-array name="current">
+        <item>Description</item>
+        <item>Help</item>
+
         <item>INP TYPE,2</item>
         <item>INP NUMBER,0</item>
         <item>ZERO LEVEL (mv),2048</item>
@@ -46,6 +52,9 @@
     </string-array>
 
     <string-array name="сharger">
+        <item>Description</item>
+        <item>Help</item>
+
         <item>OUT TYPE,1</item>
         <item>OUT NUMBER,1</item>
         <item>START TIME (ms),5000</item>
@@ -54,18 +63,27 @@
     </string-array>
 
     <string-array name="charging">
+        <item>Description</item>
+        <item>Help</item>
+
         <item>INP TYPE,2</item>
         <item>INP NUMBER,3</item>
         <item>LOGIC LEVEL (mv),9000</item>
     </string-array>
 
     <string-array name="ignition">
+        <item>Description</item>
+        <item>Help</item>
+
         <item>INP TYPE,2</item>
         <item>INP NUMBER,3</item>
         <item>LOGIC LEVEL (mv),9000</item>
     </string-array>
 
     <string-array name="power">
+        <item>Description</item>
+        <item>Help</item>
+
         <item>OUT TYPE,1</item>
         <item>OUT NUMBER,4</item>
         <item>START TIME (ms),2500</item>
@@ -74,6 +92,9 @@
     </string-array>
 
     <string-array name="precharge">
+        <item>Description</item>
+        <item>Help</item>
+
         <item>INP TYPE,1</item>
         <item>INP NUMBER,5</item>
         <item>START TIME (ms),1500</item>
@@ -82,6 +103,9 @@
     </string-array>
 
     <string-array name="maincontactor">
+        <item>Description</item>
+        <item>Help</item>
+
         <item>OUT TYPE,1</item>
         <item>OUT NUMBER,4</item>
         <item>START TIME (ms),2500</item>
@@ -90,6 +114,9 @@
     </string-array>
 
     <string-array name="chcurrentmax">
+        <item>Description</item>
+        <item>Help</item>
+
         <item>INP TYPE,1</item>
         <item>ZERO LEVEL,1000</item>
         <item>LEVEL MAX,4000</item>

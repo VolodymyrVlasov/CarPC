@@ -13,10 +13,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-
-import java.util.Objects;
 
 public class LevelsConfig extends Fragment {
     private static final String TAG = "GroupConfig";
@@ -76,8 +73,8 @@ public class LevelsConfig extends Fragment {
         View btnLayout = factory.inflate(R.layout.read_write_buttons, null);
         View descriptionLayout2 = factory.inflate(R.layout.description_line, null);
         View[] paramLayout = new View[paramQuantity];
-        TextView groupDescription = descriptionLayout.findViewById(R.id.description);
-        TextView configDescription = descriptionLayout2.findViewById(R.id.description);
+        TextView groupDescription = descriptionLayout.findViewById(R.id.description_text_view);
+        TextView configDescription = descriptionLayout2.findViewById(R.id.description_text_view);
         TextView[] numParam = new TextView[paramQuantity];
         TextView[] titleParam = new TextView[paramQuantity];
         final TextView[] valueParam = new TextView[paramQuantity];
