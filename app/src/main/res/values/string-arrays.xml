@@ -89,7 +89,6 @@
         <item>HOLD PWM,0</item>
     </string-array>
 
-    chcurrentmax
     <string-array name="chcurrentmax">
         <item>INP TYPE,1</item>
         <item>ZERO LEVEL,1000</item>
