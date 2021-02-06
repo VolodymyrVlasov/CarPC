@@ -91,6 +91,13 @@ public class ConfiguratorTab extends Fragment {
         HashMap<Integer, String> configurationMap = new HashMap<>();
         configurationMap.put(0, "levels");
         configurationMap.put(1, "current");
+        configurationMap.put(2, "сharger");
+        configurationMap.put(3, "charging");
+        configurationMap.put(4, "ignition");
+        configurationMap.put(5, "power");
+
+
+
         return configurationMap;
     }
 }
@@ -179,7 +186,7 @@ class ConfigAdapter extends BaseAdapter {
         parameterText.setText(data.get(i).getConfigItem());
         //edit text
         TextView editText = v.findViewById(R.id.config_value);
-        editText.setText(data.get(i).getConfigHint());
+        editText.setHint(data.get(i).getConfigHint());
 
         return v;
     }

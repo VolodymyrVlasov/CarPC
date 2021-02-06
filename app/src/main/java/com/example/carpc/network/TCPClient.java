@@ -52,7 +52,7 @@ public class TCPClient implements Closeable {
     }
 
     private TCPClient(final String address, final int port) {
-        createConnection(address, port, false);
+        createConnection(address, port, true);
     }
 
     public String getLocalNetworkAddress(Context ctx) {
