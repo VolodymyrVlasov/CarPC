@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         TCPClient.getInstance(this).setTCPClientListener(new TCPClient.TCPClientListener() {
             @Override
             public void OnDataReceive(DataParser data) {
-//                Log.i("MAIN", "dashboard fragment is visisble" + dashboardWidget.isVisible());
                 if (dashboardWidget.isVisible()) {
                     dashboardWidget.getSpeedometerWidget().setSpeedText(data.getSpeed());
                     dashboardWidget.getBatteryWidget().updateWidgetUI(data.getRange(), data.getFirstTempSensorValue(), data.getBatteryCapacity());

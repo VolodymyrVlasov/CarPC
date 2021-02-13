@@ -42,7 +42,6 @@ public class TripManagerWidget extends Fragment {
     }
 
     public void updateWidgetUI(final Double lastChargePassedDistance, final Double range, final Double totalDistance) {
-        System.out.println("Battery manager Widget");
         if (passedDistanceTextView != null) {
             passedDistanceTextView.post(new Runnable() {
                 @Override

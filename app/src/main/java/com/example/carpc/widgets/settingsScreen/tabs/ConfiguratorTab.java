@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.carpc.MainActivity;
 import com.example.carpc.R;
 import com.example.carpc.adapters.ConfigAdapter;
 import com.example.carpc.models.ConfigData;
@@ -79,6 +80,7 @@ public class ConfiguratorTab extends Fragment {
         writeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                writeToServer(getConfigurationMap().get(spinner.getSelectedItemPosition()));
             }
         });
 
@@ -87,6 +89,38 @@ public class ConfiguratorTab extends Fragment {
         helpTextView = v.findViewById(R.id.help_text_view);
         getSelectedSpinnerData(0);
         return v;
+    }
+
+    private void writeToServer(String cmdName) {
+        TCPClient tcpClient = TCPClient.getInstance(getContext());
+        for (int i = 0; i < adapter.getCount(); i++) {
+            if (adapter.getItem(i).isConfigValueEmpty()) {
+                Toast.makeText(getContext(), "All input fields shouldn`t be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        try {
+            StringBuilder resultCommand = new StringBuilder(cmdName + " ");
+
+            for (int i = 0; i < adapter.getCount(); i++) {
+                resultCommand.append(adapter.getItem(i).getConfigValue());
+                if (i < adapter.getCount() - 1) {
+                    resultCommand.append(":");
+                }
+            }
+
+            tcpClient.sendMessage("..");
+            Thread.sleep(3);
+            tcpClient.sendMessage("config");
+            Thread.sleep(3);
+            tcpClient.sendMessage(resultCommand.toString());
+            Toast.makeText(getContext(), resultCommand.toString(), Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Don`t apply", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+        MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
     }
 
     private void readFromServer(String cmdName) {
@@ -103,7 +137,7 @@ public class ConfiguratorTab extends Fragment {
                 String[] arr = newConfig.split(":");
 
                 for (int i = 0; i < arr.length; i++) {
-                    adapter.getItem(i).setConfigHint(arr[i]);
+                    adapter.getItem(i).setConfigValue(arr[i]);
                 }
 
                 listView.setAdapter(adapter);
