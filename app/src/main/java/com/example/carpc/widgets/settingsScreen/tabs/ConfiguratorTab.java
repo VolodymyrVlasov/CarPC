@@ -1,13 +1,11 @@
 package com.example.carpc.widgets.settingsScreen.tabs;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -17,6 +15,8 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.carpc.R;
+import com.example.carpc.adapters.ConfigAdapter;
+import com.example.carpc.models.ConfigData;
 import com.example.carpc.network.TCPClient;
 import com.example.carpc.utils.DataParser;
 
@@ -69,7 +69,6 @@ public class ConfiguratorTab extends Fragment {
             }
         });
 
-
         readBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +79,6 @@ public class ConfiguratorTab extends Fragment {
         writeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
 
@@ -92,9 +90,7 @@ public class ConfiguratorTab extends Fragment {
     }
 
     private void readFromServer(String cmdName) {
-
         TCPClient tcpClient = TCPClient.getInstance(getContext());
-
         try {
             tcpClient.sendMessage("..");
             Thread.sleep(3);
@@ -127,10 +123,8 @@ public class ConfiguratorTab extends Fragment {
         HashMap<Integer, String> configurationMap = getConfigurationMap();
         String arrayKeyName = configurationMap.get(configId);
         int idName = this.getResources().getIdentifier(arrayKeyName, "array", getContext().getPackageName());
-
         String[] rawData = getContext().getResources().getStringArray(idName);
         ArrayList<ConfigData> filteredData = new ArrayList<>();
-
 
         for (int i = 2; i < rawData.length; i++) {
             String[] parts = rawData[i].split(",");
@@ -161,91 +155,5 @@ public class ConfiguratorTab extends Fragment {
     }
 }
 
-class ConfigData {
-    private String configItem;
-    private String configHint;
-    private String cmdName;
-
-    public ConfigData(String configItem, String configHint) {
-        this.configItem = configItem;
-        this.configHint = configHint;
-    }
-
-    public ConfigData(String configItem, String cmdName, String configHint) {
-        this.configItem = configItem;
-        this.configHint = configHint;
-        this.cmdName = cmdName;
-    }
-
-    public String getCmdName() {
-        return cmdName;
-    }
-
-    public void setCmdName(String cmdName) {
-        this.cmdName = cmdName;
-    }
-
-    public String getConfigItem() {
-        return configItem;
-    }
-
-    public void setConfigItem(String configItem) {
-        this.configItem = configItem;
-    }
-
-    public String getConfigHint() {
-        return configHint;
-    }
-
-    public void setConfigHint(String configHint) {
-        this.configHint = configHint;
-    }
-}
 
 
-class ConfigAdapter extends BaseAdapter {
-    Context context;
-    ArrayList<ConfigData> data;
-    private static LayoutInflater inflater = null;
-
-    public ConfigAdapter(Context context, ArrayList<ConfigData> data) {
-        this.context = context;
-        this.data = data;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    @Override
-    public int getCount() {
-        return data.size();
-    }
-
-    @Override
-    public ConfigData getItem(int i) {
-        return data.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        View v = view;
-        if (v == null) {
-            v = inflater.inflate(R.layout.config_line, null);
-        }
-
-        // parameter number text
-        TextView textNumber = (TextView) v.findViewById(R.id.parameter_num);
-        textNumber.setText(String.valueOf(i + 1));
-        // parameter text
-        TextView parameterText = (TextView) v.findViewById(R.id.config_title);
-        parameterText.setText(data.get(i).getConfigItem());
-        //edit text
-        TextView editText = v.findViewById(R.id.config_value);
-        editText.setHint(data.get(i).getConfigHint());
-
-        return v;
-    }
-}
