@@ -27,7 +27,6 @@ import java.util.Objects;
 
 public class ConfiguratorTab extends Fragment {
     private static final String TAG = "GroupConfig";
-    private androidx.fragment.app.FragmentTransaction fragmentTransaction;
 
     private ListView listView;
     private Spinner spinner;
@@ -124,6 +123,10 @@ public class ConfiguratorTab extends Fragment {
     }
 
     private void readFromServer(String cmdName) {
+        if (cmdName.equals("levels")) {
+            readLevelsFromSever();
+            return;
+        }
         TCPClient tcpClient = TCPClient.getInstance(getContext());
         try {
             tcpClient.sendMessage("..");
@@ -143,6 +146,29 @@ public class ConfiguratorTab extends Fragment {
                 listView.setAdapter(adapter);
             }
             Toast.makeText(getContext(), newConfig, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readLevelsFromSever() {
+        TCPClient tcpClient = TCPClient.getInstance(getContext());
+        try {
+            tcpClient.sendMessage("..");
+            Thread.sleep(3);
+            tcpClient.sendMessage("levels");
+            Thread.sleep(3);
+
+            for (int i = 0; i < adapter.getCount(); i++) {
+                tcpClient.sendMessage(adapter.getItem(i).getCmdName());
+                Thread.sleep(3);
+                String cmdName = adapter.getItem(i).getCmdName();
+                String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
+                adapter.getItem(i).setConfigValue(newConfigValue);
+                Toast.makeText(getContext(), cmdName + ": " + newConfigValue, Toast.LENGTH_SHORT).show();
+            }
+
+            adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
         }

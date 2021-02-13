@@ -1,6 +1,7 @@
 package com.example.carpc.utils;
 
 import android.util.Log;
+
 import java.util.HashMap;
 
 public class DataParser {
@@ -16,7 +17,7 @@ public class DataParser {
     private static HashMap<String, String> cellInfo = new HashMap<>();
 
     private static Boolean analogInputFlag = false, tempSensorFlag = false, capacityFlag = false,
-    hasNewMessage = false;
+            hasNewMessage = false;
 
     private String[] currentConfig = {"Please try again", "Please try again"};
     private String levelsMax, levelsMin, levelsStartbal, levelsBal, levelsChrgd, levelsAllowd, levelsCmin;
@@ -286,5 +287,27 @@ public class DataParser {
     public String getLevelsCmin() {
 //        levelsCmin = "2700";
         return levelsCmin;
+    }
+
+    // TODO: change keyN?ames as constants e.g cmin
+    public String getLevelsDataByCmdName(String keyName) throws Exception  {
+        switch (keyName) {
+            case "cmin":
+                return levelsCmin;
+            case "min":
+                return levelsMin;
+            case "max":
+                return levelsMax;
+            case "allowd":
+                return levelsAllowd;
+            case "chrgd":
+                return levelsChrgd;
+            case "bal":
+                return levelsBal;
+            case "startbal":
+                return levelsStartbal;
+            default:
+                throw new Exception("Unknown level data key name exception!");
+        }
     }
 }

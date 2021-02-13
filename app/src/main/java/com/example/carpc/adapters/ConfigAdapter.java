@@ -83,11 +83,7 @@ public class ConfigAdapter extends BaseAdapter {
         return v;
     }
 
-    public TextView getEditText() {
-        return editText;
-    }
-
-    public void setEditText(TextView editText) {
-        this.editText = editText;
+    public ArrayList<ConfigData> getData() {
+        return data;
     }
 }
