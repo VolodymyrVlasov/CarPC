@@ -1,11 +1,59 @@
 package com.example.carpc.utils;
 
+import java.util.EnumMap;
 import java.util.HashMap;
+
+enum ParserKey {
+    CMIN("cmin"),
+    MIN("min"),
+    MAX("max"),
+    SPEED("V"),
+
+    MAX_CELL_VOLT("m"),
+    MIN_CELL_VOLT("n"),
+
+    MAX_CELL_TEMP("z"),
+    MIN_CELL_TEMP("w"),
+
+    CELL_INFO("q"),
+
+    ANALOG_INPUTS("i"),
+
+    OPTO_INPUTS("o"),
+
+    BUTTONS("b"),
+
+    TEMP_SENSORS("t"),
+
+    ERROR("E"),
+
+    CURRENT("c"),
+
+
+    VOLTAGE("v"),
+
+    STATUS("s"),
+    TOTAL_DISTANCE("F"),
+    LAST_CHARGE_DISTANCE("f"),
+    RANGE("R"),
+    CAPACITY("l"),
+    MOTOR_TEMP("d"),
+    INVERTOR_TEMP("e"),
+    RPM("r");
+
+    private String value;
+
+    ParserKey(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+}
 
 public class DataParser {
     private static DataParser instance = null;
-
-    public static String inputData;
 
     private static HashMap<String, Double> valueArray = new HashMap<>();
     private static HashMap<String, String> valueMinMaxCellArray = new HashMap<>();
@@ -13,6 +61,9 @@ public class DataParser {
     private static HashMap<String, String> valueAnalogInputsArray = new HashMap<>();
     private static HashMap<String, String> valueTempSensorArray = new HashMap<>();
     private static HashMap<String, String> cellInfo = new HashMap<>();
+
+    private EnumMap<ParserKey, String> parserData = new EnumMap<>(ParserKey.class);
+
 
     private static Boolean analogInputFlag = false, tempSensorFlag = false, capacityFlag = false,
             hasNewMessage = false;
@@ -22,15 +73,15 @@ public class DataParser {
             levelsChrgd = "0", levelsAllowd = "", levelsCmin = "";
 
     private DataParser() {
-        String[] chars = new String[]{"V", "v", "l", "R", "q", "z", "w", "c", "F", "f", "d", "e", "r"};
-        for (String e : chars) valueArray.put(e, 0.0);
-        valueMinMaxCellArray.put("n", "0:0.000");
-        valueMinMaxCellArray.put("m", "0:0.000");
-        valueAnalogInputsArray.put("i", "0:0:0:0:0:0");
-        valueTempSensorArray.put("t", "0:0:0:0");
-        valueMinMaxCellTempArray.put("w", "0:0.000");
-        valueMinMaxCellTempArray.put("z", "0:0.000");
-        cellInfo.put("q", "0:0000:000:000:0:1");
+//        String[] chars = new String[]{"V", "v", "l", "R", "q", "z", "w", "c", "F", "f", "d", "e", "r"};
+//        for (String e : chars) valueArray.put(e, 0.0);
+//        valueMinMaxCellArray.put("n", "0:0.000");
+//        valueMinMaxCellArray.put("m", "0:0.000");
+//        valueAnalogInputsArray.put("i", "0:0:0:0:0:0");
+//        valueTempSensorArray.put("t", "0:0:0:0");
+//        valueMinMaxCellTempArray.put("w", "0:0.000");
+//        valueMinMaxCellTempArray.put("z", "0:0.000");
+//        cellInfo.put("q", "0:0000:000:000:0:1");
     }
 
     public static DataParser getInstance() {
@@ -42,7 +93,6 @@ public class DataParser {
     }
 
     public DataParser parseInputData(String inputData) throws NullPointerException {
-        DataParser.inputData = inputData;
         hasNewMessage = true;
 
         try {
@@ -64,8 +114,10 @@ public class DataParser {
             }
             if (inputData.substring(1, 3).equals("t:")) {
                 analogInputFlag = false;
-                valueTempSensorArray.put(inputData.substring(1, 2),
-                        inputData.substring(3));
+
+//                parserData.put(ParserKey.CURRENT, inputData.substring(3));
+
+                valueTempSensorArray.put(inputData.substring(1, 2), inputData.substring(3));
             }
             if (inputData.substring(1, 2).equals("q")) {
                 analogInputFlag = false;
@@ -78,9 +130,10 @@ public class DataParser {
             if (inputData.contains("current")) {
                 currentConfig = inputData.split("current");
             }
-            if (inputData.contains("cmin")) {
-                levelsCmin = inputData.substring(10);
-                levelsCmin = levelsCmin.replaceAll("cmin = ", "").trim();
+
+            if (inputData.contains(ParserKey.CMIN.getValue())) {
+                String value = inputData.substring(10).replaceAll("cmin = ", "").trim();
+                parserData.put(ParserKey.CMIN, value);
                 inputData = null;
             }
             if (inputData.contains("max")) {
@@ -107,28 +160,54 @@ public class DataParser {
                 levelsAllowd = inputData.substring(10);
                 levelsAllowd = levelsAllowd.replaceAll("allowd = ", "").trim();
             }
-            if (!inputData.substring(1, 2).equals("q") &&
-                    !inputData.substring(1, 3).equals("t:") &&
-                    !inputData.substring(1, 3).equals("i:") &&
-                    !inputData.substring(1, 2).equals("w") &&
-                    !inputData.substring(1, 2).equals("z") &&
-                    !inputData.substring(1, 2).equals("m") &&
-                    !inputData.substring(1, 2).equals("n") &&
-                    !inputData.substring(1, 2).equals("E")) {
-                analogInputFlag = false;
-                valueArray.put(inputData.substring(1, 2),
-                        Double.parseDouble(inputData.substring(2)));
-            }
+
+
+            checkMultipleKeyForParse(ParserKey.SPEED, inputData);
+
+//
+//            if (!inputData.substring(1, 2).equals("q") &&
+//                    !inputData.substring(1, 3).equals("t:") &&
+//                    !inputData.substring(1, 3).equals("i:") &&
+//                    !inputData.substring(1, 2).equals("w") &&
+//                    !inputData.substring(1, 2).equals("z") &&
+//                    !inputData.substring(1, 2).equals("m") &&
+//                    !inputData.substring(1, 2).equals("n") &&
+//                    !inputData.substring(1, 2).equals("E")) {
+//                analogInputFlag = false;
+//
+////
+////                valueArray.put(inputData.substring(1, 2),
+////                        Double.parseDouble(inputData.substring(2)));
+//            }
         } catch (NullPointerException | StringIndexOutOfBoundsException | NumberFormatException e) {
         }
 
         return this;
     }
 
+    private void checkSingleKeyForParse(ParserKey key, String inputData) {
+        if (inputData.contains(key.getValue())) {
+            String value = inputData.substring(10).replaceAll(key.getValue() + " = ", "").trim();
+            parserData.put(key, value);
+        }
+    }
+
+    private void checkMultipleKeyForParse(ParserKey key, String inputData) {
+
+        // todo проверить нет ли совпадений с названиями команд
+        if (inputData.substring(1,3).contains(key.getValue())) {
+            parserData.put(key, inputData.substring(2));
+        }
+    }
+
+//    public String getParserData(ParserKey key) {
+//
+//    }
 
     public Integer getSpeed() {
+        return Integer.valueOf(parserData.get(ParserKey.SPEED));
         // todo: can be errors
-        return (int) Math.round(valueArray.get("V"));
+//        return (int) Math.round(valueArray.get("V"));
     }
 
     public Double getCurrent() {

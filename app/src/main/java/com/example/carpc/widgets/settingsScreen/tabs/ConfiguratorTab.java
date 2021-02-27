@@ -91,6 +91,10 @@ public class ConfiguratorTab extends Fragment {
     }
 
     private void writeToServer(String cmdName) {
+        if (cmdName.equals("levels")) {
+            writeLevelsToSever();
+            return;
+        }
         TCPClient tcpClient = TCPClient.getInstance(getContext());
         for (int i = 0; i < adapter.getCount(); i++) {
             if (adapter.getItem(i).isConfigValueEmpty()) {
@@ -122,6 +126,8 @@ public class ConfiguratorTab extends Fragment {
         MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
     }
 
+
+
     private void readFromServer(String cmdName) {
         if (cmdName.equals("levels")) {
             readLevelsFromSever();
@@ -149,6 +155,30 @@ public class ConfiguratorTab extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void writeLevelsToSever() {
+        TCPClient tcpClient = TCPClient.getInstance(getContext());
+        for (int i = 0; i < adapter.getCount(); i++) {
+            if (adapter.getItem(i).isConfigValueEmpty()) {
+                Toast.makeText(getContext(), "All input fields shouldn`t be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        try {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                String cmdName = adapter.getItem(i).getCmdName();
+                String resultCommand = cmdName + " " + adapter.getItem(i).getConfigValue();
+                tcpClient.sendMessage("..");
+                Thread.sleep(3);
+                tcpClient.sendMessage("levels");
+                Thread.sleep(3);
+                tcpClient.sendMessage(resultCommand);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void readLevelsFromSever() {
