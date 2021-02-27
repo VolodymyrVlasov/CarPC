@@ -31,7 +31,7 @@
         <item>Description</item>
         <item>Help</item>
 
-        <item>Max voltage level (mv),max,4200</item>
+        <item>Max voltage level (mv),max,4100</item>
         <item>Min voltage level (mv),min,3000</item>
         <item>Start balancing voltage (mv),startbal,4100</item>
         <item>Stop balancing voltage (mv),bal,4180</item>

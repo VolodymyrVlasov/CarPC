@@ -1,7 +1,5 @@
 package com.example.carpc.utils;
 
-import android.util.Log;
-
 import java.util.HashMap;
 
 public class DataParser {
@@ -20,7 +18,8 @@ public class DataParser {
             hasNewMessage = false;
 
     private String[] currentConfig = {"Please try again", "Please try again"};
-    private String levelsMax, levelsMin, levelsStartbal, levelsBal, levelsChrgd, levelsAllowd, levelsCmin;
+    private String levelsMax = "", levelsMin = "", levelsStartbal = "", levelsBal = "",
+            levelsChrgd = "0", levelsAllowd = "", levelsCmin = "";
 
     private DataParser() {
         String[] chars = new String[]{"V", "v", "l", "R", "q", "z", "w", "c", "F", "f", "d", "e", "r"};
@@ -68,12 +67,12 @@ public class DataParser {
                 valueTempSensorArray.put(inputData.substring(1, 2),
                         inputData.substring(3));
             }
-            if (inputData.substring(1, 3).equals("q")) {
+            if (inputData.substring(1, 2).equals("q")) {
                 analogInputFlag = false;
                 cellInfo.put(inputData.substring(1, 2),
                         inputData.substring(3));
             }
-            if (inputData.substring(1, 3).equals("l")) {
+            if (inputData.substring(1, 2).equals("l")) {
                 capacityFlag = true;
             }
             if (inputData.contains("current")) {
@@ -82,38 +81,31 @@ public class DataParser {
             if (inputData.contains("cmin")) {
                 levelsCmin = inputData.substring(10);
                 levelsCmin = levelsCmin.replaceAll("cmin = ", "").trim();
-                Log.i("dataParser", "parsed levelsCmin " + levelsCmin);
                 inputData = null;
             }
             if (inputData.contains("max")) {
                 levelsMax = inputData.substring(10);
                 levelsMax = levelsMax.replaceAll("max = ", "").trim();
-                Log.i("dataParser", "parsed levelsMax " + levelsMax);
             }
             if (inputData.contains("min")) {
                 levelsMin = inputData.substring(10);
                 levelsMin = levelsMin.replaceAll("min = ", "").trim();
-                Log.i("dataParser", "parsed levelsMin " + levelsMin);
             }
             if (inputData.contains("startbal")) {
                 levelsStartbal = inputData.substring(10);
                 levelsStartbal = levelsStartbal.replaceAll("startbal = ", "").trim();
-                Log.i("dataParser", "parsed levelsStartbal " + levelsStartbal);
             }
             if (inputData.contains("bal")) {
                 levelsBal = inputData.substring(10);
                 levelsBal = levelsBal.replaceAll("bal = ", "").trim();
-                Log.i("dataParser", "parsed levelsBal " + levelsBal);
             }
             if (inputData.contains("chrgd")) {
                 levelsChrgd = inputData.substring(10);
                 levelsChrgd = levelsChrgd.replaceAll("chrgd = ", "").trim();
-                Log.i("dataParser", "parsed levelsChrgd " + levelsChrgd);
             }
             if (inputData.contains("allowd")) {
                 levelsAllowd = inputData.substring(10);
                 levelsAllowd = levelsAllowd.replaceAll("allowd = ", "").trim();
-                Log.i("dataParser", "parsed levelsAllowd " + levelsAllowd);
             }
             if (!inputData.substring(1, 2).equals("q") &&
                     !inputData.substring(1, 3).equals("t:") &&
@@ -133,13 +125,6 @@ public class DataParser {
         return this;
     }
 
-    public void messageReceived() {
-        hasNewMessage = false;
-    }
-
-    public boolean hasNewMessage() {
-        return hasNewMessage;
-    }
 
     public Integer getSpeed() {
         // todo: can be errors
@@ -252,45 +237,12 @@ public class DataParser {
         } else {
             currentConfig[1] = currentConfig[1].substring(3);
         }
-        Log.i("dataParser", "DATAPARSER -> GETCURRENGCONFIG -> currentConfig[1]: " + currentConfig[1]);
         return currentConfig[1];
     }
 
-    public String getLevelsMax() {
-        return levelsMax;
-    }
-
-    public String getLevelsMin() {
-        return levelsMin;
-    }
-
-    public String getLevelsStartbal() {
-//        levelsStartbal = "4100";
-        return levelsStartbal;
-    }
-
-    public String getLevelsBal() {
-//        levelsBal = "4180";
-        return levelsBal;
-    }
-
-    public String getLevelsChrgd() {
-//        levelsChrgd = "4150";
-        return levelsChrgd;
-    }
-
-    public String getLevelsAllowd() {
-//        levelsAllowd = "2850";
-        return levelsAllowd;
-    }
-
-    public String getLevelsCmin() {
-//        levelsCmin = "2700";
-        return levelsCmin;
-    }
 
     // TODO: change keyN?ames as constants e.g cmin
-    public String getLevelsDataByCmdName(String keyName) throws Exception  {
+    public String getLevelsDataByCmdName(String keyName) throws Exception {
         switch (keyName) {
             case "cmin":
                 return levelsCmin;
