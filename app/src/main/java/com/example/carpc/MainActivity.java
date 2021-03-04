@@ -62,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
             public void OnDataReceive(DataParser data) {
                 if (dashboardWidget.isVisible()) {
                     dashboardWidget.getSpeedometerWidget().setSpeedText(data.getSpeed());
-//                    dashboardWidget.getBatteryWidget().updateWidgetUI(data.getRange(), data.getFirstTempSensorValue(), data.getBatteryCapacity());
-//                    dashboardWidget.getTripManagerWidget().updateWidgetUI(data.getLastChargePassedDistance(), data.getRange(), data.getTotalDistance());
-//                    dashboardWidget.getBatteryManagerWidget().updateWidgetUI(data.getCurrent(), data.getVoltage(), data.getBatteryCapacity());
+                    dashboardWidget.getBatteryWidget().updateWidgetUI(data.getRange(), data.getFirstTempSensorValue(), data.getBatteryCapacity());
+                    dashboardWidget.getTripManagerWidget().updateWidgetUI(data.getLastChargePassedDistance(), data.getRange(), data.getTotalDistance());
+                    dashboardWidget.getBatteryManagerWidget().updateWidgetUI(data.getCurrent(), data.getVoltage(), data.getBatteryCapacity());
                 }
             }
         });
