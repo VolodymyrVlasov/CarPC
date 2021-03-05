@@ -184,18 +184,18 @@ public class ConfiguratorTab extends Fragment {
     private void readLevelsFromSever() {
         TCPClient tcpClient = TCPClient.getInstance(getContext());
         try {
-            tcpClient.sendMessage("..");
-            Thread.sleep(3);
-            tcpClient.sendMessage("levels");
-            Thread.sleep(3);
-
             for (int i = 0; i < adapter.getCount(); i++) {
+                tcpClient.sendMessage("..");
+                Thread.sleep(10);
+                tcpClient.sendMessage("levels");
+                Thread.sleep(10);
                 tcpClient.sendMessage(adapter.getItem(i).getCmdName());
-                Thread.sleep(3);
+                Thread.sleep(10);
+                System.out.println("send message: " + adapter.getItem(i).getCmdName());
                 String cmdName = adapter.getItem(i).getCmdName();
+                Thread.sleep(50);
                 String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
                 adapter.getItem(i).setConfigValue(newConfigValue);
-                Toast.makeText(getContext(), cmdName + ": " + newConfigValue, Toast.LENGTH_SHORT).show();
             }
 
             adapter.notifyDataSetChanged();

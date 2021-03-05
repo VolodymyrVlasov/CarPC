@@ -3,17 +3,20 @@ package com.example.carpc.utils;
 import java.util.EnumMap;
 
 enum ParserKey {
+    // Config values
+    // Levels path
     LEVELS_CMIN("cmin"),
     LEVELS_MIN("min"),
     LEVELS_MAX("max"),
     LEVELS_ALLOWD("allowd"),
     LEVELS_STARTBAL("startbal"),
     LEVELS_BAL("bal"),
-    LEVELS_CHRGD("shrgd"),
-
+    LEVELS_CHRGD("chrgd"),
+    // Config path
     CONFIG_CURRENT("current"),
     CONFIG_IGNITION("ignition"),
 
+    // Actual values
     SPEED("V"),
     MAX_CELL_VOLT("m"),
     MIN_CELL_VOLT("n"),
@@ -52,6 +55,10 @@ public class DataParser {
     private EnumMap<ParserKey, String> parserData = new EnumMap<>(ParserKey.class);
 
     private DataParser() {
+        for (ParserKey key : ParserKey.values()) {
+            parserData.put(key, "0");
+        }
+        parserData.put(ParserKey.TEMP_SENSORS, ":0:0:0:0");
     }
 
     public static DataParser getInstance() {
@@ -62,26 +69,31 @@ public class DataParser {
     }
 
     public DataParser parseInputData(String inputData) throws NullPointerException {
-
-        for (ParserKey key : ParserKey.values()) {
-            checkMultipleKeyForParse(key, inputData);
+        System.out.println(inputData);
+        if (inputData.contains("=")) {
+            putConfigValue(inputData);
+        } else if (inputData.contains("&")) {
+            putActualValue(inputData);
         }
-
         return this;
     }
 
-    private void checkSingleKeyForParse(ParserKey key, String inputData) {
-        if (inputData.contains(key.getValue())) {
-            String value = inputData.substring(10).replaceAll(key.getValue() + " = ", "").trim();
-            parserData.put(key, value);
+    private void putConfigValue(String inputData) {
+        String[] cmd = inputData.substring(10).trim().split(" = ");
+        for (ParserKey key : ParserKey.values()) {
+            if (cmd[0].equals(key.getValue())) {
+                parserData.put(key, cmd[1]);
+                break;
+            }
         }
     }
 
-    private void checkMultipleKeyForParse(ParserKey key, String inputData) {
-        // todo проверить нет ли совпадений с названиями команд
-        if (inputData.substring(1,3).contains(key.getValue())) {
-            parserData.put(key, inputData.substring(2));
-            System.out.println(key + ": " + parserData.get(key));
+    private void putActualValue(String inputData) {
+        for (ParserKey key : ParserKey.values()) {
+            if (inputData.substring(1, 3).contains(key.getValue())) {
+                parserData.put(key, inputData.substring(2));
+                System.out.println(key + ": " + parserData.get(key));
+            }
         }
     }
 

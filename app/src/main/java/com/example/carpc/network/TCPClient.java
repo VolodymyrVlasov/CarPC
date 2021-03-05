@@ -29,7 +29,6 @@ public class TCPClient implements Closeable {
     private boolean connectionState = false;
     private boolean reconnect = true;
     private final String TAG = "SOCKET";
-    private static DataParser dataParser;
     private static String inputMessage;
 
     private TCPClientListener listener;
