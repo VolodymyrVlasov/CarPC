@@ -43,7 +43,8 @@
             <ListView
                 android:id="@+id/configListView"
                 android:layout_width="match_parent"
-                android:layout_height="350dp" />
+                android:layout_height="wrap_content"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,7 +57,7 @@
                 <Button
                     android:id="@+id/btn_read"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_marginRight="7dp"
                     android:layout_weight="1"
                     android:background="@drawable/transparent_bg_bordered_button"
@@ -66,7 +67,7 @@
                 <Button
                     android:id="@+id/btn_write"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="7dp"
                     android:layout_weight="1"
                     android:background="@drawable/transparent_bg_bordered_button"

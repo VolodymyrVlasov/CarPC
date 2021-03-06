@@ -16,6 +16,8 @@ enum ParserKey {
     CONFIG_CURRENT("current"),
     CONFIG_IGNITION("ignition"),
 
+    // cmd = value
+
     // Actual values
     SPEED("V"),
     MAX_CELL_VOLT("m"),
@@ -39,6 +41,8 @@ enum ParserKey {
     INVERTOR_TEMP("e"),
     RPM("r");
 
+    // &c100
+
     private String value;
 
     ParserKey(String value) {
@@ -55,6 +59,8 @@ public class DataParser {
     private EnumMap<ParserKey, String> parserData = new EnumMap<>(ParserKey.class);
 
     private DataParser() {
+
+        // Todo change init values
         for (ParserKey key : ParserKey.values()) {
             parserData.put(key, "0");
         }
@@ -69,7 +75,6 @@ public class DataParser {
     }
 
     public DataParser parseInputData(String inputData) throws NullPointerException {
-        System.out.println(inputData);
         if (inputData.contains("=")) {
             putConfigValue(inputData);
         } else if (inputData.contains("&")) {
@@ -78,6 +83,9 @@ public class DataParser {
         return this;
     }
 
+
+    // ?? levelv> ?? cmin = 4200
+    // cmd[0] -> cmin, cmd[1] -> 4200
     private void putConfigValue(String inputData) {
         String[] cmd = inputData.substring(10).trim().split(" = ");
         for (ParserKey key : ParserKey.values()) {
@@ -88,11 +96,16 @@ public class DataParser {
         }
     }
 
+
+    //&c500
+    // &t:0:0:0:0
+
+    // CURRETN, 500
+    // TEMPSENSORS, :0:0:0:0
     private void putActualValue(String inputData) {
         for (ParserKey key : ParserKey.values()) {
             if (inputData.substring(1, 3).contains(key.getValue())) {
                 parserData.put(key, inputData.substring(2));
-                System.out.println(key + ": " + parserData.get(key));
             }
         }
     }
@@ -161,11 +174,11 @@ public class DataParser {
         return parserData.get(ParserKey.CELL_INFO);
     }
 
-    public Double getFirstTempSensorValue() {
+    public Double getTempSensorValue(int sensNumber) {
         String temp = parserData.get(ParserKey.TEMP_SENSORS);
         assert temp != null;
         String[] arr = temp.split(":");
-        return Double.parseDouble(arr[1]);
+        return Double.parseDouble(arr[sensNumber]);
     }
 
     public Double getSecondTempSensorValue() {
@@ -173,20 +186,6 @@ public class DataParser {
         assert temp != null;
         String[] arr = temp.split(":");
         return Double.parseDouble(arr[2]);
-    }
-
-    public Double getThirdTempSensorValue() {
-        String temp = parserData.get(ParserKey.TEMP_SENSORS);
-        assert temp != null;
-        String[] arr = temp.split(":");
-        return Double.parseDouble(arr[3]);
-    }
-
-    public Double getFourthTempSensorValue() {
-        String temp = parserData.get(ParserKey.TEMP_SENSORS);
-        assert temp != null;
-        String[] arr = temp.split(":");
-        return Double.parseDouble(arr[4]);
     }
 
     public String getCurrentConfig() {

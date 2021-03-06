@@ -84,6 +84,7 @@ public class ConfiguratorTab extends Fragment {
         });
 
         listView = v.findViewById(R.id.configListView);
+
         descriptionTextView = v.findViewById(R.id.description_text_view);
         helpTextView = v.findViewById(R.id.help_text_view);
         getSelectedSpinnerData(0);
@@ -150,6 +151,8 @@ public class ConfiguratorTab extends Fragment {
                 }
 
                 listView.setAdapter(adapter);
+                listView.setLayoutParams(setListViewHeight(listView, adapter));
+                listView.requestLayout();
             }
             Toast.makeText(getContext(), newConfig, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
@@ -184,6 +187,11 @@ public class ConfiguratorTab extends Fragment {
     private void readLevelsFromSever() {
         TCPClient tcpClient = TCPClient.getInstance(getContext());
         try {
+
+            //    ?? levelv> ?? cmin = 4200
+            // min = 200
+            // max = 5454
+
             for (int i = 0; i < adapter.getCount(); i++) {
                 tcpClient.sendMessage("..");
                 Thread.sleep(10);
@@ -197,6 +205,7 @@ public class ConfiguratorTab extends Fragment {
                 String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
                 adapter.getItem(i).setConfigValue(newConfigValue);
             }
+
 
             adapter.notifyDataSetChanged();
         } catch (Exception e) {
@@ -227,6 +236,8 @@ public class ConfiguratorTab extends Fragment {
 
         adapter = new ConfigAdapter(getContext(), filteredData);
         listView.setAdapter(adapter);
+        listView.setLayoutParams(setListViewHeight(listView, adapter));
+        listView.requestLayout();
         updateSpinnerDescriptions(rawData[0], rawData[1]);
     }
 
@@ -242,6 +253,19 @@ public class ConfiguratorTab extends Fragment {
         configurationMap.put(7, "maincontactor");
         configurationMap.put(8, "chcurrentmax");
         return configurationMap;
+    }
+
+    private ViewGroup.LayoutParams setListViewHeight(ListView listView, ConfigAdapter adapter){
+        int totalHeight = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        return params;
     }
 }
 
