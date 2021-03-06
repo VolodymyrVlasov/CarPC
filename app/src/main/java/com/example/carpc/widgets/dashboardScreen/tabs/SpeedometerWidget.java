@@ -20,6 +20,7 @@ public class SpeedometerWidget extends Fragment implements TCPClient.TCPClientLi
 
     public SpeedometerWidget() {
         TCPClient.getInstance(getContext()).addNetworkListener(this);
+        //
     }
 
     @Override
