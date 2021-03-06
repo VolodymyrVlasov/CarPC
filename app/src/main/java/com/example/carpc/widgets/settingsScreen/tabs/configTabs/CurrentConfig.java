@@ -46,8 +46,8 @@ public class CurrentConfig extends Fragment {
     private void addCurrentConfig() {
         final int paramQuantity = 5;
         final String[] commandName = new String[]{"current"};
-        String description = getString(R.string.CONFIGURATOR_Current_Top_Description);
-        String description2 = getString(R.string.CONFIGURATOR_Current_Bottom_Description);
+        String description = getString(R.string.CONFIGURATOR_Current_description);
+        String description2 = getString(R.string.CONFIGURATOR_Current_help);
         final String[] paramTitle = new String[]{
                 "INP TYPE:",
                 "INP NUMBER",
@@ -68,8 +68,8 @@ public class CurrentConfig extends Fragment {
         View btnLayout = factory.inflate(R.layout.read_write_buttons, null);
         View descriptionLayout2 = factory.inflate(R.layout.description_line, null);
         View[] paramLayout = new View[paramQuantity];
-        TextView groupDescription = descriptionLayout.findViewById(R.id.description);
-        TextView configDescription = descriptionLayout2.findViewById(R.id.description);
+        TextView groupDescription = descriptionLayout.findViewById(R.id.description_text_view);
+        TextView configDescription = descriptionLayout2.findViewById(R.id.description_text_view);
         TextView[] numParam = new TextView[paramQuantity];
         TextView[] titleParam = new TextView[paramQuantity];
         final TextView[] valueParam = new TextView[paramQuantity];

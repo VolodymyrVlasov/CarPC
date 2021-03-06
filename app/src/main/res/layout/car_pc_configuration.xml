@@ -8,59 +8,90 @@
     android:paddingHorizontal="7dp"
     tools:context=".widgets.settingsScreen.tabs.ConfiguratorTab">
 
+    <Spinner
+        android:id="@+id/configurationGroupList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/configurationGroupList"
+        android:theme="@style/mySpinnerItemStyle" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="7dp"
-                android:paddingBottom="7dp">
+                android:layout_margin="10dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/description_text_view"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="7dp"
                     android:layout_marginRight="7dp"
+                    android:layout_weight="0.3"
+                    android:text="Lorem ipsum"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/configListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="7dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_read"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_weight="1"
                     android:background="@drawable/transparent_bg_bordered_button"
-                    android:orientation="vertical">
+                    android:text="READ PARAMS"
+                    android:textColor="@drawable/custom_button" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginBottom="7dp"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
-
-                        <Spinner
-                            android:id="@+id/configurationGroupList"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:entries="@array/configurationGroupList"
-                            android:theme="@style/mySpinnerItemStyle" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
+                <Button
+                    android:id="@+id/btn_write"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/transparent_bg_bordered_button"
+                    android:text="WRITE CONFIG"
+                    android:textColor="@drawable/custom_button" />
 
             </LinearLayout>
 
-            <ScrollView
-                android:id="@+id/frameForConfigFragments"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_margin="10dp">
 
-            </ScrollView>
-
+                <TextView
+                    android:id="@+id/help_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="7dp"
+                    android:layout_weight="0.3"
+                    android:text="Lorem ipsum"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="15sp" />
+            </LinearLayout>
         </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

@@ -17,10 +17,10 @@
             android:id="@+id/widget_name"
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:gravity="center"
             android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="1dp">
 
@@ -56,12 +56,12 @@
             android:id="@+id/value_of_last_charge_trip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
             android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             app:layout_constraintTop_toBottomOf="@+id/widget_name"
-            tools:ignore="MissingConstraints">
+            tools:ignore="MissingConstraints"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/passed_last_charge_text_view"
@@ -99,9 +99,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
+            android:orientation="horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/value_of_last_charge_trip"
             tools:ignore="MissingConstraints">
 
@@ -140,11 +140,11 @@
             android:id="@+id/current_trip_divider"
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
             android:gravity="center"
             android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@+id/name_of_last_charge_trip">
 
             <ImageView
@@ -179,12 +179,12 @@
             android:id="@+id/value_of_current_trip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
             android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             app:layout_constraintTop_toBottomOf="@+id/current_trip_divider"
-            tools:ignore="MissingConstraints">
+            tools:ignore="MissingConstraints"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/passed_current_trip_text_view"
@@ -222,9 +222,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
+            android:orientation="horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/value_of_current_trip"
             tools:ignore="MissingConstraints">
 
@@ -263,11 +263,11 @@
             android:id="@+id/odometer_divider"
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
             android:gravity="center"
             android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@+id/name_of_current_trip">
 
             <ImageView
@@ -299,13 +299,15 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/value_of_odometer1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/odometer_divider">
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            app:layout_constraintTop_toBottomOf="@+id/odometer_divider"
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/name_total_trip"
@@ -326,13 +328,25 @@
                 android:text="0"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/value_of_odometer2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            app:layout_constraintTop_toBottomOf="@+id/value_of_odometer1"
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/name_total_energy"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:textAlignment="center"
+                android:gravity="left"
                 android:text="Total energy:"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp" />
@@ -346,7 +360,6 @@
                 android:text="0"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp" />
-
         </LinearLayout>
 
 

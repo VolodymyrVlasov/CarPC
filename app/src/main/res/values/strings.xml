@@ -26,9 +26,9 @@
     <string name="CONFIGURATOR_Levels_Bottom_Description">TODO: write description</string>
 
     <!-- CONFIGURATOR -> Current -->
-    <string name="CONFIGURATOR_Current_Top_Description">Setting up the current sensor.\n
+    <string name="CONFIGURATOR_Current_description">Setting up the current sensor.\n
         To configure you need to use the terminal on the next tab</string>
-    <string name="CONFIGURATOR_Current_Bottom_Description">1. INP TYPE:\n
+    <string name="CONFIGURATOR_Current_help">1. INP TYPE:\n
         0 — Undefined\n
         1 — ADC\n
         2 — USART\n
@@ -61,32 +61,7 @@
         parameter value is 25000mA.</string>
 
 
-    <string-array name="configurationGroupList">
-        <item>Levels (BMS)</item>
-        <item>Current</item>
-        <item>Charger</item>
-        <item>Charging</item>
-        <item>Ignition</item>
-        <item>Power</item>
-        <item>Precharge</item>
-        <item>Main contactor</item>
-        <item>Charge Current Max</item>
-        <item>Discharge Current Max</item>
-        <item>Thermostat</item>
-        <item>Temperature Sensor Types</item>
-        <item>Interface</item>
-        <item>Speed</item>
-        <item>RPM</item>
-        <item>Battery</item>
-        <item>Charging temperature</item>
-        <item>Power temperature</item>
-        <item>CAN</item>
-        <item>Accelerator</item>
-        <item>Alarm</item>
-        <item>Flags</item>
-        <item>Buttons</item>
-        <item>Gauge</item>
-    </string-array>
+
 
     <string-array name="inputTypesSpeed">
         <item>SP 1</item>

@@ -39,8 +39,8 @@ public class DashboardWidget extends Fragment {
         fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.replace(R.id.dashboardCenterCont, speedometerWidget);
-        fragmentTransaction.replace(R.id.dashboardRightUpCont, iconStatusRightWidget);
-        fragmentTransaction.replace(R.id.dashboardLeftUpCont, iconStatusLeftWidget);
+//        fragmentTransaction.replace(R.id.dashboardRightUpCont, iconStatusRightWidget);
+//        fragmentTransaction.replace(R.id.dashboardLeftUpCont, iconStatusLeftWidget);
         fragmentTransaction.replace(R.id.dashboardBottomLeftCont, batteryWidget);
         fragmentTransaction.setCustomAnimations(R.animator.left_in, R.animator.right_in).replace(R.id.dashboardLeftCont, batteryManagerWidget);
         fragmentTransaction.setCustomAnimations(R.animator.left_out, R.animator.right_out).replace(R.id.dashboardRightCont, tripManagerWidget);

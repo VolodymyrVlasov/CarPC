@@ -16,10 +16,10 @@
             android:id="@+id/widget_name"
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:gravity="center"
-            android:orientation="horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="1dp">
 
@@ -55,12 +55,12 @@
             android:id="@+id/value_of_Amp_Volt_Power"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/widget_name"
-            tools:ignore="MissingConstraints"
-            android:layout_marginTop="5dp">
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/current_text_view"
@@ -98,9 +98,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:orientation="horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/value_of_Amp_Volt_Power"
             tools:ignore="MissingConstraints">
 
@@ -139,11 +139,11 @@
             android:id="@+id/divider_1"
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/name_of_Amp_Volt_Power"
             tools:layout_editor_absoluteX="0dp">
 
@@ -162,12 +162,12 @@
             android:id="@+id/value_of_powermeter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/divider_1"
-            tools:ignore="MissingConstraints"
-            android:layout_marginTop="5dp">
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/average_WH_divide_KM_TextView"
@@ -204,9 +204,9 @@
             android:id="@+id/name_of_powermeter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/value_of_powermeter"
             tools:ignore="MissingConstraints">
 
@@ -245,11 +245,11 @@
             android:id="@+id/divider_2"
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/name_of_powermeter"
             tools:layout_editor_absoluteX="0dp">
 
@@ -262,16 +262,15 @@
                 app:srcCompat="@drawable/pic_divider_line_center" />
         </LinearLayout>
 
+
         <LinearLayout
-            android:id="@+id/value_of_min_cell"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
             android:layout_marginTop="5dp"
+            android:layout_marginRight="50dp"
             android:orientation="horizontal"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            app:layout_constraintTop_toBottomOf="@+id/divider_2"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintTop_toBottomOf="@+id/divider_2">
 
             <TextView
                 android:id="@+id/name_cell_min"
@@ -292,6 +291,7 @@
                 android:text="0"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp" />
+
             <TextView
                 android:id="@+id/value_cell_min_voltage"
                 android:layout_width="0dp"
@@ -301,18 +301,7 @@
                 android:text="4.200"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/value_of_max_cell"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            app:layout_constraintTop_toBottomOf="@+id/value_of_min_cell"
-            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/name_cell_max"
@@ -333,6 +322,7 @@
                 android:text="0"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp" />
+
             <TextView
                 android:id="@+id/value_cell_max_voltage"
                 android:layout_width="0dp"
