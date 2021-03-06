@@ -57,12 +57,12 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Key: " + entry.getKey() + " - " + entry.getValue());
         }
         TCPClient.getInstance(this).sendMessage(AppConstants.SUBSCRIBE);
-        TCPClient.getInstance(this).setTCPClientListener(new TCPClient.TCPClientListener() {
+        TCPClient.getInstance(this).addNetworkListener(new TCPClient.TCPClientListener() {
             @Override
             public void OnDataReceive(DataParser data) {
                 if (dashboardWidget.isVisible()) {
-                    dashboardWidget.getSpeedometerWidget().setSpeedText(data.getSpeed());
-                    dashboardWidget.getBatteryWidget().updateWidgetUI(data.getRange(), data.getFirstTempSensorValue(), data.getBatteryCapacity());
+//                    dashboardWidget.getSpeedometerWidget().setSpeedText(data.getSpeed());
+                    dashboardWidget.getBatteryWidget().updateWidgetUI(data.getRange(), data.getTempSensorValue(1), data.getBatteryCapacity());
                     dashboardWidget.getTripManagerWidget().updateWidgetUI(data.getLastChargePassedDistance(), data.getRange(), data.getTotalDistance());
                     dashboardWidget.getBatteryManagerWidget().updateWidgetUI(data.getCurrent(), data.getVoltage(), data.getBatteryCapacity());
                 }
