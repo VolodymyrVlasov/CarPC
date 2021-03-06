@@ -206,7 +206,6 @@ public class ConfiguratorTab extends Fragment {
                 adapter.getItem(i).setConfigValue(newConfigValue);
             }
 
-
             adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();

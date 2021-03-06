@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class TCPClient implements Closeable {
@@ -31,15 +33,20 @@ public class TCPClient implements Closeable {
     private final String TAG = "SOCKET";
     private static String inputMessage;
 
-    private TCPClientListener listener;
+//    private TCPClientListener listener;
+    private List<TCPClientListener> networkListeners;
 
     public interface TCPClientListener {
         public void OnDataReceive(DataParser data);
     }
 
-    public void setTCPClientListener(TCPClientListener listener) {
-        this.listener = listener;
+    public void addNetworkListener(TCPClientListener newListener) {
+        this.networkListeners.add(newListener);
     }
+
+//    public void setTCPClientListener(TCPClientListener listener) {
+//        this.listener = listener;
+//    }
 
     public static TCPClient getInstance(Context ctx) {
         if (instance == null) {
@@ -52,6 +59,7 @@ public class TCPClient implements Closeable {
 
     private TCPClient(final String address, final int port) {
         createConnection(address, port, true);
+        networkListeners = new ArrayList<>();
     }
 
     public String getLocalNetworkAddress(Context ctx) {
@@ -101,10 +109,14 @@ public class TCPClient implements Closeable {
                             inputMessage = scanner.nextLine();
                             message.setMessage(inputMessage, true);
 
-
                             DataParser data = DataParser.getInstance().parseInputData(inputMessage);
-                            if(listener != null) {
-                                listener.OnDataReceive(data);
+                            if(networkListeners != null) {
+
+                                for(TCPClientListener listener : networkListeners) {
+                                    listener.OnDataReceive(data);
+                                }
+
+//                                listener.OnDataReceive(data);
                             }
                         }
                     } catch (Exception e) {
