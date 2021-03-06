@@ -7,21 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-
 import com.example.carpc.R;
-import com.example.carpc.network.TCPClient;
 import com.example.carpc.utils.DataParser;
+import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
 
-public class SpeedometerWidget extends Fragment implements TCPClient.TCPClientListener {
+public class SpeedometerWidget extends AbstractDashboardWidget {
     private int speedToSet = 0;
-
     public TextView speedTextView;
-
-    public SpeedometerWidget() {
-        TCPClient.getInstance(getContext()).addNetworkListener(this);
-        //
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,29 +24,16 @@ public class SpeedometerWidget extends Fragment implements TCPClient.TCPClientLi
         return v;
     }
 
-    public void setSpeedText(int speed) {
-        if (speedToSet <= speed) speedToSet += 1;
-        if (speedToSet > speed) speedToSet -= 1;
-
-        speedTextView.post(new Runnable() {
-                               @Override
-                               public void run() { speedTextView.setText(String.valueOf(speedToSet));
-                               }
-                           }
-        );
-    }
-
     @Override
-    public void OnDataReceive(DataParser data) {
+    public void updateUI(DataParser data) {
         if (speedToSet <= data.getSpeed()) speedToSet += 1;
         if (speedToSet > data.getSpeed()) speedToSet -= 1;
 
         speedTextView.post(new Runnable() {
-                               @Override
-                               public void run() { speedTextView.setText(String.valueOf(speedToSet));
-                               }
-                           }
+               @Override
+               public void run() { speedTextView.setText(String.valueOf(speedToSet));
+               }
+           }
         );
-
     }
 }
