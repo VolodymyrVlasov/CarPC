@@ -12,14 +12,13 @@ import androidx.fragment.app.Fragment;
 import com.example.carpc.R;
 import com.example.carpc.utils.Counter;
 import com.example.carpc.utils.DataParser;
+import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
 
-public class BatteryManagerWidget extends Fragment {
+public class BatteryManagerWidget extends AbstractDashboardWidget {
     public static TextView currentTextView, voltageTextView, powerTextView,
             avConsumption, currentConsumption, currentSessionWattMeter,
             minCellNumber, minCellVoltage,
             maxCellNumber, maxCellVoltage;
-    private DataParser parser;
-    private Counter counter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,24 +37,26 @@ public class BatteryManagerWidget extends Fragment {
         minCellVoltage = v.findViewById(R.id.value_cell_min_voltage);
         maxCellNumber = v.findViewById(R.id.value_cell_max_id);
         maxCellVoltage = v.findViewById(R.id.value_cell_max_voltage);
-        parser = DataParser.getInstance();
         setRetainInstance(true);
         return v;
     }
 
-    public void updateWidgetUI(final Double current, final Double voltage, final Double capacity) {
+
+    @Override
+    public void updateUI(final DataParser data) {
         currentTextView.post(new Runnable() {
             @SuppressLint("DefaultLocale")
             @Override
             public void run() {
+                double current = data.getCurrent();
+                double voltage = data.getVoltage();
                 currentTextView.setText(String.valueOf((int) Math.round(current)));
                 voltageTextView.setText(String.valueOf((int) Math.round(voltage)));
                 powerTextView.setText(String.valueOf((int) Math.round(current * voltage / 1000)));
-                avConsumption.setText(String.format("%.0f",
-                        Counter.getUsedWH() * 1000 / parser.getLastChargePassedDistance()));
-                currentConsumption.setText(String.valueOf((int) Math.round(capacity)));
-                String[] maxCellVal = parser.getMaxCellVoltage().split(":");
-                String[] minCellVal = parser.getMinCellVoltage().split(":");
+                avConsumption.setText(String.valueOf(Counter.getUsedWH() * 1000 / data.getLastChargePassedDistance()));
+                currentConsumption.setText(String.valueOf((int) Math.round(data.getBatteryCapacity())));
+                String[] maxCellVal = data.getMaxCellVoltage().split(":");
+                String[] minCellVal = data.getMinCellVoltage().split(":");
                 if (minCellVal.length == 2) {
                     minCellNumber.setText(minCellVal[0]);
                     minCellVal[1] = minCellVal[1].substring(0, 1) + "." + minCellVal[1].substring(1);

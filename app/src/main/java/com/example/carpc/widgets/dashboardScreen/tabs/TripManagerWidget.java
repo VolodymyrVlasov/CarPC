@@ -10,8 +10,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.R;
 import com.example.carpc.utils.DataParser;
+import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
 
-public class TripManagerWidget extends Fragment {
+public class TripManagerWidget extends AbstractDashboardWidget {
     //LAST CHARGE
     public TextView passedDistanceTextView, rangeDistanceTextView, ampereHourTextView;
     //CURRENT TRIP
@@ -19,8 +20,6 @@ public class TripManagerWidget extends Fragment {
             usedEnergyCurTripTextView, averageConsumptionCurTripTextView;
     //ODOMETER
     public TextView totalTripTextView, totalEnergyTextView;
-    int totalTripToSet = 0;
-    DataParser parser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,21 +35,19 @@ public class TripManagerWidget extends Fragment {
 
         totalTripTextView = v.findViewById(R.id.value_total_trip);
         totalEnergyTextView = v.findViewById(R.id.value_total_energy);
-        parser = DataParser.getInstance();
         setRetainInstance(true);
         return v;
     }
 
-    public void updateWidgetUI(final Double lastChargePassedDistance, final Double range, final Double totalDistance) {
-        if (passedDistanceTextView != null) {
-            passedDistanceTextView.post(new Runnable() {
-                @Override
-                public void run() {
-                    passedDistanceTextView.setText(String.valueOf(lastChargePassedDistance));
-                    rangeDistanceTextView.setText(String.valueOf(range));
-                    totalTripTextView.setText(String.valueOf(totalDistance));
-                }
-            });
-        }
+    @Override
+    public void updateUI(final DataParser data) {
+        passedDistanceTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                passedDistanceTextView.setText(String.valueOf(Math.round(data.getLastChargePassedDistance())));
+                rangeDistanceTextView.setText(String.valueOf(Math.round(data.getRange())));
+                totalTripTextView.setText(String.valueOf(Math.round(data.getTotalDistance())));
+            }
+        });
     }
 }
