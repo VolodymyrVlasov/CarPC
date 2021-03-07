@@ -10,19 +10,19 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carpc.R;
 
-public class PlotTab extends Fragment {
+public class ChartTab extends Fragment {
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                        Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.plot_tab, container, false);
+        View v = inflater.inflate(R.layout.chart_tab, container, false);
         setRetainInstance(true);
-        System.out.println("Create PLOT TAB");
+        System.out.println("Create CHART TAB");
         return v;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        System.out.println("Destroy PLOT TAB");
+        System.out.println("Destroy CHART TAB");
     }
 }
