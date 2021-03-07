@@ -39,8 +39,12 @@ enum ParserKey {
     CAPACITY("l"),
     MOTOR_TEMP("d"),
     INVERTOR_TEMP("e"),
-    RPM("r");
+    RPM("r"),
 
+    CELL("cell"),
+    CELLS_QUANTITY("cells");
+
+    ;
     // &c100
 
     private String value;
@@ -79,6 +83,8 @@ public class DataParser {
             putConfigValue(inputData);
         } else if (inputData.contains("&")) {
             putActualValue(inputData);
+        } else if (inputData.substring(0, 4).toLowerCase().contains(ParserKey.CELL.getValue())) {
+            parserData.put(ParserKey.CELL, inputData);     // cell1: 4000,20,20,5,6
         }
         return this;
     }
@@ -192,8 +198,17 @@ public class DataParser {
     }
 
 
+    public String getTransmittedData() {
+        return parserData.get(ParserKey.CELL);
+    }
+
+    public static Integer getCellsQuantity(){
+        return 34;
+//        return Integer.parseInt(Objects.requireNonNull(parserData.get(ParserKey.CELLS_QUANTITY)));
+    }
+
     // TODO: change keyNames as constants e.g cmin
-    public String getLevelsDataByCmdName(String keyName) throws Exception {
+    public String getLevelsDataByCmdName(String keyName) {
         switch (keyName) {
             case "cmin":
                 return parserData.get(ParserKey.LEVELS_CMIN);
@@ -210,7 +225,7 @@ public class DataParser {
             case "startbal":
                 return parserData.get(ParserKey.LEVELS_STARTBAL);
             default:
-                throw new Exception("Unknown level data key name exception!");
+                return "0";
         }
     }
 }
