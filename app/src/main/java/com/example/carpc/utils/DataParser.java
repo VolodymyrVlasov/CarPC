@@ -83,8 +83,7 @@ public class DataParser {
         return this;
     }
 
-
-    // ?? levelv> ?? cmin = 4200
+    // ??levels>?? cmin = 4200
     // cmd[0] -> cmin, cmd[1] -> 4200
     private void putConfigValue(String inputData) {
         String[] cmd = inputData.substring(10).trim().split(" = ");
