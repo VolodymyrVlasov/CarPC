@@ -173,6 +173,9 @@ public class ChartTab extends AbstractDashboardWidget {
         float max = Float.parseFloat(data.getLevelsDataByCmdName("max"));
         float allowd = Float.parseFloat(data.getLevelsDataByCmdName("allowd"));
 
+
+        Log.i(FRAGMENT_TAG, " data " + groupIndex + " " + groupValue[0] + " " + min + " " + max + " " + allowd);
+
         addBarData(groupIndex, Float.parseFloat(groupValue[0]), min, max, allowd);
     }
 }
