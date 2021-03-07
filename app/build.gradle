@@ -26,10 +26,6 @@ ext {
     supportLibrary = "27.0.2"
 }
 
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
 dependencies {
 
     //noinspection GradleCompatible
@@ -48,6 +44,4 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // add chart library
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-
 }
