@@ -36,17 +36,4 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         fragmentTitles.add(name);
     }
 
-    public void removeFragment(Fragment fragment, String name) {
-        fragmentList.remove(fragment);
-        fragmentTitles.remove(name);
-    }
-
-
-    public List<Fragment> getFragmentList() {
-        return this.fragmentList;
-    }
-
-    public List<String> getFragmentTitles() {
-        return  this.fragmentTitles;
-    }
 }

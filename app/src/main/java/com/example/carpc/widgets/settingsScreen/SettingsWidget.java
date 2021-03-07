@@ -13,6 +13,7 @@ import com.example.carpc.R;
 import com.example.carpc.adapters.ViewPagerAdapter;
 import com.example.carpc.widgets.settingsScreen.tabs.ConfiguratorTab;
 import com.example.carpc.widgets.settingsScreen.tabs.ConnectionTab;
+import com.example.carpc.widgets.settingsScreen.tabs.PlotTab;
 import com.example.carpc.widgets.settingsScreen.tabs.TerminalTab;
 import com.example.carpc.widgets.settingsScreen.tabs.UITab;
 import com.google.android.material.tabs.TabLayout;
@@ -57,6 +58,7 @@ public class SettingsWidget extends Fragment {
         viewPagerAdapter.addFragment(new ConnectionTab(), "CONNECTION");
         viewPagerAdapter.addFragment(new ConfiguratorTab(), "CONFIGURATOR");
         viewPagerAdapter.addFragment(new TerminalTab(), "TERMINAL");
+        viewPagerAdapter.addFragment(new PlotTab(), "CELLS");
         viewPagerAdapter.addFragment(new UITab(), "UI");
         viewPager.setAdapter(viewPagerAdapter);
     }
