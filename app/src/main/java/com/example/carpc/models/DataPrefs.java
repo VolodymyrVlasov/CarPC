@@ -27,7 +27,7 @@ public class DataPrefs {
     }
 
     public String getIP() {
-        return sharedPref.getString(DATA_IP, "192.168.1.23");
+        return sharedPref.getString(DATA_IP, "10.0.2.2");
     }
 
     public void setIP(String IP) {

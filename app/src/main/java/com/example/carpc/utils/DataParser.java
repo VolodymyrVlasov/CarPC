@@ -203,7 +203,7 @@ public class DataParser {
     }
 
     public static Integer getCellsQuantity(){
-        return 34;
+        return 35;
 //        return Integer.parseInt(Objects.requireNonNull(parserData.get(ParserKey.CELLS_QUANTITY)));
     }
 
