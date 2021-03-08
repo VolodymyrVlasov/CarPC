@@ -123,6 +123,9 @@ public class DataParser {
     }
 
 
+    public Integer getMaxConfigVoltage() {
+        return Integer.valueOf(parserData.get(ParserKey.LEVELS_MAX));
+    }
 
     public Integer getSpeed() {
         return Integer.valueOf(parserData.get(ParserKey.SPEED));

@@ -53,7 +53,7 @@ public class BatteryManagerWidget extends AbstractDashboardWidget {
                 currentTextView.setText(String.valueOf((int) Math.round(current)));
                 voltageTextView.setText(String.valueOf((int) Math.round(voltage)));
                 powerTextView.setText(String.valueOf((int) Math.round(current * voltage / 1000)));
-                avConsumption.setText(String.valueOf(Counter.getUsedWH() * 1000 / data.getLastChargePassedDistance()));
+                avConsumption.setText(String.valueOf(Math.round(Counter.getUsedWH() * 1000 / data.getLastChargePassedDistance())));
                 currentConsumption.setText(String.valueOf((int) Math.round(data.getBatteryCapacity())));
                 String[] maxCellVal = data.getMaxCellVoltage().split(":");
                 String[] minCellVal = data.getMinCellVoltage().split(":");
