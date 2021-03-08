@@ -75,9 +75,6 @@ public class DataParser {
         parserData.put(ParserKey.CELLS_QUANTITY, "35");
         parserData.put(ParserKey.CELL_INFO, "1:4000:200:150:5:8");
         parserData.put(ParserKey.ANALOG_INPUTS, ":1200:1350:500:150:553:887");
-
-
-
     }
 
     public static DataParser getInstance() {

@@ -120,6 +120,8 @@ public class TCPClient implements Closeable {
                             }
                         }
                     } catch (Exception e) {
+                        printWriter.println("transmit 0");
+                        printWriter.println("@a0");
                         connectionState = false;
                         e.printStackTrace();
                     }
