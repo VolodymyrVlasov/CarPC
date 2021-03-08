@@ -73,6 +73,10 @@ public class DataParser {
         parserData.put(ParserKey.LEVELS_MAX, "4200");
         parserData.put(ParserKey.LEVELS_ALLOWD, "3500");
         parserData.put(ParserKey.CELLS_QUANTITY, "35");
+        parserData.put(ParserKey.CELL_INFO, "1:4000:200:150:5:8");
+        parserData.put(ParserKey.ANALOG_INPUTS, ":1200:1350:500:150:553:887");
+
+
 
     }
 
@@ -94,8 +98,7 @@ public class DataParser {
         return this;
     }
 
-    /**
-     * ??levels>?? cmin = 4200
+    /** ??levels>?? cmin = 4200
      * cmd[0] -> cmin, cmd[1] -> 4200
      */
     private void putConfigValue(String inputData) {
@@ -108,8 +111,7 @@ public class DataParser {
         }
     }
 
-    /**
-     * &c500
+    /**&c500
      * &t:0:0:0:0
      * CURRETN, 500
      * TEMPSENSORS, :0:0:0:0
