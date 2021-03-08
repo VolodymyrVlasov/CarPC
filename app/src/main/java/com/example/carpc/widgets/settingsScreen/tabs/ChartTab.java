@@ -15,6 +15,7 @@ import com.example.carpc.utils.DataParser;
 import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -22,11 +23,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-//        String[] arr = new String[]{"Cell 5: 4055, 26.6, 30.6, 5, 8",
-//                "Cell 4: 4066, 26.6, 30.6, 5, 8",
-//                "Cell 3: 4057, 26.5, 30.6, 5, 8",
-//                "Cell 2: 4045, 26.6, 30.5, 5, 8",
-//                "Cell 1: 4067, 26.6, 30.5, 5, 8"};
 public class ChartTab extends AbstractDashboardWidget {
     private BarChart barChart;
     private ArrayList<BarEntry> barEntries;
@@ -50,7 +46,7 @@ public class ChartTab extends AbstractDashboardWidget {
 
         barChart = (BarChart) v.findViewById(R.id.lineChart);
 
-        int xAxisQuantity = DataParser.getCellsQuantity();
+        int xAxisQuantity = DataParser.getInstance().getCellsQuantity();
 
         colors = new ArrayList<Integer>(xAxisQuantity);
 
@@ -70,7 +66,6 @@ public class ChartTab extends AbstractDashboardWidget {
         barChart.setData(data);
         this.initBarChartStyles();
 
-        this.isInitialized = true;
         return v;
     }
 
@@ -83,6 +78,12 @@ public class ChartTab extends AbstractDashboardWidget {
         tcpClient.sendMessage("@a0"); // @0 - unsubscribe
         tcpClient.sendMessage("transmit 1"); // get data from transmit
         Log.i(FRAGMENT_TAG, "Subscribe to transmit data");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.isInitialized = true;
     }
 
     @Override
@@ -100,6 +101,8 @@ public class ChartTab extends AbstractDashboardWidget {
         barChart.setDrawGridBackground(false);
         barChart.setDrawBorders(false);
 
+        // todo: change orientation
+
         // remove description
         Description description = new Description();
         description.setEnabled(false);
@@ -107,6 +110,13 @@ public class ChartTab extends AbstractDashboardWidget {
 
         // set animation
         barChart.animateY(1000);
+
+        // set max
+        YAxis yAxis = barChart.getAxisRight();
+        yAxis.setAxisMaximum(4500f);
+        yAxis.setAxisMinimum(0);
+
+
     }
 
     private void addBarData(float x, float y, float min, float max, float allowd) {
@@ -161,29 +171,26 @@ public class ChartTab extends AbstractDashboardWidget {
             return;
         }
 
+        String rawData = data.getTransmittedData();            //        volt, temp, temp bal, ...
+        String[] rawSplitData = rawData.split(":");     // cell1:  4066, 26.6, 30.6, 5, 8
+
+
+        Log.i(FRAGMENT_TAG, rawData);
+
+        final float groupIndex = Float.parseFloat(rawSplitData[0].substring(4));
+        final String[] groupValue = rawSplitData[1].split(",");
+
+        final float min = Float.parseFloat(data.getLevelsDataByCmdName("min"));
+        final float max = Float.parseFloat(data.getLevelsDataByCmdName("max"));
+        final float allowd = Float.parseFloat(data.getLevelsDataByCmdName("allowd"));
+
+        Log.i(FRAGMENT_TAG, " data " + groupIndex + " " + groupValue[0] + " " + min + " " + max + " " + allowd);
+
         barChart.post(new Runnable() {
             @Override
             public void run() {
-                String rawData = data.getTransmittedData();            //        volt, temp, temp bal, ...
-                String[] rawSplitData = rawData.split(":");     // cell1:  4066, 26.6, 30.6, 5, 8
-
-                Log.i(FRAGMENT_TAG, rawData);
-                float groupIndex = Float.parseFloat(rawSplitData[0].substring(4));
-                String[] groupValue = rawSplitData[1].split(",");
-
-
-                float min = Float.parseFloat(data.getLevelsDataByCmdName("min"));
-                float max = Float.parseFloat(data.getLevelsDataByCmdName("max"));
-                float allowd = Float.parseFloat(data.getLevelsDataByCmdName("allowd"));
-
-
-                Log.i(FRAGMENT_TAG, " data " + groupIndex + " " + groupValue[0] + " " + min + " " + max + " " + allowd);
-
                 addBarData(groupIndex, Float.parseFloat(groupValue[0]), min, max, allowd);
             }
         });
-
-
-
     }
 }

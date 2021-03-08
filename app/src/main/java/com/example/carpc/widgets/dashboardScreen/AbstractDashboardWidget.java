@@ -13,7 +13,7 @@ public abstract class AbstractDashboardWidget extends Fragment implements TCPCli
 
     @Override
     public void OnDataReceive(DataParser data) {
-        if (this.getView() != null) {
+        if (this.getView() != null && this.isVisible()) {
             this.updateUI(data);
         }
     }

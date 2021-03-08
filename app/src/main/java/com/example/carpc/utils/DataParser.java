@@ -72,9 +72,10 @@ public class DataParser {
         parserData.put(ParserKey.LEVELS_MIN, "3000");
         parserData.put(ParserKey.LEVELS_MAX, "4200");
         parserData.put(ParserKey.LEVELS_ALLOWD, "3500");
-        parserData.put(ParserKey.CELLS_QUANTITY, "35");
+        parserData.put(ParserKey.CELLS_QUANTITY, "36");
         parserData.put(ParserKey.CELL_INFO, "1:4000:200:150:5:8");
         parserData.put(ParserKey.ANALOG_INPUTS, ":1200:1350:500:150:553:887");
+        parserData.put(ParserKey.CELL, "cell1: 4000:200:150:5:8");
     }
 
     public static DataParser getInstance() {
@@ -204,9 +205,9 @@ public class DataParser {
 
 
     // TODO: make method non static
-    public static Integer getCellsQuantity(){
-        return 36;
-//        return Integer.parseInt(Objects.requireNonNull(parserData.get(ParserKey.CELLS_QUANTITY)));
+    public Integer getCellsQuantity(){
+//        return 36;
+        return Integer.parseInt(parserData.get(ParserKey.CELLS_QUANTITY));
     }
 
     public String getLevelsDataByCmdName(String keyName) {
