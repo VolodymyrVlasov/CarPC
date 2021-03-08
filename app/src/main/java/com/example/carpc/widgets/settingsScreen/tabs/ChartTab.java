@@ -15,10 +15,14 @@ import com.example.carpc.utils.DataParser;
 import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +34,13 @@ public class ChartTab extends AbstractDashboardWidget {
 
     private static final String FRAGMENT_TAG = "CHART_TAB";
     private static final String chartName = "Cells voltage";
-    private final int RED_COLOR = Color.parseColor("#FF4500");
-    private final int GREY_COLOR = Color.parseColor("#C0C0C0");
-    private final int YELLOW_COLOR = Color.parseColor("#ffff00");
     private static final int DEFAULT_BAR_VOLTAGE = 999;
+
+    // colors
+    private final int RED_COLOR = Color.parseColor("#FF4500");
+    private final int COLOR_GREY = Color.parseColor("#C0C0C0");
+    private final int YELLOW_COLOR = Color.parseColor("#ffff00");
+    private final int COLOR_GREEN = Color.parseColor("#1fffad");
 
     // trigger variable for bar chart rendering
     private boolean isInitialized = false;
@@ -56,7 +63,7 @@ public class ChartTab extends AbstractDashboardWidget {
         for (int i = 0; i < xAxisQuantity; i++) {
             colors.add(0);
             barEntries.add(null);
-            this.addBarData(i, DEFAULT_BAR_VOLTAGE, GREY_COLOR);
+            this.addBarData(i, DEFAULT_BAR_VOLTAGE, COLOR_GREY);
         }
 
         BarDataSet barDataSet = new BarDataSet(barEntries, chartName);
@@ -111,12 +118,32 @@ public class ChartTab extends AbstractDashboardWidget {
         // set animation
         barChart.animateY(1000);
 
-        // set max
-        YAxis yAxis = barChart.getAxisRight();
+        // set max and min values for y axis
+        YAxis yAxis = barChart.getAxisLeft();
         yAxis.setAxisMaximum(4500f);
         yAxis.setAxisMinimum(0);
 
+        barChart.getXAxis().setLabelCount(0);
 
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                float voltage = e.getX();
+                float cellIndex = e.getY();
+                updateChartDescriptionDataOnSelect(voltage, cellIndex);
+
+            }
+
+            @Override
+            public void onNothingSelected() {}
+        });
+
+    }
+
+    private void updateChartDescriptionDataOnSelect(float voltage, float cellIndex) {
+        Log.i(FRAGMENT_TAG, "onSelect " + voltage + " cellIndex " + cellIndex);
+        // todo
     }
 
     private void addBarData(float x, float y, float min, float max, float allowd) {
@@ -126,8 +153,7 @@ public class ChartTab extends AbstractDashboardWidget {
         // update/set bar data with index x
 
         barEntries.set((int) x, new BarEntry(x, y));
-        barChart.notifyDataSetChanged();
-        barChart.invalidate();
+//        barChart.notifyDataSetChanged();
     }
 
     private void addBarData(float x, float y, int color) {
@@ -137,8 +163,6 @@ public class ChartTab extends AbstractDashboardWidget {
         // update/set bar data with index x
 
         barEntries.set((int) x, new BarEntry(x, y));
-        barChart.notifyDataSetChanged();
-        barChart.invalidate();
     }
 
 //    @Override
@@ -152,14 +176,14 @@ public class ChartTab extends AbstractDashboardWidget {
         // < min && > max red
         // > min && < allowd yellow
 
-        if (voltageData < 1000) {
-            return this.GREY_COLOR;
-        } else if (voltageData < min && voltageData > max) {
+        if (voltageData > allowd && voltageData < max) {
+            return this.COLOR_GREEN;
+        } else if (voltageData > max || voltageData < min) {
             return this.RED_COLOR;
-        } else if (voltageData > min && voltageData < allowd) {
+        } else if (voltageData < allowd && voltageData > min) {
             return this.YELLOW_COLOR;
         } else {
-            return this.GREY_COLOR; // if another case return also gery color
+            return this.COLOR_GREY; // if another case return also gery color
         }
     }
 
@@ -190,6 +214,11 @@ public class ChartTab extends AbstractDashboardWidget {
             @Override
             public void run() {
                 addBarData(groupIndex, Float.parseFloat(groupValue[0]), min, max, allowd);
+
+                if(groupIndex >= 35) {
+                    barChart.notifyDataSetChanged();
+                    barChart.invalidate();
+                }
             }
         });
     }
