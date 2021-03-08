@@ -64,11 +64,16 @@ public class DataParser {
 
     private DataParser() {
 
-        // Todo change init values
+        // TODO: change init values
         for (ParserKey key : ParserKey.values()) {
             parserData.put(key, "0");
         }
         parserData.put(ParserKey.TEMP_SENSORS, ":0:0:0:0");
+        parserData.put(ParserKey.LEVELS_MIN, "3000");
+        parserData.put(ParserKey.LEVELS_MAX, "4200");
+        parserData.put(ParserKey.LEVELS_ALLOWD, "3500");
+        parserData.put(ParserKey.CELLS_QUANTITY, "35");
+
     }
 
     public static DataParser getInstance() {
@@ -89,8 +94,10 @@ public class DataParser {
         return this;
     }
 
-    // ??levels>?? cmin = 4200
-    // cmd[0] -> cmin, cmd[1] -> 4200
+    /**
+     * ??levels>?? cmin = 4200
+     * cmd[0] -> cmin, cmd[1] -> 4200
+     */
     private void putConfigValue(String inputData) {
         String[] cmd = inputData.substring(10).trim().split(" = ");
         for (ParserKey key : ParserKey.values()) {
@@ -101,12 +108,12 @@ public class DataParser {
         }
     }
 
-
-    //&c500
-    // &t:0:0:0:0
-
-    // CURRETN, 500
-    // TEMPSENSORS, :0:0:0:0
+    /**
+     * &c500
+     * &t:0:0:0:0
+     * CURRETN, 500
+     * TEMPSENSORS, :0:0:0:0
+     */
     private void putActualValue(String inputData) {
         for (ParserKey key : ParserKey.values()) {
             if (inputData.substring(1, 3).contains(key.getValue())) {
@@ -114,6 +121,8 @@ public class DataParser {
             }
         }
     }
+
+
 
     public Integer getSpeed() {
         return Integer.valueOf(parserData.get(ParserKey.SPEED));
@@ -186,28 +195,21 @@ public class DataParser {
         return Double.parseDouble(arr[sensNumber]);
     }
 
-    public Double getSecondTempSensorValue() {
-        String temp = parserData.get(ParserKey.TEMP_SENSORS);
-        assert temp != null;
-        String[] arr = temp.split(":");
-        return Double.parseDouble(arr[2]);
-    }
-
     public String getCurrentConfig() {
         return parserData.get(ParserKey.CONFIG_CURRENT);
     }
-
 
     public String getTransmittedData() {
         return parserData.get(ParserKey.CELL);
     }
 
+
+    // TODO: make method non static
     public static Integer getCellsQuantity(){
         return 36;
 //        return Integer.parseInt(Objects.requireNonNull(parserData.get(ParserKey.CELLS_QUANTITY)));
     }
 
-    // TODO: change keyNames as constants e.g cmin
     public String getLevelsDataByCmdName(String keyName) {
         switch (keyName) {
             case "cmin":
