@@ -11,30 +11,35 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
-import com.example.carpc.network.TCPClient;
 import com.example.carpc.models.DataPrefs;
+import com.example.carpc.network.TCPClient;
 
 import java.util.Objects;
 
 public class ConnectionTab extends Fragment implements View.OnClickListener {
+    public static boolean isVisible = false;
     private EditText serverAddress, serverPort;
     private TextView myNetworkAddress;
-    private Button btnConnect, btnDisconnect;
+    private static Button btnConnect;
+    private Button btnDisconnect;
     private DataPrefs dataPrefs;
 
-    private TCPClient tcpClient;
+    private static TCPClient tcpClient;
 
 
     public ConnectionTab() {
         this.tcpClient = TCPClient.getInstance(getContext());
         this.dataPrefs = DataPrefs.getInstance(getContext());
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +72,18 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         btnDisconnect.setOnClickListener(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        isVisible = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isVisible = false;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View v) {
@@ -90,7 +107,8 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         setConnectionStateIndicator();
     }
 
-    public void setConnectionStateIndicator() {
+
+    public static void setConnectionStateIndicator() {
         boolean flag = true;
         long time = SystemClock.uptimeMillis();
 
@@ -98,13 +116,15 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
             if (SystemClock.uptimeMillis() >= time + 200) {
                 if (tcpClient.isConnected()) {
                     btnConnect.setTextColor(Color.argb(255, 3, 218, 197));
-                    btnConnect.setBackground(ResourcesCompat.getDrawable(getResources(),
+                    btnConnect.setBackground(ResourcesCompat.getDrawable(
+                            btnConnect.getContext().getResources(),
                             R.drawable.transparent_bg_bordered_button_active, null));
                     btnConnect.setText("CONNECTED");
                     btnConnect.setActivated(false);
                 } else {
                     btnConnect.setTextColor(Color.WHITE);
-                    btnConnect.setBackground(ResourcesCompat.getDrawable(getResources(),
+                    btnConnect.setBackground(ResourcesCompat.getDrawable(
+                            btnConnect.getContext().getResources(),
                             R.drawable.transparent_bg_bordered_button, null));
                     btnConnect.setText("CONNECT");
                     btnConnect.setActivated(true);

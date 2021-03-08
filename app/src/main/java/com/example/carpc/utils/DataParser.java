@@ -69,7 +69,7 @@ public class DataParser {
             parserData.put(key, "0");
         }
         parserData.put(ParserKey.TEMP_SENSORS, ":0:0:0:0");
-        parserData.put(ParserKey.LEVELS_MIN, "3000");
+        parserData.put(ParserKey.LEVELS_MIN, "3200");
         parserData.put(ParserKey.LEVELS_MAX, "4200");
         parserData.put(ParserKey.LEVELS_ALLOWD, "3500");
         parserData.put(ParserKey.CELLS_QUANTITY, "36");
