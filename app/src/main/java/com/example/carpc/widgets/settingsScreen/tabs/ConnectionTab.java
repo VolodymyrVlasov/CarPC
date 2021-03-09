@@ -114,20 +114,31 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
 
         while (flag) {
             if (SystemClock.uptimeMillis() >= time + 200) {
+
                 if (tcpClient.isConnected()) {
-                    btnConnect.setTextColor(Color.argb(255, 3, 218, 197));
-                    btnConnect.setBackground(ResourcesCompat.getDrawable(
-                            btnConnect.getContext().getResources(),
-                            R.drawable.transparent_bg_bordered_button_active, null));
-                    btnConnect.setText("CONNECTED");
-                    btnConnect.setActivated(false);
+                    btnConnect.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            btnConnect.setTextColor(Color.argb(255, 3, 218, 197));
+                            btnConnect.setBackground(ResourcesCompat.getDrawable(
+                                    btnConnect.getContext().getResources(),
+                                    R.drawable.transparent_bg_bordered_button_active, null));
+                            btnConnect.setText("CONNECTED");
+                            btnConnect.setActivated(false);
+                        }
+                    });
                 } else {
-                    btnConnect.setTextColor(Color.WHITE);
-                    btnConnect.setBackground(ResourcesCompat.getDrawable(
-                            btnConnect.getContext().getResources(),
-                            R.drawable.transparent_bg_bordered_button, null));
-                    btnConnect.setText("CONNECT");
-                    btnConnect.setActivated(true);
+                    btnConnect.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            btnConnect.setTextColor(Color.WHITE);
+                            btnConnect.setBackground(ResourcesCompat.getDrawable(
+                                    btnConnect.getContext().getResources(),
+                                    R.drawable.transparent_bg_bordered_button, null));
+                            btnConnect.setText("CONNECT");
+                            btnConnect.setActivated(true);
+                        }
+                    });
                 }
                 flag = false;
             }

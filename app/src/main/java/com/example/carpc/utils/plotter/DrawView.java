@@ -10,7 +10,9 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     public DrawView(Context context) {
         super(context);
-        getHolder().addCallback(this);
+        this.getHolder().addCallback(this);
+
+
     }
 
     public void updateCapacity(Double capacity) throws NullPointerException{
