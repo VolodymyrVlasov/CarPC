@@ -89,6 +89,8 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnConnect:
+                tcpClient.disconnect();
+                setConnectionStateIndicator();
                 updateConnectionParams(serverAddress.getText().toString(), Integer.parseInt(serverPort.getText().toString()));
                 MainActivity.hideKeyboard((Activity) Objects.requireNonNull(getContext()));
                 break;

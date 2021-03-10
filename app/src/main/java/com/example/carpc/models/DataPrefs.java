@@ -33,8 +33,7 @@ public class DataPrefs {
 
 
     public void setIP(String IP) {
-        sharedPref.edit().putString(AppConstants.DATA_IP, IP);
-        commit();
+        sharedPref.edit().putString(AppConstants.DATA_IP, IP).commit();
     }
 
     public int getPort() {
@@ -42,8 +41,8 @@ public class DataPrefs {
     }
 
     public void setPort(int port) {
-        sharedPref.edit().putInt(AppConstants.DATA_PORT, port);
-        commit();
+        sharedPref.edit().putInt(AppConstants.DATA_PORT, port).commit();
+
     }
 
     public Map<String, ?> GetAll() {
@@ -71,16 +70,15 @@ public class DataPrefs {
     }
 
     public void setUsedAmpereHour(Double ampereHour) {
-        sharedPref.edit().putInt(AppConstants.DATA_BATTERY_USED_AH, (int) (ampereHour * 10)).apply();
+        sharedPref.edit().putInt(AppConstants.DATA_BATTERY_USED_AH, (int) (ampereHour * 10)).commit();
 
     }
 
     public void setUsedWattHour(Double ampereHour) {
-        sharedPref.edit().putInt(AppConstants.DATA_BATTERY_USED_WH, (int) (ampereHour * 10)).apply();
+        sharedPref.edit().putInt(AppConstants.DATA_BATTERY_USED_WH, (int) (ampereHour * 10)).commit();
     }
 
     public void commit() {
-        sharedPref.edit().apply();
-
+        sharedPref.edit().commit();
     }
 }

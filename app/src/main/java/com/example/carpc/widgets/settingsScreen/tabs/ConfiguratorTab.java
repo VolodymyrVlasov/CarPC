@@ -199,14 +199,14 @@ public class ConfiguratorTab extends Fragment {
 
             for (int i = 0; i < adapter.getCount(); i++) {
                 tcpClient.sendMessage("..");
-                Thread.sleep(3);
+//                Thread.sleep(1);
                 tcpClient.sendMessage("levels");
-                Thread.sleep(3);
+//                Thread.sleep(1);
                 tcpClient.sendMessage(adapter.getItem(i).getCmdName());
-                Thread.sleep(3);
+//                Thread.sleep(1);
                 System.out.println("send message: " + adapter.getItem(i).getCmdName());
                 String cmdName = adapter.getItem(i).getCmdName();
-                Thread.sleep(50);
+                Thread.sleep(10);
                 String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
                 Log.i(TAG, "newConfigValue: " + newConfigValue);
                 adapter.getItem(i).setConfigValue(newConfigValue);
