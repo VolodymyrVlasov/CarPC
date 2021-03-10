@@ -1,5 +1,6 @@
 package com.example.carpc.models;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import com.example.carpc.utils.AppConstants;
@@ -27,11 +28,12 @@ public class DataPrefs {
     }
 
     public String getIP() {
-        return sharedPref.getString(DATA_IP, "192.168.1.23");
+        return sharedPref.getString(DATA_IP, "192.168.1.6");
     }
 
+
     public void setIP(String IP) {
-        sharedPref.edit().putString(AppConstants.DATA_IP, IP);
+        sharedPref.edit().putString(AppConstants.DATA_IP, IP).commit();
     }
 
     public int getPort() {
@@ -39,7 +41,8 @@ public class DataPrefs {
     }
 
     public void setPort(int port) {
-        sharedPref.edit().putInt(AppConstants.DATA_PORT, port);
+        sharedPref.edit().putInt(AppConstants.DATA_PORT, port).commit();
+
     }
 
     public Map<String, ?> GetAll() {
@@ -67,16 +70,15 @@ public class DataPrefs {
     }
 
     public void setUsedAmpereHour(Double ampereHour) {
-        sharedPref.edit().putInt(AppConstants.DATA_BATTERY_USED_AH, (int) (ampereHour * 10)).apply();
+        sharedPref.edit().putInt(AppConstants.DATA_BATTERY_USED_AH, (int) (ampereHour * 10)).commit();
 
     }
 
     public void setUsedWattHour(Double ampereHour) {
-        sharedPref.edit().putInt(AppConstants.DATA_BATTERY_USED_WH, (int) (ampereHour * 10)).apply();
+        sharedPref.edit().putInt(AppConstants.DATA_BATTERY_USED_WH, (int) (ampereHour * 10)).commit();
     }
 
     public void commit() {
-        sharedPref.edit().apply();
-
+        sharedPref.edit().commit();
     }
 }

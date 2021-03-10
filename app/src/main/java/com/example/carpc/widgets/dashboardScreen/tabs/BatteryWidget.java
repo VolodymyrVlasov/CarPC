@@ -1,13 +1,13 @@
 package com.example.carpc.widgets.dashboardScreen.tabs;
 
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.fragment.app.Fragment;
 
 import com.example.carpc.R;
 import com.example.carpc.utils.DataParser;
@@ -16,7 +16,7 @@ import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
 
 public class BatteryWidget extends AbstractDashboardWidget {
     DrawView batteryIcon;
-    LinearLayout surfaceView;
+    LinearLayout view;
     TextView rangeTextView;
     TextView tempOutside;
 
@@ -24,8 +24,12 @@ public class BatteryWidget extends AbstractDashboardWidget {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.battery_widget, container, false);
-        surfaceView = (LinearLayout) v.findViewById(R.id.for_battery_canvas);
-        surfaceView.addView(batteryIcon = new DrawView(getContext()));
+        view = (LinearLayout) v.findViewById(R.id.for_battery_canvas);
+        batteryIcon = new DrawView(getContext());
+        batteryIcon.setZOrderOnTop(true);
+        SurfaceHolder sfhTrackHolder = batteryIcon.getHolder();
+        sfhTrackHolder.setFormat(PixelFormat.TRANSPARENT);
+        view.addView(batteryIcon);
         rangeTextView = v.findViewById(R.id.range);
         tempOutside = v.findViewById(R.id.temp_outside);
         setRetainInstance(true);

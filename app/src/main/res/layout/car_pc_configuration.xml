@@ -8,12 +8,25 @@
     android:paddingHorizontal="7dp"
     tools:context=".widgets.settingsScreen.tabs.ConfiguratorTab">
 
-    <Spinner
-        android:id="@+id/configurationGroupList"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/configurationGroupList"
-        android:theme="@style/mySpinnerItemStyle" />
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@drawable/transparent_bg_bordered_button"
+        android:layout_marginRight="7dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical">
+
+        <Spinner
+            android:id="@+id/configurationGroupList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/configurationGroupList"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:theme="@style/mySpinnerItemStyle" />
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -43,8 +56,7 @@
             <ListView
                 android:id="@+id/configListView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"

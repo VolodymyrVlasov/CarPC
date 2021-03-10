@@ -11,6 +11,7 @@ import com.example.carpc.models.DataPrefs;
 import com.example.carpc.models.Message;
 import com.example.carpc.utils.AppConstants;
 import com.example.carpc.utils.DataParser;
+import com.example.carpc.widgets.settingsScreen.tabs.ConnectionTab;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class TCPClient implements Closeable {
     private final String TAG = "SOCKET";
     private static String inputMessage;
 
-//    private TCPClientListener listener;
+    //    private TCPClientListener listener;
     private List<TCPClientListener> networkListeners;
 
     public interface TCPClientListener {
@@ -79,16 +80,19 @@ public class TCPClient implements Closeable {
             @Override
             public void run() {
                 try {
-                    socket = new Socket();
-                    socket.connect(new InetSocketAddress(address, port), 500);
-                    scanner = new Scanner(socket.getInputStream());
-                    if (subscribe) {
-                        sendMessage(AppConstants.SUBSCRIBE);
-                    } else {
-                        sendMessage(AppConstants.UNSUBSCRIBE);
+                    if (connectionState == false) {
+                        socket = new Socket();
+                        socket.connect(new InetSocketAddress(address, port), 500);
+                        scanner = new Scanner(socket.getInputStream());
+                        readInputStream();
+                        connectionState = true;
+                        if (subscribe) {
+                            sendMessage(AppConstants.SUBSCRIBE);
+                        } else {
+                            sendMessage(AppConstants.UNSUBSCRIBE);
+                        }
                     }
-                    readInputStream();
-                    connectionState = true;
+
                 } catch (IOException e) {
                     connectionState = false;
                     if (reconnect) createConnection(address, port, subscribe);
@@ -104,6 +108,7 @@ public class TCPClient implements Closeable {
             public void run() {
                 while (connectionState) {
                     try {
+
                         socket.setSoTimeout(0);
                         if (scanner.hasNextLine()) {
                             inputMessage = scanner.nextLine();
@@ -120,7 +125,13 @@ public class TCPClient implements Closeable {
                             }
                         }
                     } catch (Exception e) {
+                        printWriter.println("transmit 0");
+                        printWriter.println("@a0");
                         connectionState = false;
+
+                        if (ConnectionTab.isVisible) {
+                            ConnectionTab.setConnectionStateIndicator();
+                        }
                         e.printStackTrace();
                     }
                 }
@@ -143,6 +154,9 @@ public class TCPClient implements Closeable {
                     if (!connectionState) Thread.currentThread().interrupt();
                 } catch (Exception e) {
                     connectionState = false;
+                    if (ConnectionTab.isVisible) {
+                        ConnectionTab.setConnectionStateIndicator();
+                    }
                     e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }

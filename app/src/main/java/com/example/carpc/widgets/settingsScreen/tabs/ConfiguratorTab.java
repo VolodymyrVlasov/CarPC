@@ -1,6 +1,8 @@
 package com.example.carpc.widgets.settingsScreen.tabs;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.carpc.MainActivity;
@@ -38,6 +41,7 @@ public class ConfiguratorTab extends Fragment {
     private TextView descriptionTextView;
     private TextView helpTextView;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,9 +49,10 @@ public class ConfiguratorTab extends Fragment {
         spinnerCategories = getContext().getResources().getStringArray(R.array.configurationGroupList);
 
         spinner = v.findViewById(R.id.configurationGroupList);
-        final ArrayAdapter<?> adapter =
+        final ArrayAdapter adapter =
                 ArrayAdapter.createFromResource(getContext(), R.array.configurationGroupList, R.layout.spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.dropdown_items);
+
         spinner.setAdapter(adapter);
 
         readBtn = v.findViewById(R.id.btn_read);
@@ -194,15 +199,16 @@ public class ConfiguratorTab extends Fragment {
 
             for (int i = 0; i < adapter.getCount(); i++) {
                 tcpClient.sendMessage("..");
-                Thread.sleep(10);
+//                Thread.sleep(1);
                 tcpClient.sendMessage("levels");
-                Thread.sleep(10);
+//                Thread.sleep(1);
                 tcpClient.sendMessage(adapter.getItem(i).getCmdName());
-                Thread.sleep(10);
+//                Thread.sleep(1);
                 System.out.println("send message: " + adapter.getItem(i).getCmdName());
                 String cmdName = adapter.getItem(i).getCmdName();
-                Thread.sleep(50);
+                Thread.sleep(10);
                 String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
+                Log.i(TAG, "newConfigValue: " + newConfigValue);
                 adapter.getItem(i).setConfigValue(newConfigValue);
             }
 
