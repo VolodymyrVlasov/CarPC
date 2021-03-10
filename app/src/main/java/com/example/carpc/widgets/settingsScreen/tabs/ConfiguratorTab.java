@@ -2,6 +2,7 @@ package com.example.carpc.widgets.settingsScreen.tabs;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -198,15 +199,16 @@ public class ConfiguratorTab extends Fragment {
 
             for (int i = 0; i < adapter.getCount(); i++) {
                 tcpClient.sendMessage("..");
-                Thread.sleep(10);
+                Thread.sleep(3);
                 tcpClient.sendMessage("levels");
-                Thread.sleep(10);
+                Thread.sleep(3);
                 tcpClient.sendMessage(adapter.getItem(i).getCmdName());
-                Thread.sleep(10);
+                Thread.sleep(3);
                 System.out.println("send message: " + adapter.getItem(i).getCmdName());
                 String cmdName = adapter.getItem(i).getCmdName();
                 Thread.sleep(50);
                 String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
+                Log.i(TAG, "newConfigValue: " + newConfigValue);
                 adapter.getItem(i).setConfigValue(newConfigValue);
             }
 

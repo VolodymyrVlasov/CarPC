@@ -1,5 +1,7 @@
 package com.example.carpc.utils;
 
+import android.util.Log;
+
 import java.util.EnumMap;
 
 enum ParserKey {
@@ -42,9 +44,7 @@ enum ParserKey {
     RPM("r"),
 
     CELL("cell"),
-    CELLS_QUANTITY("cells");
-
-    ;
+    CELLS_QUANTITY("cells");;
     // &c100
 
     private String value;
@@ -59,15 +59,16 @@ enum ParserKey {
 }
 
 public class DataParser {
+    private String TAG = "DataParser";
     private static DataParser instance = null;
-    private EnumMap<ParserKey, String> parserData = new EnumMap<>(ParserKey.class);
+    private static EnumMap<ParserKey, String> parserData = new EnumMap<>(ParserKey.class);
 
     private DataParser() {
-
-        // TODO: change init values
+//         TODO: change init values
         for (ParserKey key : ParserKey.values()) {
             parserData.put(key, "0");
         }
+        Log.i(TAG, "init values");
         parserData.put(ParserKey.TEMP_SENSORS, ":0:0:0:0");
         parserData.put(ParserKey.LEVELS_MIN, "3200");
         parserData.put(ParserKey.LEVELS_MAX, "4200");
@@ -76,6 +77,7 @@ public class DataParser {
         parserData.put(ParserKey.CELL_INFO, "1:4000:200:150:5:8");
         parserData.put(ParserKey.ANALOG_INPUTS, ":1200:1350:500:150:553:887");
         parserData.put(ParserKey.CELL, "cell1: 4000:200:150:5:8");
+
     }
 
     public static DataParser getInstance() {
@@ -86,17 +88,23 @@ public class DataParser {
     }
 
     public DataParser parseInputData(String inputData) throws NullPointerException {
-        if (inputData.contains("=")) {
-            putConfigValue(inputData);
-        } else if (inputData.contains("&")) {
+//        Log.i(TAG, "inputData : " + inputData);
+
+        if (inputData.contains("&")) {
+            Log.i(TAG, "inputData contain \"&\" so call putActualValue()");
             putActualValue(inputData);
-        } else if (inputData.substring(0, 4).toLowerCase().contains(ParserKey.CELL.getValue())) {
+        } else if (inputData.contains("=")) {
+            Log.i(TAG, "inputData contain \"=\", so call putConfigValue()");
+            putConfigValue(inputData);
+        } else if (inputData.toLowerCase().contains("cell")) {
+            Log.i(TAG, "inputData contain \"cell\" so call parserData.put(ParserKey.CELL, inputData)");
             parserData.put(ParserKey.CELL, inputData);     // cell1: 4000,20,20,5,6
         }
         return this;
     }
 
-    /** ??levels>?? cmin = 4200
+    /**
+     * ??levels>?? cmin = 4200
      * cmd[0] -> cmin, cmd[1] -> 4200
      */
     private void putConfigValue(String inputData) {
@@ -109,7 +117,8 @@ public class DataParser {
         }
     }
 
-    /**&c500
+    /**
+     * &c500
      * &t:0:0:0:0
      * CURRETN, 500
      * TEMPSENSORS, :0:0:0:0
@@ -208,7 +217,7 @@ public class DataParser {
 
 
     // TODO: make method non static
-    public Integer getCellsQuantity(){
+    public Integer getCellsQuantity() {
 //        return 36;
         return Integer.parseInt(parserData.get(ParserKey.CELLS_QUANTITY));
     }

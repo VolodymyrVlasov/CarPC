@@ -58,7 +58,7 @@ public class SettingsWidget extends Fragment {
         viewPagerAdapter.addFragment(new ConnectionTab(), "CONNECTION");
         viewPagerAdapter.addFragment(new ConfiguratorTab(), "CONFIGURATOR");
         viewPagerAdapter.addFragment(new TerminalTab(), "TERMINAL");
-        viewPagerAdapter.addFragment(new ChartTab(), "CELLS");
+//        viewPagerAdapter.addFragment(new ChartTab(), "CELLS");
         viewPagerAdapter.addFragment(new UITab(), "UI");
         viewPager.setAdapter(viewPagerAdapter);
     }

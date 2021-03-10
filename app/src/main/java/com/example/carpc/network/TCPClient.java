@@ -11,7 +11,6 @@ import com.example.carpc.models.DataPrefs;
 import com.example.carpc.models.Message;
 import com.example.carpc.utils.AppConstants;
 import com.example.carpc.utils.DataParser;
-import com.example.carpc.widgets.settingsScreen.SettingsWidget;
 import com.example.carpc.widgets.settingsScreen.tabs.ConnectionTab;
 
 import java.io.Closeable;
@@ -109,18 +108,22 @@ public class TCPClient implements Closeable {
             public void run() {
                 while (connectionState) {
                     try {
+
                         socket.setSoTimeout(0);
-                        inputMessage = scanner.nextLine();
-                        message.setMessage(inputMessage, true);
+                        if (scanner.hasNextLine()) {
+                            inputMessage = scanner.nextLine();
+                            message.setMessage(inputMessage, true);
 
-                        DataParser data = DataParser.getInstance().parseInputData(inputMessage);
-                        if (networkListeners != null) {
+                            DataParser data = DataParser.getInstance().parseInputData(inputMessage);
+                            if(networkListeners != null) {
 
-                            for (TCPClientListener listener : networkListeners) {
-                                listener.OnDataReceive(data);
+                                for(TCPClientListener listener : networkListeners) {
+                                    listener.OnDataReceive(data);
+                                }
+
+//                                listener.OnDataReceive(data);
                             }
                         }
-
                     } catch (Exception e) {
                         printWriter.println("transmit 0");
                         printWriter.println("@a0");
