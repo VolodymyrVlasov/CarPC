@@ -27,10 +27,42 @@
         <item>Gauge</item>
     </string-array>
 
+    <!--  LEVELS                                                                                    -->
     <string-array name="levels">
-        <item>Description</item>
-        <item>Help</item>
+        <item>In this group the voltage levels for the cells are set.
+            The levels are stored both on the main board and on all additional boards.</item>
+        <item>MAX VOLTAGE:\n
+            If the cell voltage exceeds the maximum voltage, the battery charging process will
+            be paused or stopped.
 
+            \n\nMIN VOLTAGE:\n
+            If the cell voltage drops below the minimum voltage, the discharge of the battery will
+            be paused or stopped.
+
+            \n\nSTART BALANCING:\n
+            The cell voltage above which the cell voltage balancing process begins.
+            Balancing is only performed during the charging process. The balancing process at this
+            point is performed by the central module. Also this level is used to provide hysteresis
+            during charging. That is, when the charge is finished, the charge will start again if
+            the voltage on at least one cell drops below this level.
+
+            \n\nSTOP BALANCING:\n
+            The cell voltage above which the balancer turns on on the add-on board regardless of the
+            main board signals and regardless of whether it is charging or discharging.
+            It is recommended that this level be set at or close to the maximum value.
+
+            \n\nCHARGED VOLTAGE:\n
+            The cell voltage at which all cells are considered to be charged when reached.
+            It is recommended to set this level between startbal and bal.
+
+            \n\nALLOWED VOLTAGE:\n
+            Used to provide a load trip hysteresis at the lower voltage threshold. This level is
+            also used to enable the "Turtle" mode.
+
+            \n\nCRITICAL MIN VOLTAGE:\n
+            The critical low voltage level of a cell. If at least one cell voltage is below this
+            level, it is prohibited to charge, discharge or turn on the dc/dc converter.
+        </item>
         <item>Max voltage level (mv),max,4100</item>
         <item>Min voltage level (mv),min,3000</item>
         <item>Start balancing voltage (mv),startbal,4100</item>
@@ -40,10 +72,45 @@
         <item>Critical min voltage (mv),cmin,2700</item>
     </string-array>
 
-    <string-array name="current">
-        <item>Description</item>
-        <item>Help</item>
 
+    <!--  CURRENT                                                                                   -->
+    <string-array name="current">
+        <item>Setting the current sensor parameters</item>
+        <item>
+            \nINP TYPE:\n
+            Source type.\n
+            0 - undefined,\n
+            1 - ADC input,\n
+            2 - USART input,\n
+            3 - RS485 input
+
+            \n\nINP NUMBER:\n
+            Input number.\n
+            Makes sense only for ADC inputs. For old style RS485 sensors set 101 (20 first instances).
+
+            \n\nZERO LEVEL:\n
+            Value corresponding to zero current.
+            Smaller is negative current. A larger value is positive.
+            \n◦ For USART input this is the ADC value. It can be found out with the command diag/current.
+            The value in brackets is the ADC value.
+
+            \n\nAMPER ON VOLT:\n
+            ◦ For ADC input this is the multiplier to convert the sensor output voltage to current.
+             For example, we know that a change of 10 millivolts (0.01 volts) in the sensor output
+            voltage corresponds to a current of 1 amp. So the value of this parameter is 100 (1/0.01 = 100).\n
+            ◦ For USART and RS485 input this is the multiplier M in the formula C = M * Adc.
+            \nThe resolution of the ADC is 4096. If the sensor measures current from -400 to +400
+            Amps we get a range of 800A. 800/4096 = 0,195. That is, 195 mA per ADC unit. Considering
+            that the return value in milliamps, this parameter is 195.
+
+            \n\nMIN FIXED CURRENT:\n
+            Current value in milliamps. The minimum value of current that is counted. For example,
+            current less than 1 amp will not be considered due to sensor error. The temperature
+            drift of the electronic components used causes the device to "catch" current of 0.5A or
+            -0.7A in the absence of real current. With a measured current range of -200A to +200A,
+            the minimum current of 1A will be 0.5%. This is consistent with the accuracy of most meters.
+            The value is always rounded to 100mA. The maximum value of the parameter is 25000mA.
+        </item>
         <item>INP TYPE,2</item>
         <item>INP NUMBER,0</item>
         <item>ZERO LEVEL (mv),2048</item>
@@ -51,20 +118,61 @@
         <item>MIN FIXED CURRENT,500</item>
     </string-array>
 
-    <string-array name="сharger">
-        <item>Description</item>
-        <item>Help</item>
+    <!--  CHARGER                                                                                   -->
+    <string-array name="charger">
+        <item>Setting the charger parameters</item>
+        <item>
+            \nOUT TYPE:\n
+            Source type.\n
+            0 - undefined\n
+            1 - Power Outputs\n
+            2 - PWM Outputs\n
+            3 - CAN device\n
+            4 - Combined.\n
+            Combined output: 2 outputs are used - logical and PWM.
+            Logic switches on the relay, PWM - regulates the charging current.
 
+            \n\nOUT NUMBER:\n
+            For logic and PWM outputs, the output number.\n
+            For CAN set: 0 - off, 1 - CU: "NanjingPengtu", "TC carger (Elcon)". In the future the
+            list of models will be expanded.
+
+            \n\nSTART TIME:\n
+            Start time in deciseconds.\n
+            For PWM it is the action time of the duty cycle.
+
+            \n\nSTART PWM:\n
+            For PWM. 0 to 255.
+
+            \n\nHOLD PWM:\n
+            For PWM only.\n
+            Hold Quotient. 0 to 255.
+        </item>
         <item>OUT TYPE,1</item>
         <item>OUT NUMBER,1</item>
-        <item>START TIME (ms),5000</item>
+        <item>START TIME (ds),5000</item>
         <item>START PWM,0</item>
         <item>HOLD PWM,0</item>
     </string-array>
 
     <string-array name="charging">
-        <item>Description</item>
-        <item>Help</item>
+        <item>Setting input for charging signal</item>
+        <item>
+            \nINP TYPE:\n
+            0 - undefined\n
+            1 - ADC(Inputs)\n
+            2 - Opto inputs (Inp OptoN)\n
+            3 - CAN device
+
+           \n\nINP NUMBER:\n
+            For CAN - 0.\n
+            The type of the DUT is defined in the "charger" section. From the DUT we get only the
+            signal to the network and without the command "charger" is meaningless.
+
+            \n\nLOGIC LEVEL:\n
+            ADC only.\n
+            Logic level voltage in millivolts. For other types specify 0.
+        </item>
 
         <item>INP TYPE,2</item>
         <item>INP NUMBER,3</item>
@@ -73,8 +181,20 @@
 
     <string-array name="ignition">
         <item>Description</item>
-        <item>Help</item>
+        <item>
+            \nINP TYPE:\n
+            0 - undefined\n
+            1 - ADC(Inputs)\n
+            2 - Opto inputs (Inp OptoN)\n
+            3 - CAN device
 
+           \n\nINP NUMBER:\n
+            For CAN - currently not applicable. Specify 0.
+
+            \n\nLOGIC LEVEL:\n
+            ADC only.\n
+            Logic level voltage in millivolts. For other types specify 0.
+        </item>
         <item>INP TYPE,2</item>
         <item>INP NUMBER,3</item>
         <item>LOGIC LEVEL (mv),9000</item>
@@ -82,8 +202,39 @@
 
     <string-array name="power">
         <item>Description</item>
-        <item>Help</item>
+        <item>
+            \nOUT TYPE:\n
+            Source type.\n
+            0 - undefined\n
+            1 - Power Outputs\n
+            2 - PWM Outputs\n
+            3 - CAN device\n
 
+            \n\nOUT NUMBER:\n
+            For logic and PWM outputs - output number.\n
+            For CAN set:\n
+            0 - off\n
+            1 - Curtis controller\n
+            2 - MesDea Vehicle\n
+            3 - BMZ\n
+            The list will be expanded in the future.
+
+            \n\nSTART TIME:\n
+            Only for PWM. Start time.\n
+            For logical - delay of the output actuation.
+
+            \n\nSTART PWM:\n
+           For PWM. The quadrature at the start. From 0 to 255.\n
+            For logical - output number for automatic "forward" command.\n
+            0 - if the function is not used.\n
+            This is used when controlling the Curtis controller. To eliminate the error of violating
+            the sequence of control signals.
+
+            \n\nHOLD PWM:\n
+            For PWM only. Holding quadrature. From 0 to 255.\n
+            For logical - delay of the "forward" command, after the output is triggered.
+            In deciseconds. The maximum value is 255.
+        </item>
         <item>OUT TYPE,1</item>
         <item>OUT NUMBER,4</item>
         <item>START TIME (ms),2500</item>
@@ -92,20 +243,61 @@
     </string-array>
 
     <string-array name="precharge">
-        <item>Description</item>
-        <item>Help</item>
+        <item>If this command is configured, a signal will be given a 1.5 second before the
+            main contactor turns on, according to the settings of this command.</item>
+        <item>
+            \nOUT TYPE:\n
+            Source type.\n
+            0 - undefined\n
+            1 - Power Outputs\n
+            2 - PWM Outputs\n
+            3 - CAN device
 
-        <item>INP TYPE,1</item>
-        <item>INP NUMBER,5</item>
+            \n\nOUT NUMBER:\n
+            For logic and PWM outputs - output number.\n
+            For CAN:\n
+            0 - off\n
+            1 - Curtis controller\n
+            In the future the list will be expanded.
+
+            \n\nSTART TIME:\n
+            For PWM only
+
+            \n\nSTART PWM:\n
+            For PWM only. Quarterness at start. From 0 to 255.
+
+            \n\nHOLD PWM:\n
+            For PWM only. Holding quadrature. From 0 to 255.
+        </item>
+        <item>OUT TYPE,1</item>
+        <item>OUT NUMBER,5</item>
         <item>START TIME (ms),1500</item>
         <item>START PWM,0</item>
         <item>HOLD PWM,0</item>
     </string-array>
 
     <string-array name="maincontactor">
-        <item>Description</item>
-        <item>Help</item>
+        <item>Command to turn on the main contactor. Turns ON when the charge and discharge signals
+            are applied. Turns off only when input signals disappear and in critical situations.</item>
+        <item>
+            \nOUT TYPE:\n
+            Source type.\n
+            0 - undefined\n
+            1 - Power Outputs\n
+            2 - PWM Outputs
 
+            \n\nOUT NUMBER:\n
+            For logic and PWM outputs - output number.
+
+            \n\nSTART TIM:\n
+            For PWM only
+
+            \n\nSTART PWM:\n
+            For PWM only. Quarterness at start. From 0 to 255.
+
+            \n\nHOLD PWM:\n
+            For PWM only. Holding quadrature. From 0 to 255.
+        </item>
         <item>OUT TYPE,1</item>
         <item>OUT NUMBER,4</item>
         <item>START TIME (ms),2500</item>
@@ -114,12 +306,17 @@
     </string-array>
 
     <string-array name="chcurrentmax">
-        <item>Description</item>
-        <item>Help</item>
+        <item>Limit charging current</item>
+        <item>The parameter is only applicable when using CAN-bus or hybrid controllers.\n
+            Before version 1.07.45 there was the parameter "Current, mA".\n
+            Removed due to its transfer to the "charger" command.
 
-        <item>INP TYPE,1</item>
-        <item>ZERO LEVEL,1000</item>
-        <item>LEVEL MAX,4000</item>
+            \n\nIt is possible to regulate the current with a remote controller (variable resistor).\n
+            If regulation is not needed, specify 0.
+        </item>
+        <item>INP NUM,1</item>
+        <item>ZERO LEVEL (mv),1000</item>
+        <item>LEVEL MAX (mv),4000</item>
     </string-array>
 
 </resources>
