@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,8 +58,8 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         if (tcpClient.isConnected()) {
             String localIpAddress = tcpClient.getLocalNetworkAddress(getContext());
             myNetworkAddress.setText(localIpAddress);
+            setConnectionStateIndicator(true);
         }
-        setConnectionStateIndicator();
         setRetainInstance(true);
         return v;
     }
@@ -108,26 +107,35 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     }
 
 
-    public static void setConnectionStateIndicator() {
-        boolean state = tcpClient.isConnected() ? setConnectBtnState(true) : setConnectBtnState(false);
+    public static void setConnectionStateIndicator(boolean stateIndicator) {
+        setConnectBtnState(stateIndicator);
     }
 
-    private static boolean setConnectBtnState(boolean state){
+    private static void setConnectBtnState(boolean state) {
         if (state) {
-            btnConnect.setTextColor(Color.argb(255, 3, 218, 197));
-            btnConnect.setBackground(ResourcesCompat.getDrawable(
-                    btnConnect.getContext().getResources(),
-                    R.drawable.transparent_bg_bordered_button_active, null));
-            btnConnect.setText("CONNECTED");
-            btnConnect.setActivated(false);
+            btnConnect.post(new Runnable() {
+                @Override
+                public void run() {
+                    btnConnect.setTextColor(Color.argb(255, 3, 218, 197));
+                    btnConnect.setBackground(ResourcesCompat.getDrawable(
+                            btnConnect.getContext().getResources(),
+                            R.drawable.transparent_bg_bordered_button_active, null));
+                    btnConnect.setText("CONNECTED");
+                    btnConnect.setActivated(false);
+                }
+            });
         } else {
-            btnConnect.setTextColor(Color.WHITE);
-            btnConnect.setBackground(ResourcesCompat.getDrawable(
-                    btnConnect.getContext().getResources(),
-                    R.drawable.transparent_bg_bordered_button, null));
-            btnConnect.setText("CONNECT");
-            btnConnect.setActivated(true);
+            btnConnect.post(new Runnable() {
+                @Override
+                public void run() {
+                    btnConnect.setTextColor(Color.WHITE);
+                    btnConnect.setBackground(ResourcesCompat.getDrawable(
+                            btnConnect.getContext().getResources(),
+                            R.drawable.transparent_bg_bordered_button, null));
+                    btnConnect.setText("CONNECT");
+                    btnConnect.setActivated(true);
+                }
+            });
         }
-        return state;
     }
 }

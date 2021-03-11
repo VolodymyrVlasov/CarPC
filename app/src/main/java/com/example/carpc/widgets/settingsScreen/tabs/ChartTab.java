@@ -174,10 +174,10 @@ public class ChartTab extends AbstractDashboardWidget {
 
     private void addBarData(float x, float y, float min, float max, float allowd) {
         // set color for x
-        colors.set((int) x - 1, getBarColor(y, min, max, allowd));
+        colors.set((int) x, getBarColor(y, min, max, allowd));
         // todo: fix 0 index
         // update/set bar data with index x
-        barEntries.set((int) x - 1, new BarEntry(x, y));
+        barEntries.set((int) x, new BarEntry(x, y));
         barChart.invalidate();
 
     }
