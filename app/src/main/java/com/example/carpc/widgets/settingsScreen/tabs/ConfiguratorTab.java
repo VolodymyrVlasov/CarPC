@@ -257,6 +257,21 @@ public class ConfiguratorTab extends Fragment {
         configurationMap.put(6, "precharge");
         configurationMap.put(7, "maincontactor");
         configurationMap.put(8, "chcurrentmax");
+        configurationMap.put(9, "discurrentmax");
+        configurationMap.put(10, "thermostat1");
+        configurationMap.put(11, "thermostat2");
+        configurationMap.put(12, "thermostat3");
+        configurationMap.put(13, "thermostat4");
+        configurationMap.put(14, "temptypes");
+        configurationMap.put(15, "speed");
+        configurationMap.put(16, "rpm");
+        configurationMap.put(17, "battery");
+        configurationMap.put(18, "chtemp");
+        configurationMap.put(19, "pwrtemp");
+        configurationMap.put(20, "can");
+        configurationMap.put(21, "accell");
+        configurationMap.put(22, "alarm");
+
         return configurationMap;
     }
 
