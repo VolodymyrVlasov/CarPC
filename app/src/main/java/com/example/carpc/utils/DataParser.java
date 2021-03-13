@@ -79,6 +79,7 @@ public class DataParser {
     private String TAG = "DataParser";
     private static DataParser instance = null;
     private static EnumMap<ParserKey, String> parserData = new EnumMap<>(ParserKey.class);
+    private String inputData;
 
     private DataParser() {
 //         TODO: change init values
@@ -106,6 +107,8 @@ public class DataParser {
 
     public DataParser parseInputData(String inputData) throws NullPointerException {
 //        Log.i(TAG, "inputData : " + inputData);
+
+        this.inputData = inputData;
 
         if (inputData.contains("&")) {
             Log.i(TAG, "inputData contain \"&\" so call putActualValue()");
@@ -256,5 +259,9 @@ public class DataParser {
             default:
                 return "0";
         }
+    }
+
+    public String getInputLine() {
+        return inputData;
     }
 }
