@@ -17,6 +17,25 @@ enum ParserKey {
     // Config path
     CONFIG_CURRENT("current"),
     CONFIG_IGNITION("ignition"),
+    CONFIG_POWER("power"),
+    CONFIG_PRECHARGE("precharge"),
+    CONFIG_MAIN_CONTACTOR("maincontactor"),
+    CONFIG_CHARGE_CURRENT_MAX("chcurrentmax"),
+    CONFIG_DISCHARGE_CURRENT_MAX("discurrentmax"),
+    CONFIG_THERMOSTAT_1("thermostat1"),
+    CONFIG_THERMOSTAT_2("thermostat2"),
+    CONFIG_THERMOSTAT_3("thermostat3"),
+    CONFIG_THERMOSTAT_4("thermostat4"),
+    CONFIG_TEMP_SENS_TYPE("temptypes"),
+    CONFIG_SPEED("speed"),
+    CONFIG_RPM("rpm"),
+    CONFIG_BATTERY_CAPACITY("battery"),
+    CONFIG_CHARGING_TEMP("chtemp"),
+    CONFIG_DISCHARGING_TEMP("pwrtemp"),
+    CONFIG_CAN("can"),
+    CONFIG_ACCELERATOR("accell"),
+    CONFIG_ALARM_BEEPER("alarm"),
+
 
     // cmd = value
 
@@ -131,7 +150,6 @@ public class DataParser {
         }
     }
 
-
     public Integer getMaxConfigVoltage() {
         return Integer.valueOf(parserData.get(ParserKey.LEVELS_MAX));
     }
@@ -150,7 +168,7 @@ public class DataParser {
 
     public Double getTotalDistance() {
         return Double.parseDouble(parserData.get(ParserKey.TOTAL_DISTANCE)) / 10;
-    }
+    }пше
 
     public Double getLastChargePassedDistance() {
         return Double.parseDouble(parserData.get(ParserKey.LAST_CHARGE_DISTANCE)) / 10;
@@ -214,7 +232,6 @@ public class DataParser {
     public String getTransmittedData() {
         return parserData.get(ParserKey.CELL);
     }
-
 
     // TODO: make method non static
     public Integer getCellsQuantity() {
