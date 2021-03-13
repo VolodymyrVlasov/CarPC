@@ -35,8 +35,6 @@ enum ParserKey {
     CONFIG_CAN("can"),
     CONFIG_ACCELERATOR("accell"),
     CONFIG_ALARM_BEEPER("alarm"),
-
-
     // cmd = value
 
     // Actual values
@@ -168,7 +166,7 @@ public class DataParser {
 
     public Double getTotalDistance() {
         return Double.parseDouble(parserData.get(ParserKey.TOTAL_DISTANCE)) / 10;
-    }пше
+    }
 
     public Double getLastChargePassedDistance() {
         return Double.parseDouble(parserData.get(ParserKey.LAST_CHARGE_DISTANCE)) / 10;

@@ -132,8 +132,6 @@ public class ConfiguratorTab extends Fragment {
         MainActivity.hideKeyboard(Objects.requireNonNull(getActivity()));
     }
 
-
-
     private void readFromServer(String cmdName) {
         if (cmdName.equals("levels")) {
             readLevelsFromSever();
