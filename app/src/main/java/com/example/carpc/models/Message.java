@@ -3,7 +3,6 @@ import android.util.Log;
 
 public class Message {
     private static final String TAG = "Message";
-    private String message;
     private int messageCount;
     private boolean newMessageFlag = false;
 
@@ -13,13 +12,6 @@ public class Message {
         this.messageCount = 0;
         this.msg = new StringBuilder();
         msg.setLength(100);
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-        this.messageCount++;
-        Log.i(TAG, getCountMessage());
-        newMessageFlag = true;
     }
 
     public void setMessage(String message, boolean newMessage) {
@@ -35,14 +27,6 @@ public class Message {
         return msg.toString();
     }
 
-    public int getMessageCount() {
-        return messageCount;
-    }
-
-    public String getCountMessage() {
-        return messageCount + " " + message;
-    }
-
     public boolean hasNewMessage() {
         return newMessageFlag;
     }
@@ -50,5 +34,4 @@ public class Message {
     public void clearAllText() {
         msg.delete(0, msg.length());
     }
-
 }

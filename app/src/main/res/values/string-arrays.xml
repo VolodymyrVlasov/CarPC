@@ -69,6 +69,7 @@
         <item>Charged voltage (mv),chrgd,4150</item>
         <item>Allowed voltage (mv),allowd,2850</item>
         <item>Critical min voltage (mv),cmin,2700</item>
+        <item>Cells quantity,cells,96</item>
     </string-array>
 
     <!--  CURRENT                                                                                   -->

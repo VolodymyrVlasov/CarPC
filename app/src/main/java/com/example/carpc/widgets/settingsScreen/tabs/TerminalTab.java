@@ -1,8 +1,12 @@
 package com.example.carpc.widgets.settingsScreen.tabs;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -11,6 +15,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.example.carpc.MainActivity;
 import com.example.carpc.R;
@@ -26,29 +31,11 @@ public class TerminalTab extends AbstractDashboardWidget implements View.OnClick
     private TextView messagesTextView;
     private Button btnSend, btnClear, btnSubscribe, btnUnsubscribe;
     private Message message = MainActivity.getMessage();
+    private boolean scrollFocusDownFlag = true;
+    private String TAG = "TERMINAL_TAB";
 
-    public TerminalTab() {
-    }
-
-    @Override
-    public void updateUI(final DataParser data) {
-        messagesTextView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (message.hasNewMessage()) {
-                    messagesTextView.setText(message.getMessage());
-                    inputDataScrollView.fullScroll(View.FOCUS_DOWN);
-                }
-//                Log.i("TERMINALTAB", data.getInputLine());
-//                messagesTextView.append(data.getInputLine() + "\n");
-//                inputDataScrollView.fullScroll(View.FOCUS_DOWN);
-
-            }
-        });
-//        messagesTextView.setText(data.getInputLine());
-//        inputDataScrollView.fullScroll(View.FOCUS_DOWN);
-    }
-
+    @SuppressLint("ClickableViewAccessibility")
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,8 +47,8 @@ public class TerminalTab extends AbstractDashboardWidget implements View.OnClick
         btnClear = v.findViewById(R.id.btnClearTermTab);
         btnSubscribe = v.findViewById(R.id.btnSubscribe);
         btnUnsubscribe = v.findViewById(R.id.btnUnsubscribe);
-//        messages.setLines(50);
-//        message.clearAllText();
+        messagesTextView.setLines(50);
+        message.clearAllText();
 
         messageToSend.setOnKeyListener(new View.OnKeyListener() {
 
@@ -74,7 +61,22 @@ public class TerminalTab extends AbstractDashboardWidget implements View.OnClick
                 return false;
             }
         });
-//        update();
+
+        inputDataScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                    Log.d(TAG, "Touch down on inputDataScrollView");
+                    scrollFocusDownFlag = false;
+
+                } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                    Log.d(TAG, "Touch up on inputDataScrollView");
+                    scrollFocusDownFlag = true;
+                }
+                return false;
+            }
+        });
+
         //TODO set Enter key onclick listener to send message
         setRetainInstance(true);
         return v;
@@ -108,41 +110,31 @@ public class TerminalTab extends AbstractDashboardWidget implements View.OnClick
         }
     }
 
+    @Override
+    public void updateUI(final DataParser data) {
+        messagesTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (message.hasNewMessage() && scrollFocusDownFlag) {
+                    messagesTextView.setText(message.getMessage());
 
-//    public void update() {
-//        TimerTask repeatedTask = new TimerTask() {
-//            public void run() {
-//                if (getActivity() != null) {
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @SuppressLint("SetTextI18n")
-//                        @Override
-//                        public void run() {
-//                            if (message.hasNewMessage()) {
-//                                messages.setText(message.getMessage());
-//                                inputDataScrollView.fullScroll(View.FOCUS_DOWN);
-//                            }
-//                        }
-//                    });
-//                }
-//            }
-//        };
-//        Timer timer = new Timer("Timer");
-//        long delay = 1L;
-//        long period = 10L;
-//        timer.scheduleAtFixedRate(repeatedTask, delay, period);
-//    }
+                }
+            }
+        });
+    }
 
     private void sendMessage(String message) {
-//        this.message.setMessage("\t\t\t\tOUT>>\t\t" + message, true);
+        this.message.setMessage("\t\t\t\tOUT>>\t\t" + message, true);
         TCPClient.getInstance(getContext()).sendMessage(message);
         messageToSend.setText("");
-        //  messageToSend.setFocusable(true);
-//        inputDataScrollView.fullScroll(View.FOCUS_DOWN);
+        messageToSend.setFocusable(true);
+        messagesTextView.setText(this.message.getMessage());
+//        scrollFocusDownFlag = false;
     }
 
     private void clearAllText() {
         messagesTextView.setText("");
         messageToSend.setText("");
-//        message.clearAllText();
+        message.clearAllText();
     }
 }

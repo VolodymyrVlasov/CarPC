@@ -31,15 +31,12 @@ import java.util.Objects;
 public class ConfiguratorTab extends Fragment {
     private static final String TAG = "GroupConfig";
 
+    private TextView descriptionTextView;
+    private TextView helpTextView;
     private ListView listView;
     private Spinner spinner;
     private ConfigAdapter adapter;
     private String[] spinnerCategories;
-
-    private Button readBtn;
-    private Button writeBtn;
-    private TextView descriptionTextView;
-    private TextView helpTextView;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -47,16 +44,15 @@ public class ConfiguratorTab extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.car_pc_configuration, container, false);
         spinnerCategories = getContext().getResources().getStringArray(R.array.configurationGroupList);
-
         spinner = v.findViewById(R.id.configurationGroupList);
+
         final ArrayAdapter adapter =
                 ArrayAdapter.createFromResource(getContext(), R.array.configurationGroupList, R.layout.spinner_item);
         adapter.setDropDownViewResource(R.layout.dropdown_items);
 
         spinner.setAdapter(adapter);
-
-        readBtn = v.findViewById(R.id.btn_read);
-        writeBtn = v.findViewById(R.id.btn_write);
+        Button readBtn = v.findViewById(R.id.btn_read);
+        Button writeBtn = v.findViewById(R.id.btn_write);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -93,8 +89,10 @@ public class ConfiguratorTab extends Fragment {
         descriptionTextView = v.findViewById(R.id.description_text_view);
         helpTextView = v.findViewById(R.id.help_text_view);
         getSelectedSpinnerData(0);
+        readAllConfigParamsFromCarPC();
         return v;
     }
+
 
     private void writeToServer(String cmdName) {
         if (cmdName.equals("levels")) {
@@ -144,20 +142,19 @@ public class ConfiguratorTab extends Fragment {
             tcpClient.sendMessage("config");
             Thread.sleep(3);
             tcpClient.sendMessage(cmdName);
-            Thread.sleep(100);
-            String newConfig = DataParser.getInstance().getCurrentConfig();
-            if (!newConfig.contains("try")) {
-                String[] arr = newConfig.split(":");
+            Thread.sleep(50);
 
-                for (int i = 0; i < arr.length; i++) {
-                    adapter.getItem(i).setConfigValue(arr[i]);
-                }
+            String[] arr = DataParser.getInstance().getConfigDataByCmdName(cmdName).split(":");
 
-                listView.setAdapter(adapter);
-                listView.setLayoutParams(setListViewHeight(listView, adapter));
-                listView.requestLayout();
+            for (int i = 0; i < arr.length; i++) {
+                adapter.getItem(i).setConfigValue(arr[i]);
             }
-            Toast.makeText(getContext(), newConfig, Toast.LENGTH_SHORT).show();
+
+            listView.setAdapter(adapter);
+            listView.setLayoutParams(setListViewHeight(listView, adapter));
+            listView.requestLayout();
+
+//            Toast.makeText(getContext(), newConfig, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,6 +162,7 @@ public class ConfiguratorTab extends Fragment {
 
     private void writeLevelsToSever() {
         TCPClient tcpClient = TCPClient.getInstance(getContext());
+
         for (int i = 0; i < adapter.getCount(); i++) {
             if (adapter.getItem(i).isConfigValueEmpty()) {
                 Toast.makeText(getContext(), "All input fields shouldn`t be empty", Toast.LENGTH_SHORT).show();
@@ -181,6 +179,10 @@ public class ConfiguratorTab extends Fragment {
                 Thread.sleep(3);
                 tcpClient.sendMessage(resultCommand);
             }
+
+            Toast.makeText(this.getContext(), "Please wait for 30 sec while server synchronize" +
+                    " ", Toast.LENGTH_LONG).show();
+            tcpClient.sendMessage("sync 1");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -191,25 +193,31 @@ public class ConfiguratorTab extends Fragment {
         TCPClient tcpClient = TCPClient.getInstance(getContext());
         try {
 
-            //    ?? levelv> ?? cmin = 4200
-            // min = 200
-            // max = 5454
-
             for (int i = 0; i < adapter.getCount(); i++) {
-                tcpClient.sendMessage("..");
-//                Thread.sleep(1);
-                tcpClient.sendMessage("levels");
-//                Thread.sleep(1);
-                tcpClient.sendMessage(adapter.getItem(i).getCmdName());
-//                Thread.sleep(1);
-                System.out.println("send message: " + adapter.getItem(i).getCmdName());
                 String cmdName = adapter.getItem(i).getCmdName();
-                Thread.sleep(10);
-                String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
-                Log.i(TAG, "newConfigValue: " + newConfigValue);
-                adapter.getItem(i).setConfigValue(newConfigValue);
+                if (cmdName.equals("cells")) {
+                    tcpClient.sendMessage("..");
+                    Thread.sleep(2);
+                    tcpClient.sendMessage("config");
+                    Thread.sleep(2);
+                    tcpClient.sendMessage(cmdName);
+                    Thread.sleep(10);
+                    String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
+                    Log.i(TAG, "newConfigValue: " + newConfigValue);
+                    adapter.getItem(i).setConfigValue(newConfigValue);
+                    break;
+                } else {
+                    tcpClient.sendMessage("..");
+                    Thread.sleep(2);
+                    tcpClient.sendMessage("levels");
+                    Thread.sleep(2);
+                    tcpClient.sendMessage(cmdName);
+                    Thread.sleep(15);
+                    String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
+                    Log.i(TAG, "newConfigValue: " + newConfigValue);
+                    adapter.getItem(i).setConfigValue(newConfigValue);
+                }
             }
-
             adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
@@ -273,7 +281,7 @@ public class ConfiguratorTab extends Fragment {
         return configurationMap;
     }
 
-    private ViewGroup.LayoutParams setListViewHeight(ListView listView, ConfigAdapter adapter){
+    private ViewGroup.LayoutParams setListViewHeight(ListView listView, ConfigAdapter adapter) {
         int totalHeight = 0;
         for (int i = 0; i < adapter.getCount(); i++) {
             View listItem = adapter.getView(i, null, listView);
@@ -284,6 +292,42 @@ public class ConfiguratorTab extends Fragment {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
         return params;
+    }
+
+    private void readAllConfigParamsFromCarPC() {
+        HashMap<Integer, String> cmdNameList = getConfigurationMap();
+        TCPClient tcpClient = TCPClient.getInstance(getContext());
+        try {
+            for (int i = 0; i < cmdNameList.size(); i++) {
+                tcpClient.sendMessage("..");
+                Thread.sleep(2);
+                tcpClient.sendMessage("config");
+                Thread.sleep(2);
+                tcpClient.sendMessage(cmdNameList.get(i));
+                Thread.sleep(5);
+            }
+
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if (adapter.getItem(i).getCmdName().equals("cells")) {
+                    tcpClient.sendMessage("..");
+                    Thread.sleep(2);
+                    tcpClient.sendMessage("config");
+                    Thread.sleep(2);
+                    tcpClient.sendMessage(adapter.getItem(i).getCmdName());
+                    Thread.sleep(10);
+                    break;
+                } else {
+                    tcpClient.sendMessage("..");
+                    Thread.sleep(2);
+                    tcpClient.sendMessage("levels");
+                    Thread.sleep(2);
+                    tcpClient.sendMessage(adapter.getItem(i).getCmdName());
+                    Thread.sleep(10);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

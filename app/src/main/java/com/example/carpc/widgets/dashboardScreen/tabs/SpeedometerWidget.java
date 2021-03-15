@@ -1,7 +1,6 @@
 package com.example.carpc.widgets.dashboardScreen.tabs;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +29,15 @@ public class SpeedometerWidget extends AbstractDashboardWidget {
         if (speedToSet > data.getSpeed()) speedToSet -= 1;
 
         speedTextView.post(new Runnable() {
-               @Override
-               public void run() { speedTextView.setText(String.valueOf(speedToSet));
-               }
-           }
-        );
+            @Override
+            public void run() {
+                try {
+                    speedTextView.setText(String.valueOf(speedToSet));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

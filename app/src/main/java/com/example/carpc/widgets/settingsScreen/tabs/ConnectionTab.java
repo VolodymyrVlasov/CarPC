@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,36 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
             myNetworkAddress.setText(localIpAddress);
             setConnectionStateIndicator(true);
         }
+
+        /**
+         *  messageToSend.setOnKeyListener(new View.OnKeyListener() {
+         *
+         *             @Override
+         *             public boolean onKey(View v, int keyCode, KeyEvent event) {
+         *                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
+         *                     String temp = messageToSend.getText().toString();
+         *                     if (!temp.equals("")) sendMessage(temp);
+         *                 }
+         *                 return false;
+         *             }
+         *         });
+         */
+
+        serverPort.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    if (!serverAddress.getText().toString().equals("") && !serverPort.getText().toString().equals("")) {
+                        tcpClient.disconnect();
+                        MainActivity.hideKeyboard((Activity) Objects.requireNonNull(getContext()));
+                        setConnectBtnState(false);
+                        updateConnectionParams(serverAddress.getText().toString(), Integer.parseInt(serverPort.getText().toString()));
+                    }
+                }
+
+                return false;
+            }
+        });
         setRetainInstance(true);
         return v;
     }

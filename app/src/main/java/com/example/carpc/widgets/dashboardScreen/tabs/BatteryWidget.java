@@ -45,9 +45,13 @@ public class BatteryWidget extends AbstractDashboardWidget {
         rangeTextView.post(new Runnable() {
             @Override
             public void run() {
-                rangeTextView.setText(String.valueOf(data.getRange()));
-                tempOutside.setText(String.valueOf(data.getTempSensorValue(1)));
-                batteryIcon.updateCapacity(data.getBatteryCapacity());
+                try {
+                    rangeTextView.setText(String.valueOf(data.getRange()));
+                    tempOutside.setText(String.valueOf(data.getTempSensorValue(1)));
+                    batteryIcon.updateCapacity(data.getBatteryCapacity());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
