@@ -11,26 +11,57 @@
         <item>Main contactor</item>
         <item>Charge Current Max</item>
         <item>Discharge Current Max</item>
-        <item>Thermostat</item>
+        <item>Thermostat 1</item>
+        <item>Thermostat 2</item>
+        <item>Thermostat 3</item>
+        <item>Thermostat 4</item>
         <item>Temperature Sensor Types</item>
-        <item>Interface</item>
         <item>Speed</item>
         <item>RPM</item>
         <item>Battery</item>
         <item>Charging temperature</item>
-        <item>Power temperature</item>
+        <item>Discharging temperature</item>
         <item>CAN</item>
         <item>Accelerator</item>
         <item>Alarm</item>
-        <item>Flags</item>
-        <item>Buttons</item>
-        <item>Gauge</item>
     </string-array>
 
+    <!--  LEVELS                                                                                    -->
     <string-array name="levels">
-        <item>Description</item>
-        <item>Help</item>
+        <item>In this group the voltage levels for the cells are set.
+            The levels are stored both on the main board and on all additional boards.</item>
+        <item>MAX VOLTAGE:\n
+            If the cell voltage exceeds the maximum voltage, the battery charging process will
+            be paused or stopped.
 
+            \n\nMIN VOLTAGE:\n
+            If the cell voltage drops below the minimum voltage, the discharge of the battery will
+            be paused or stopped.
+
+            \n\nSTART BALANCING:\n
+            The cell voltage above which the cell voltage balancing process begins.
+            Balancing is only performed during the charging process. The balancing process at this
+            point is performed by the central module. Also this level is used to provide hysteresis
+            during charging. That is, when the charge is finished, the charge will start again if
+            the voltage on at least one cell drops below this level.
+
+            \n\nSTOP BALANCING:\n
+            The cell voltage above which the balancer turns on on the add-on board regardless of the
+            main board signals and regardless of whether it is charging or discharging.
+            It is recommended that this level be set at or close to the maximum value.
+
+            \n\nCHARGED VOLTAGE:\n
+            The cell voltage at which all cells are considered to be charged when reached.
+            It is recommended to set this level between startbal and bal.
+
+            \n\nALLOWED VOLTAGE:\n
+            Used to provide a load trip hysteresis at the lower voltage threshold. This level is
+            also used to enable the "Turtle" mode.
+
+            \n\nCRITICAL MIN VOLTAGE:\n
+            The critical low voltage level of a cell. If at least one cell voltage is below this
+            level, it is prohibited to charge, discharge or turn on the dc/dc converter.
+        </item>
         <item>Max voltage level (mv),max,4100</item>
         <item>Min voltage level (mv),min,3000</item>
         <item>Start balancing voltage (mv),startbal,4100</item>
@@ -38,12 +69,47 @@
         <item>Charged voltage (mv),chrgd,4150</item>
         <item>Allowed voltage (mv),allowd,2850</item>
         <item>Critical min voltage (mv),cmin,2700</item>
+        <item>Cells quantity,cells,96</item>
     </string-array>
 
+    <!--  CURRENT                                                                                   -->
     <string-array name="current">
-        <item>Description</item>
-        <item>Help</item>
+        <item>Setting the current sensor parameters</item>
+        <item>
+            \nINP TYPE:\n
+            Source type.\n
+            0 - undefined,\n
+            1 - ADC input,\n
+            2 - USART input,\n
+            3 - RS485 input
 
+            \n\nINP NUMBER:\n
+            Input number.\n
+            Makes sense only for ADC inputs. For old style RS485 sensors set 101 (20 first instances).
+
+            \n\nZERO LEVEL:\n
+            Value corresponding to zero current.
+            Smaller is negative current. A larger value is positive.
+            \n◦ For USART input this is the ADC value. It can be found out with the command diag/current.
+            The value in brackets is the ADC value.
+
+            \n\nAMPER ON VOLT:\n
+            ◦ For ADC input this is the multiplier to convert the sensor output voltage to current.
+             For example, we know that a change of 10 millivolts (0.01 volts) in the sensor output
+            voltage corresponds to a current of 1 amp. So the value of this parameter is 100 (1/0.01 = 100).\n
+            ◦ For USART and RS485 input this is the multiplier M in the formula C = M * Adc.
+            \nThe resolution of the ADC is 4096. If the sensor measures current from -400 to +400
+            Amps we get a range of 800A. 800/4096 = 0,195. That is, 195 mA per ADC unit. Considering
+            that the return value in milliamps, this parameter is 195.
+
+            \n\nMIN FIXED CURRENT:\n
+            Current value in milliamps. The minimum value of current that is counted. For example,
+            current less than 1 amp will not be considered due to sensor error. The temperature
+            drift of the electronic components used causes the device to "catch" current of 0.5A or
+            -0.7A in the absence of real current. With a measured current range of -200A to +200A,
+            the minimum current of 1A will be 0.5%. This is consistent with the accuracy of most meters.
+            The value is always rounded to 100mA. The maximum value of the parameter is 25000mA.
+        </item>
         <item>INP TYPE,2</item>
         <item>INP NUMBER,0</item>
         <item>ZERO LEVEL (mv),2048</item>
@@ -51,20 +117,61 @@
         <item>MIN FIXED CURRENT,500</item>
     </string-array>
 
-    <string-array name="сharger">
-        <item>Description</item>
-        <item>Help</item>
+    <!--  CHARGER                                                                                   -->
+    <string-array name="charger">
+        <item>Setting the charger parameters</item>
+        <item>
+            \nOUT TYPE:\n
+            Source type.\n
+            0 - undefined\n
+            1 - Power Outputs\n
+            2 - PWM Outputs\n
+            3 - CAN device\n
+            4 - Combined.\n
+            Combined output: 2 outputs are used - logical and PWM.
+            Logic switches on the relay, PWM - regulates the charging current.
 
+            \n\nOUT NUMBER:\n
+            For logic and PWM outputs, the output number.\n
+            For CAN set: 0 - off, 1 - CU: "NanjingPengtu", "TC carger (Elcon)". In the future the
+            list of models will be expanded.
+
+            \n\nSTART TIME:\n
+            Start time in deciseconds.\n
+            For PWM it is the action time of the duty cycle.
+
+            \n\nSTART PWM:\n
+            For PWM. 0 to 255.
+
+            \n\nHOLD PWM:\n
+            For PWM only.\n
+            Hold Quotient. 0 to 255.
+        </item>
         <item>OUT TYPE,1</item>
         <item>OUT NUMBER,1</item>
-        <item>START TIME (ms),5000</item>
+        <item>START TIME (ds),5000</item>
         <item>START PWM,0</item>
         <item>HOLD PWM,0</item>
     </string-array>
 
     <string-array name="charging">
-        <item>Description</item>
-        <item>Help</item>
+        <item>Setting input for charging signal</item>
+        <item>
+            \nINP TYPE:\n
+            0 - undefined\n
+            1 - ADC(Inputs)\n
+            2 - Opto inputs (Inp OptoN)\n
+            3 - CAN device
+
+           \n\nINP NUMBER:\n
+            For CAN - 0.\n
+            The type of the DUT is defined in the "charger" section. From the DUT we get only the
+            signal to the network and without the command "charger" is meaningless.
+
+            \n\nLOGIC LEVEL:\n
+            ADC only.\n
+            Logic level voltage in millivolts. For other types specify 0.
+        </item>
 
         <item>INP TYPE,2</item>
         <item>INP NUMBER,3</item>
@@ -73,8 +180,20 @@
 
     <string-array name="ignition">
         <item>Description</item>
-        <item>Help</item>
+        <item>
+            \nINP TYPE:\n
+            0 - undefined\n
+            1 - ADC(Inputs)\n
+            2 - Opto inputs (Inp OptoN)\n
+            3 - CAN device
 
+           \n\nINP NUMBER:\n
+            For CAN - currently not applicable. Specify 0.
+
+            \n\nLOGIC LEVEL:\n
+            ADC only.\n
+            Logic level voltage in millivolts. For other types specify 0.
+        </item>
         <item>INP TYPE,2</item>
         <item>INP NUMBER,3</item>
         <item>LOGIC LEVEL (mv),9000</item>
@@ -82,8 +201,39 @@
 
     <string-array name="power">
         <item>Description</item>
-        <item>Help</item>
+        <item>
+            \nOUT TYPE:\n
+            Source type.\n
+            0 - undefined\n
+            1 - Power Outputs\n
+            2 - PWM Outputs\n
+            3 - CAN device
 
+            \n\nOUT NUMBER:\n
+            For logic and PWM outputs - output number.\n
+            For CAN set:\n
+            0 - off\n
+            1 - Curtis controller\n
+            2 - MesDea Vehicle\n
+            3 - BMZ\n
+            The list will be expanded in the future.
+
+            \n\nSTART TIME:\n
+            Only for PWM. Start time.\n
+            For logical - delay of the output actuation.
+
+            \n\nSTART PWM:\n
+           For PWM. The quadrature at the start. From 0 to 255.\n
+            For logical - output number for automatic "forward" command.\n
+            0 - if the function is not used.\n
+            This is used when controlling the Curtis controller. To eliminate the error of violating
+            the sequence of control signals.
+
+            \n\nHOLD PWM:\n
+            For PWM only. Holding quadrature. From 0 to 255.\n
+            For logical - delay of the "forward" command, after the output is triggered.
+            In deciseconds. The maximum value is 255.
+        </item>
         <item>OUT TYPE,1</item>
         <item>OUT NUMBER,4</item>
         <item>START TIME (ms),2500</item>
@@ -92,20 +242,61 @@
     </string-array>
 
     <string-array name="precharge">
-        <item>Description</item>
-        <item>Help</item>
+        <item>If this command is configured, a signal will be given a 1.5 second before the
+            main contactor turns on, according to the settings of this command.</item>
+        <item>
+            \nOUT TYPE:\n
+            Source type.\n
+            0 - undefined\n
+            1 - Power Outputs\n
+            2 - PWM Outputs\n
+            3 - CAN device
 
-        <item>INP TYPE,1</item>
-        <item>INP NUMBER,5</item>
+            \n\nOUT NUMBER:\n
+            For logic and PWM outputs - output number.\n
+            For CAN:\n
+            0 - off\n
+            1 - Curtis controller\n
+            In the future the list will be expanded.
+
+            \n\nSTART TIME:\n
+            For PWM only
+
+            \n\nSTART PWM:\n
+            For PWM only. Quarterness at start. From 0 to 255.
+
+            \n\nHOLD PWM:\n
+            For PWM only. Holding quadrature. From 0 to 255.
+        </item>
+        <item>OUT TYPE,1</item>
+        <item>OUT NUMBER,5</item>
         <item>START TIME (ms),1500</item>
         <item>START PWM,0</item>
         <item>HOLD PWM,0</item>
     </string-array>
 
     <string-array name="maincontactor">
-        <item>Description</item>
-        <item>Help</item>
+        <item>Command to turn on the main contactor. Turns ON when the charge and discharge signals
+            are applied. Turns off only when input signals disappear and in critical situations.</item>
+        <item>
+            \nOUT TYPE:\n
+            Source type.\n
+            0 - undefined\n
+            1 - Power Outputs\n
+            2 - PWM Outputs
 
+            \n\nOUT NUMBER:\n
+            For logic and PWM outputs - output number.
+
+            \n\nSTART TIME:\n
+            For PWM only
+
+            \n\nSTART PWM:\n
+            For PWM only. Quarterness at start. From 0 to 255.
+
+            \n\nHOLD PWM:\n
+            For PWM only. Holding quadrature. From 0 to 255.
+        </item>
         <item>OUT TYPE,1</item>
         <item>OUT NUMBER,4</item>
         <item>START TIME (ms),2500</item>
@@ -114,12 +305,425 @@
     </string-array>
 
     <string-array name="chcurrentmax">
-        <item>Description</item>
-        <item>Help</item>
+        <item>Limit charging current</item>
+        <item>
+              ZERO LEVEL:
+            \nThe value at the ADC input in millivolts, corresponding to zero current.
 
-        <item>INP TYPE,1</item>
-        <item>ZERO LEVEL,1000</item>
-        <item>LEVEL MAX,4000</item>
+            \n\nLEVEL MAX:
+            \n The value at the ADC input in millivolts, corresponding to maximum current.
+
+            \nThe parameter is only applicable when using CAN-bus or hybrid controllers.
+            Before version 1.07.45 there was the parameter "Current, mA".
+            Removed due to its transfer to the "charger" command.
+
+            \n\nIt is possible to regulate the current with a remote controller (variable resistor).\n
+            If regulation is not needed, specify 0.
+        </item>
+        <item>INP NUMBER (ADC),1</item>
+        <item>ZERO LEVEL (mv),1000</item>
+        <item>LEVEL MAX (mv),4000</item>
+    </string-array>
+
+    <string-array name="discurrentmax">
+        <item>Limit discharging current</item>
+        <item>
+            MAX CURRENT:
+            \nMaximum current in Amperes
+
+            \n\nZERO LEVEL:
+            \nThe value at the ADC input in millivolts, corresponding to zero current.
+
+            \n\nLEVEL MAX:
+            \n The value at the ADC input in millivolts, corresponding to maximum current.
+
+            \nThe parameter is only applicable when using CAN-bus or hybrid controllers.\n
+            It is possible to regulate the current with a remote controller (variable resistor).\n
+            If regulation is not needed, specify 0.
+
+            \n\n\nAdded in version "1.07.51"
+        </item>
+        <item>MAX CURRENT,300</item>
+        <item>INP NUMBER (ADC),4</item>
+        <item>ZERO LEVEL (mv),1000</item>
+        <item>LEVEL MAX (mv),4000</item>
+    </string-array>
+
+    <string-array name="thermostat1">
+        <item>Settings for the first thermostat</item>
+        <item>
+            SOURCE:
+            \n0 - неопределено
+            \n1 - Temp Sensors 1
+            \n2 - Temp Sensors 2
+            \n3 - Temp Sensors 3
+            \n4 - Temp Sensors 4
+            \n5 - from BMS
+            \n6 - Curtis, inverter temp sensor
+            \n7 - Curtis, motor temp sensor
+
+            \n\nTYPE: (Thermostat types)
+            \n0 - turn on when the temperature rises
+            \n1 - turn on when the temperature drops
+            \n2 - switching on when ignition or charge is turned on. Increase PWM duty cycle when exceeded (start temp).
+
+            \n\n\nDescription of the thermostat types:
+
+            \n\n◦ SWITCHING ON WHEN THE TEMPERATURE RISES -> 0
+            \n\nFor the logical output (Power Output), when the measured temperature exceeds of the
+            measured temperature above (high temp), a logical 1 is sent to the output.
+            logical 1. When the temperature drops below (low temp)a logical 0 is output. This
+            provides for temperature hysteresis.
+
+            \n▪ For PWM output. If the temperature exceeds (low temp) PWM is turned on at (start pwm)
+            and rises to (hight temp), at which Reaching which it takes the value (max pwm).
+
+            \n\n\n◦ SWITCHING ON WHEN THE TEMPERATURE DROPS -> 1
+            \n\nFor the logic output (Power Output) when the temperature to be measured drops below
+            (low temp). of the measured temperature below (low temp), a logical 1.
+            If the temperature rises above (high temp) a logical 0 is output.
+
+            \n▪ For PWM output. If the temperature decreases below (hight temp) the PWM is switched
+            on at (start pwm) and rises to (low temp), when reached, it takes the value (max pwm).
+
+            \n\n\n◦ TURNS ON WHEN THE IGNITION OR CHARGE IS TURNED ON -> 2
+
+            \n\n▪ For PWM output. When the ignition or charger is switched on the PWM on (start pwm) is
+            switched on. When the temperature exceeds temperature (low temp) the PWM duty cycle
+            rises to (hight temp), when reached, it takes the value (max pwm).
+
+            \n▪ Not implemented for the logic output.
+        </item>
+        <item>SOURCE,6</item>
+        <item>TYPE,0</item>
+        <item>OUT TYPE,2</item>
+        <item>OUT NUMBER,1</item>
+        <item>LOW TEMP,35</item>
+        <item>HIGH TEMP,40</item>
+        <item>START PWM,150</item>
+        <item>MAX PWM,245</item>
+    </string-array>
+
+    <string-array name="thermostat2">
+        <item>Settings for the second thermostat</item>
+        <item>
+            SOURCE:
+            \n0 - неопределено
+            \n1 - Temp Sensors 1
+            \n2 - Temp Sensors 2
+            \n3 - Temp Sensors 3
+            \n4 - Temp Sensors 4
+            \n5 - from BMS
+            \n6 - Curtis, inverter temp sensor
+            \n7 - Curtis, motor temp sensor
+
+            \n\nTYPE: (Thermostat types)
+            \n0 - turn on when the temperature rises
+            \n1 - turn on when the temperature drops
+            \n2 - switching on when ignition or charge is turned on. Increase PWM duty cycle when exceeded (start temp).
+
+            \n\n\nDescription of the thermostat types:
+
+            \n\n◦ SWITCHING ON WHEN THE TEMPERATURE RISES -> 0
+            \n\nFor the logical output (Power Output), when the measured temperature exceeds of the
+            measured temperature above (high temp), a logical 1 is sent to the output.
+            logical 1. When the temperature drops below (low temp)a logical 0 is output. This
+            provides for temperature hysteresis.
+
+            \n▪ For PWM output. If the temperature exceeds (low temp) PWM is turned on at (start pwm)
+            and rises to (hight temp), at which Reaching which it takes the value (max pwm).
+
+            \n\n\n◦ SWITCHING ON WHEN THE TEMPERATURE DROPS -> 1
+            \n\nFor the logic output (Power Output) when the temperature to be measured drops below
+            (low temp). of the measured temperature below (low temp), a logical 1.
+            If the temperature rises above (high temp) a logical 0 is output.
+
+            \n▪ For PWM output. If the temperature decreases below (hight temp) the PWM is switched
+            on at (start pwm) and rises to (low temp), when reached, it takes the value (max pwm).
+
+            \n\n\n◦ TURNS ON WHEN THE IGNITION OR CHARGE IS TURNED ON -> 2
+
+            \n\n▪ For PWM output. When the ignition or charger is switched on the PWM on (start pwm) is
+            switched on. When the temperature exceeds temperature (low temp) the PWM duty cycle
+            rises to (hight temp), when reached, it takes the value (max pwm).
+
+            \n▪ Not implemented for the logic output.
+        </item>
+        <item>SOURCE,6</item>
+        <item>TYPE,0</item>
+        <item>OUT TYPE,2</item>
+        <item>OUT NUMBER,1</item>
+        <item>LOW TEMP,35</item>
+        <item>HIGH TEMP,40</item>
+        <item>START PWM,150</item>
+        <item>MAX PWM,245</item>
+    </string-array>
+
+    <string-array name="thermostat3">
+        <item>Settings for the third thermostat</item>
+        <item>
+            SOURCE:
+            \n0 - неопределено
+            \n1 - Temp Sensors 1
+            \n2 - Temp Sensors 2
+            \n3 - Temp Sensors 3
+            \n4 - Temp Sensors 4
+            \n5 - from BMS
+            \n6 - Curtis, inverter temp sensor
+            \n7 - Curtis, motor temp sensor
+
+            \n\nTYPE: (Thermostat types)
+            \n0 - turn on when the temperature rises
+            \n1 - turn on when the temperature drops
+            \n2 - switching on when ignition or charge is turned on. Increase PWM duty cycle when exceeded (start temp).
+
+            \n\n\nDescription of the thermostat types:
+
+            \n\n◦ SWITCHING ON WHEN THE TEMPERATURE RISES -> 0
+            \n\nFor the logical output (Power Output), when the measured temperature exceeds of the
+            measured temperature above (high temp), a logical 1 is sent to the output.
+            logical 1. When the temperature drops below (low temp)a logical 0 is output. This
+            provides for temperature hysteresis.
+
+            \n▪ For PWM output. If the temperature exceeds (low temp) PWM is turned on at (start pwm)
+            and rises to (hight temp), at which Reaching which it takes the value (max pwm).
+
+            \n\n\n◦ SWITCHING ON WHEN THE TEMPERATURE DROPS -> 1
+            \n\nFor the logic output (Power Output) when the temperature to be measured drops below
+            (low temp). of the measured temperature below (low temp), a logical 1.
+            If the temperature rises above (high temp) a logical 0 is output.
+
+            \n▪ For PWM output. If the temperature decreases below (hight temp) the PWM is switched
+            on at (start pwm) and rises to (low temp), when reached, it takes the value (max pwm).
+
+            \n\n\n◦ TURNS ON WHEN THE IGNITION OR CHARGE IS TURNED ON -> 2
+
+            \n\n▪ For PWM output. When the ignition or charger is switched on the PWM on (start pwm) is
+            switched on. When the temperature exceeds temperature (low temp) the PWM duty cycle
+            rises to (hight temp), when reached, it takes the value (max pwm).
+
+            \n▪ Not implemented for the logic output.
+        </item>
+        <item>SOURCE,6</item>
+        <item>TYPE,0</item>
+        <item>OUT TYPE,2</item>
+        <item>OUT NUMBER,1</item>
+        <item>LOW TEMP,35</item>
+        <item>HIGH TEMP,40</item>
+        <item>START PWM,150</item>
+        <item>MAX PWM,245</item>
+    </string-array>
+
+    <string-array name="thermostat4">
+        <item>Settings for the fourth thermostat</item>
+        <item>
+            SOURCE:
+            \n0 - неопределено
+            \n1 - Temp Sensors 1
+            \n2 - Temp Sensors 2
+            \n3 - Temp Sensors 3
+            \n4 - Temp Sensors 4
+            \n5 - from BMS
+            \n6 - Curtis, inverter temp sensor
+            \n7 - Curtis, motor temp sensor
+
+            \n\nTYPE: (Thermostat types)
+            \n0 - turn on when the temperature rises
+            \n1 - turn on when the temperature drops
+            \n2 - switching on when ignition or charge is turned on. Increase PWM duty cycle when exceeded (start temp).
+
+            \n\n\nDescription of the thermostat types:
+
+            \n\n◦ SWITCHING ON WHEN THE TEMPERATURE RISES -> 0
+            \n\nFor the logical output (Power Output), when the measured temperature exceeds of the
+            measured temperature above (high temp), a logical 1 is sent to the output.
+            logical 1. When the temperature drops below (low temp)a logical 0 is output. This
+            provides for temperature hysteresis.
+
+            \n▪ For PWM output. If the temperature exceeds (low temp) PWM is turned on at (start pwm)
+            and rises to (hight temp), at which Reaching which it takes the value (max pwm).
+
+            \n\n\n◦ SWITCHING ON WHEN THE TEMPERATURE DROPS -> 1
+            \n\nFor the logic output (Power Output) when the temperature to be measured drops below
+            (low temp). of the measured temperature below (low temp), a logical 1.
+            If the temperature rises above (high temp) a logical 0 is output.
+
+            \n▪ For PWM output. If the temperature decreases below (hight temp) the PWM is switched
+            on at (start pwm) and rises to (low temp), when reached, it takes the value (max pwm).
+
+            \n\n\n◦ TURNS ON WHEN THE IGNITION OR CHARGE IS TURNED ON -> 2
+
+            \n\n▪ For PWM output. When the ignition or charger is switched on the PWM on (start pwm) is
+            switched on. When the temperature exceeds temperature (low temp) the PWM duty cycle
+            rises to (hight temp), when reached, it takes the value (max pwm).
+
+            \n▪ Not implemented for the logic output.
+        </item>
+        <item>SOURCE,6</item>
+        <item>TYPE,0</item>
+        <item>OUT TYPE,2</item>
+        <item>OUT NUMBER,1</item>
+        <item>LOW TEMP,35</item>
+        <item>HIGH TEMP,40</item>
+        <item>START PWM,150</item>
+        <item>MAX PWM,245</item>
+    </string-array>
+
+    <string-array name="temptypes">
+        <item>Temperature sensor type settings</item>
+        <item>
+            SENSOR TYPES:
+            \n0     - NTC 3,3k
+            \n1     - NTC 3,0k
+            \n2     - NTC 4,7k
+            \n3     - NTC 10k
+            \n11    - kty83
+            \n12    - kty84.
+        </item>
+        <item>SENSOR 1,0</item>
+        <item>SENSOR 2,0</item>
+        <item>SENSOR 3,0</item>
+        <item>SENSOR 4,0</item>
+    </string-array>
+
+    <string-array name="speed">
+        <item>Speed sensor settings</item>
+        <item>
+            INP TYPE:
+            \n0    - undefined
+            \n2    - Opto inputs
+            \n4    - Speed inputs
+            \n5    - RS485-sensor
+
+            \n\nFor RS485 sensors there are several possible ways of interpreting parameters:
+            \n1. Sensor outputting pseudo-RPM. This is the number of responses per second multiplied
+            by 60. A simple sensor with a hall sensor on board.
+
+            \n\n2. Sensor which gives out real RPM. This can be an adapter controller.
+
+            \n\n3. A sensor which gives out speed. For example a GPS sensor. For all types (inp num)
+            will be the address on the bus. If there is only one sensor then this value is usually
+            equal to 1.
+            \n\nFor step 1 (rotation poles) is the number of times the sensor is triggered per revolution
+            multiplied by the reduction, if the sensor is installed on the motor axis. If the reduction
+            is not an integer, the correct speed readings will have to be If the reduction is not an
+            integer then the correct speed readings have to be adjusted with the (wheel length mm)
+            modification.
+            \n\nFor steps 2 (rotation poles) is the reduction value.
+            \n\nFor steps 3 (rotation poles) and (wheel length mm) have no meaning and will be ignored.
+
+            \n\nWarning. The first revision of the device requires a restart after speed sensor settings!
+        </item>
+        <item>INP TYPE,4</item>
+        <item>INP NUMBER,1</item>
+        <item>WHEEL LENGTH (mm),1995</item>
+        <item>ROTATION POLES,6</item>
+    </string-array>
+
+    <string-array name="rpm">
+        <item>Motor rotation settings</item>
+        <item>
+            INP TYPE:
+            \n0   - undefined
+            \n2   - Opto inputs
+            \n4   - Speed inputs
+        </item>
+        <item>INP TYPE,4</item>
+        <item>INP NUMBER,1</item>
+        <item>ROTATION POLES,6</item>
+    </string-array>
+
+    <string-array name="battery">
+        <item>Battery capacity settings</item>
+        <item>
+           Battery capacity in AmpereHour
+        </item>
+        <item>CAPACITY (Ah),100</item>
+    </string-array>
+
+    <string-array name="chtemp">
+        <item>Charging temperature limits</item>
+        <item>
+            MIN TEMP:
+            \nMinimum allowable temperature in degrees Celsius during charging.
+
+            \n\nMAX TEMP:
+            \nMaximum allowed temperature during charge
+
+            \n\nTo disable control, run the command  -101 and 101
+        </item>
+        <item>MIN TEMP (℃),0</item>
+        <item>MAX TEMP (℃),40</item>
+    </string-array>
+
+    <string-array name="pwrtemp">
+        <item>Discharging temperature limits</item>
+        <item>
+            MIN TEMP:
+            \nMinimum allowable temperature in degrees Celsius during discharging.
+
+            \n\nMAX TEMP:
+            \nMaximum allowed temperature during discharge
+
+            \n\nTo disable control, run the command  -101 and 101
+        </item>
+        <item>MIN TEMP (℃),0</item>
+        <item>MAX TEMP (℃),40</item>
+    </string-array>
+
+    <string-array name="can">
+        <item>CAN speed settings
+        \nWARNING! Device need reboot for apply changes!</item>
+        <item>
+            BUS SPEED:
+            \n1    - 125k
+            \n2    - 250k
+            \n3    - 500k
+        </item>
+        <item>BUS SPEED,0</item>
+    </string-array>
+
+    <string-array name="accell">
+        <item>Accelerator pedal settings</item>
+        <item>
+            ADC INP:
+            \nThe number of the input. From which the voltage that determines the throttle pedal
+            position will be read.
+
+            \n\nBACKWARD MAX (mv):
+            \nValue at which backward speed will be maximum.
+
+            \n\nBACKWARD MIN (mv):
+            \nThe start of backward rotation of the engine.
+
+            \n\nFORWARD MAX (mv):
+            \nStart of engine forward rotation.
+
+            \n\nFORWARD MAX (mv):
+            \nMaximum forward speed.
+
+            \n\nIf all levels are entered - it is like controlling a joystick. If only forward
+            movement, the values (Backward max) and (Backward min) must be 0.
+        </item>
+        <item>ADC INP,4</item>
+        <item>BACKWARD MAX (mv),1000</item>
+        <item>BACKWARD MIN (mv),2000</item>
+        <item>FORWARD MAX (mv),3000</item>
+        <item>FORWARD MAX (mv),4000</item>
+    </string-array>
+
+    <string-array name="alarm">
+        <item>Alarm beeper settings</item>
+        <item>
+            OUT NUM:
+            \nThe number of the output to which the 12v will be fed when an error occurs.
+
+            \n\nMAX TEMP (℃):
+            \nThe temperature value on any of the cells at which the alarm the alarm will be triggered.
+            In degrees Celsius.
+        </item>
+        <item>OUT NUMBER,4</item>
+        <item>MAX TEMP (℃),1000</item>
     </string-array>
 
 </resources>

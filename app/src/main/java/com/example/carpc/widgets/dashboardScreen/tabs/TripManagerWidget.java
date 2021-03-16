@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-
 import com.example.carpc.R;
 import com.example.carpc.utils.DataParser;
 import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
@@ -44,9 +42,13 @@ public class TripManagerWidget extends AbstractDashboardWidget {
         passedDistanceTextView.post(new Runnable() {
             @Override
             public void run() {
-                passedDistanceTextView.setText(String.valueOf(Math.round(data.getLastChargePassedDistance())));
-                rangeDistanceTextView.setText(String.valueOf(Math.round(data.getRange())));
-                totalTripTextView.setText(String.valueOf(Math.round(data.getTotalDistance())));
+                try {
+                    passedDistanceTextView.setText(String.valueOf(Math.round(data.getLastChargePassedDistance())));
+                    rangeDistanceTextView.setText(String.valueOf(Math.round(data.getRange())));
+                    totalTripTextView.setText(String.valueOf(Math.round(data.getTotalDistance())));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

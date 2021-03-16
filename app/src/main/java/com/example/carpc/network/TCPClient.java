@@ -86,6 +86,9 @@ public class TCPClient implements Closeable {
                         scanner = new Scanner(socket.getInputStream());
                         readInputStream();
                         connectionState = true;
+                        if (ConnectionTab.isVisible) {
+                            ConnectionTab.setConnectionStateIndicator(true);
+                        }
                         if (subscribe) {
                             sendMessage(AppConstants.SUBSCRIBE);
                         } else {
@@ -95,6 +98,9 @@ public class TCPClient implements Closeable {
 
                 } catch (IOException e) {
                     connectionState = false;
+                    if (ConnectionTab.isVisible) {
+                        ConnectionTab.setConnectionStateIndicator(false);
+                    }
                     if (reconnect) createConnection(address, port, subscribe);
                     e.printStackTrace();
                 }
@@ -108,20 +114,17 @@ public class TCPClient implements Closeable {
             public void run() {
                 while (connectionState) {
                     try {
-
                         socket.setSoTimeout(0);
                         if (scanner.hasNextLine()) {
                             inputMessage = scanner.nextLine();
+                            Log.i(TAG + "_INPUT_MESSAGE", inputMessage);
                             message.setMessage(inputMessage, true);
-
                             DataParser data = DataParser.getInstance().parseInputData(inputMessage);
                             if(networkListeners != null) {
 
                                 for(TCPClientListener listener : networkListeners) {
                                     listener.OnDataReceive(data);
                                 }
-
-//                                listener.OnDataReceive(data);
                             }
                         }
                     } catch (Exception e) {
@@ -130,7 +133,7 @@ public class TCPClient implements Closeable {
                         connectionState = false;
 
                         if (ConnectionTab.isVisible) {
-                            ConnectionTab.setConnectionStateIndicator();
+                            ConnectionTab.setConnectionStateIndicator(false);
                         }
                         e.printStackTrace();
                     }
@@ -150,12 +153,14 @@ public class TCPClient implements Closeable {
                 try {
                     printWriter = new PrintWriter(socket.getOutputStream(), true);
                     printWriter.println(message);
-                    Thread.sleep(1);
+                    Log.i(TAG + "_SEND_MESSAGE", message);
+
+//                    Thread.sleep(1);
                     if (!connectionState) Thread.currentThread().interrupt();
                 } catch (Exception e) {
                     connectionState = false;
                     if (ConnectionTab.isVisible) {
-                        ConnectionTab.setConnectionStateIndicator();
+                        ConnectionTab.setConnectionStateIndicator(false);
                     }
                     e.printStackTrace();
                     Thread.currentThread().interrupt();

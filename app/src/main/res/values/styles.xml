@@ -18,6 +18,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@drawable/ico_backgroud</item>
+<!--        <item name="android:background">@android:color/holo_blue_dark</item>-->
+
     </style>
 
     <style name="MyCheckBoxDark" parent="Theme.AppCompat.Light.NoActionBar">

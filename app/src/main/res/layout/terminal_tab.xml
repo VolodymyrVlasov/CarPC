@@ -49,7 +49,9 @@
                         android:gravity="bottom"
                         android:scrollbars="vertical"
                         android:textColor="@android:color/darker_gray"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:maxLines="50"
+                        />
                 </ScrollView>
 
             </LinearLayout>

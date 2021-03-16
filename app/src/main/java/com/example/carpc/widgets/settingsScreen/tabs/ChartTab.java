@@ -114,8 +114,7 @@ public class ChartTab extends AbstractDashboardWidget {
         barChart.getAxisLeft().setDrawZeroLine(false);
         barChart.getAxisLeft().setDrawLabels(false);
 
-
-
+        barChart.getXAxis().setTextColor(COLOR_GREY);
         barChart.getXAxis().setDrawGridLines(false);
         barChart.getXAxis().setDrawAxisLine(false);
         barChart.getXAxis().setDrawLabels(true);
@@ -128,13 +127,10 @@ public class ChartTab extends AbstractDashboardWidget {
         barChart.getAxisRight().setDrawZeroLine(false);
         barChart.getAxisRight().setDrawLabels(false);
 
-
-
-
         // remove description
-//        Description description = new Description();
-//        description.setEnabled(false);
-//        barChart.setDescription(description);
+        Description description = new Description();
+        description.setEnabled(false);
+        barChart.setDescription(description);
 
         // set animation
         barChart.animateY(1000);
@@ -144,7 +140,7 @@ public class ChartTab extends AbstractDashboardWidget {
         yAxis.setAxisMaximum(DataParser.getInstance().getMaxConfigVoltage() + 100);
         yAxis.setAxisMinimum(900);
 
-        barChart.getXAxis().setLabelCount(10,true);
+        barChart.getXAxis().setLabelCount(12,true);
 
         barChart.getXAxis().setTextColor(COLOR_GREY);
         barChart.getAxisLeft().setTextColor(COLOR_GREY);
@@ -184,10 +180,10 @@ public class ChartTab extends AbstractDashboardWidget {
 
     private void addBarData(float x, float y, int color) {
         // set color for x
-        colors.set((int) x  , color);
+        colors.set((int) x, color);
 
         // update/set bar data with index x
-        barEntries.set((int) x , new BarEntry(x, y));
+        barEntries.set((int) x, new BarEntry(x, y));
         barChart.invalidate();
 
     }

@@ -48,8 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="7dp"
                     android:layout_weight="0.3"
-                    android:text="Lorem ipsum"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/materialGray"
                     android:textSize="15sp" />
             </LinearLayout>
 
@@ -99,8 +98,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="7dp"
                     android:layout_weight="0.3"
-                    android:text="Lorem ipsum"
-                    android:textColor="@android:color/darker_gray"
+                    android:linksClickable="true"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/materialGrayHint"
                     android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>

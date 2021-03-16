@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="diagGroupList">
+        <item>Inputs</item>
+        <item>Outputs</item>
+        <item>Cell monitoring</item>
+        <item>States</item>
+        <item>Errors</item>
+        <item>System</item>
+    </string-array>
+
+</resources>

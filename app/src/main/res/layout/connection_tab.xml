@@ -44,7 +44,8 @@
                     android:layout_weight="2"
                     android:backgroundTint="@android:color/darker_gray"
                     android:inputType="text"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"
+                    android:nextFocusForward="@+id/server_port"/>
 
             </LinearLayout>
 
