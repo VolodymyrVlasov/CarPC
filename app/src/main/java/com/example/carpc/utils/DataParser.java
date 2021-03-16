@@ -108,6 +108,7 @@ public class DataParser {
     private void putConfigValue(String inputData) {
         String[] cmd = inputData.substring(10).trim().split(" = ");
         for (ParserKey key : ParserKey.values()) {
+            // TODO: if CONFIG_CELLS_QUANTITY -> write value to shared preference
             if (cmd[0].equals(key.getValue())) {
                 parserData.put(key, cmd[1]);
                 Log.i(TAG + "_CONFIG_VALUE", key + ": " + cmd[1]);
@@ -123,10 +124,6 @@ public class DataParser {
                 Log.i(TAG + "_ACTUAL_VALUE", key + ": " + inputData.substring(2));
             }
         }
-    }
-
-    public Integer getMaxConfigVoltage() {
-        return Integer.parseInt(parserData.get(ParserKey.LEVELS_MAX)) != 0 ? Integer.parseInt(parserData.get(ParserKey.LEVELS_MAX)) : 4200;
     }
 
     public Integer getSpeed() {
@@ -238,6 +235,7 @@ public class DataParser {
             case "startbal":
                 return parserData.get(ParserKey.LEVELS_STARTBAL);
             case "cells":
+                // TODO: if zero -> read from shared preference
                 return parserData.get(ParserKey.CONFIG_CELLS_QUANTITY);
             default:
                 return "0";
