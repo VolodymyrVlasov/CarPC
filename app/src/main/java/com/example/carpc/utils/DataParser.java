@@ -1,7 +1,6 @@
 package com.example.carpc.utils;
 
 import android.util.Log;
-
 import java.util.EnumMap;
 
 enum ParserKey {
@@ -37,8 +36,6 @@ enum ParserKey {
     CONFIG_ALARM_BEEPER("alarm"),
     CONFIG_CELLS_QUANTITY("cells"),
 
-    // cmd = value
-
     // Actual values
     SPEED("V"),
     MAX_CELL_VOLT("m"),
@@ -61,9 +58,7 @@ enum ParserKey {
     MOTOR_TEMP("d"),
     INVERTOR_TEMP("e"),
     RPM("r"),
-
     CELL("cell");
-    // &c100
 
     private String value;
 
@@ -81,21 +76,10 @@ public class DataParser {
     private static DataParser instance = null;
     private static EnumMap<ParserKey, String> parserData = new EnumMap<>(ParserKey.class);
 
-
     private DataParser() {
-//         TODO: change init values
         for (ParserKey key : ParserKey.values()) {
             parserData.put(key, "0");
         }
-//        Log.i(TAG, "init values");
-//        parserData.put(ParserKey.TEMP_SENSORS, ":0:0:0:0");
-//        parserData.put(ParserKey.LEVELS_MIN, "3200");
-//        parserData.put(ParserKey.LEVELS_MAX, "4200");
-//        parserData.put(ParserKey.LEVELS_ALLOWD, "3500");
-//        parserData.put(ParserKey.CONFIG_CELLS_QUANTITY, "36");
-//        parserData.put(ParserKey.CELL_INFO, "1:4000:200:150:5:8");
-//        parserData.put(ParserKey.ANALOG_INPUTS, ":1200:1350:500:150:553:887");
-//        parserData.put(ParserKey.CELL, "cell1: 4000:200:150:5:8");
     }
 
     public static DataParser getInstance() {
@@ -106,24 +90,20 @@ public class DataParser {
     }
 
     public DataParser parseInputData(String inputData) throws NullPointerException {
-        Log.i(TAG +"_INPUT_DATA", "inputData : " + inputData);
+        Log.i(TAG + "_INPUT_DATA", "inputData : " + inputData);
         if (inputData.contains("&")) {
-            Log.i(TAG, "inputData contain \"&\" so call putActualValue()");
+            Log.i(TAG + "_INPUT_DATA_CONTAIN", "\"&\" -> putActualValue()");
             putActualValue(inputData);
         } else if (inputData.contains("=")) {
-            Log.i(TAG, "inputData contain \"=\", so call putConfigValue()");
+            Log.i(TAG + "_INPUT_DATA_CONTAIN", "\"=\" -> putConfigValue()");
             putConfigValue(inputData);
         } else if (inputData.toLowerCase().contains("cell")) {
-            Log.i(TAG, "inputData contain \"cell\" so call parserData.put(ParserKey.CELL, inputData)");
-            parserData.put(ParserKey.CELL, inputData);     // cell1: 4000,20,20,5,6
+            Log.i(TAG + "_INPUT_DATA_CONTAIN", "\"cell\" -> parserData.put(ParserKey.CELL, inputData)");
+            parserData.put(ParserKey.CELL, inputData);
         }
         return this;
     }
 
-    /**
-     * ??levels>?? cmin = 4200
-     * cmd[0] -> cmin, cmd[1] -> 4200
-     */
     private void putConfigValue(String inputData) {
         String[] cmd = inputData.substring(10).trim().split(" = ");
         for (ParserKey key : ParserKey.values()) {
@@ -169,7 +149,6 @@ public class DataParser {
     }
 
     public Double getRange() {
-        // todo: can produce NumberFormatException nee FIX
         return Double.parseDouble(parserData.get(ParserKey.RANGE)) / 10;
     }
 
@@ -213,11 +192,11 @@ public class DataParser {
         return parserData.get(ParserKey.CELL_INFO);
     }
 
-    public Double getTempSensorValue(int sensNumber) {
+    public Double getTempSensorValue(int sensorNumber) {
         String temp = parserData.get(ParserKey.TEMP_SENSORS);
         assert temp != null;
         String[] arr = temp.split(":");
-        return Double.parseDouble(arr[sensNumber]) / 10;
+        return Double.parseDouble(arr[sensorNumber]) / 10;
     }
 
     public String getTransmittedData() {
@@ -229,50 +208,14 @@ public class DataParser {
     }
 
     public String getConfigDataByCmdName(String keyName) {
-        switch (keyName) {
-            case "current":
-                return parserData.get(ParserKey.CONFIG_CURRENT);
-            case "ignition":
-                return parserData.get(ParserKey.CONFIG_IGNITION);
-            case "power":
-                return parserData.get(ParserKey.CONFIG_POWER);
-            case "precharge":
-                return parserData.get(ParserKey.CONFIG_PRECHARGE);
-            case "maincontactor":
-                return parserData.get(ParserKey.CONFIG_MAIN_CONTACTOR);
-            case "chcurrentmax":
-                return parserData.get(ParserKey.CONFIG_CHARGE_CURRENT_MAX);
-            case "discurrentmax":
-                return parserData.get(ParserKey.CONFIG_DISCHARGE_CURRENT_MAX);
-            case "thermostat1":
-                return parserData.get(ParserKey.CONFIG_THERMOSTAT_1);
-            case "thermostat2":
-                return parserData.get(ParserKey.CONFIG_THERMOSTAT_2);
-            case "thermostat3":
-                return parserData.get(ParserKey.CONFIG_THERMOSTAT_3);
-            case "thermostat4":
-                return parserData.get(ParserKey.CONFIG_THERMOSTAT_4);
-            case "temptypes":
-                return parserData.get(ParserKey.CONFIG_TEMP_SENS_TYPE);
-            case "speed":
-                return parserData.get(ParserKey.CONFIG_SPEED);
-            case "rpm":
-                return parserData.get(ParserKey.CONFIG_RPM);
-            case "battery":
-                return parserData.get(ParserKey.CONFIG_BATTERY_CAPACITY);
-            case "chtemp":
-                return parserData.get(ParserKey.CONFIG_CHARGING_TEMP);
-            case "pwrtemp":
-                return parserData.get(ParserKey.CONFIG_DISCHARGING_TEMP);
-            case "can":
-                return parserData.get(ParserKey.CONFIG_CAN);
-            case "accell":
-                return parserData.get(ParserKey.CONFIG_ACCELERATOR);
-            case "alarm":
-                return parserData.get(ParserKey.CONFIG_ALARM_BEEPER);
-            default:
-                return "0";
+        String data = "0";
+        for (ParserKey key : ParserKey.values()) {
+            if (key.getValue().equals(keyName)) {
+                data = parserData.get(key);
+                break;
+            }
         }
+        return data;
     }
 
     public String getLevelsDataByCmdName(String keyName) {
@@ -297,5 +240,4 @@ public class DataParser {
                 return "0";
         }
     }
-
 }

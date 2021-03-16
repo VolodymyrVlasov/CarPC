@@ -153,8 +153,6 @@ public class ConfiguratorTab extends Fragment {
             listView.setAdapter(adapter);
             listView.setLayoutParams(setListViewHeight(listView, adapter));
             listView.requestLayout();
-
-//            Toast.makeText(getContext(), newConfig, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,11 +163,14 @@ public class ConfiguratorTab extends Fragment {
 
         for (int i = 0; i < adapter.getCount(); i++) {
             if (adapter.getItem(i).isConfigValueEmpty()) {
-                Toast.makeText(getContext(), "All input fields shouldn`t be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "All input fields shouldn`t be empty",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
         }
+
         try {
+
             for (int i = 0; i < adapter.getCount(); i++) {
                 String cmdName = adapter.getItem(i).getCmdName();
                 String resultCommand = cmdName + " " + adapter.getItem(i).getConfigValue();
@@ -180,13 +181,12 @@ public class ConfiguratorTab extends Fragment {
                 tcpClient.sendMessage(resultCommand);
             }
 
-            Toast.makeText(this.getContext(), "Please wait for 30 sec while server synchronize" +
-                    " ", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(), "Please wait for 30 sec while server synchronize",
+                    Toast.LENGTH_LONG).show();
             tcpClient.sendMessage("sync 1");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void readLevelsFromSever() {
@@ -218,6 +218,7 @@ public class ConfiguratorTab extends Fragment {
                     adapter.getItem(i).setConfigValue(newConfigValue);
                 }
             }
+
             adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
@@ -232,7 +233,8 @@ public class ConfiguratorTab extends Fragment {
     private void getSelectedSpinnerData(int configId) {
         HashMap<Integer, String> configurationMap = getConfigurationMap();
         String arrayKeyName = configurationMap.get(configId);
-        int idName = this.getResources().getIdentifier(arrayKeyName, "array", getContext().getPackageName());
+        int idName = this.getResources().getIdentifier(arrayKeyName, "array",
+                Objects.requireNonNull(getContext()).getPackageName());
         String[] rawData = getContext().getResources().getStringArray(idName);
         ArrayList<ConfigData> filteredData = new ArrayList<>();
 
@@ -283,6 +285,7 @@ public class ConfiguratorTab extends Fragment {
 
     private ViewGroup.LayoutParams setListViewHeight(ListView listView, ConfigAdapter adapter) {
         int totalHeight = 0;
+
         for (int i = 0; i < adapter.getCount(); i++) {
             View listItem = adapter.getView(i, null, listView);
             listItem.measure(0, 0);
@@ -298,6 +301,7 @@ public class ConfiguratorTab extends Fragment {
         HashMap<Integer, String> cmdNameList = getConfigurationMap();
         TCPClient tcpClient = TCPClient.getInstance(getContext());
         try {
+
             for (int i = 0; i < cmdNameList.size(); i++) {
                 tcpClient.sendMessage("..");
                 Thread.sleep(2);
@@ -325,6 +329,7 @@ public class ConfiguratorTab extends Fragment {
                     Thread.sleep(10);
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

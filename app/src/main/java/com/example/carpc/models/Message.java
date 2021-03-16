@@ -6,7 +6,7 @@ public class Message {
     private int messageCount;
     private boolean newMessageFlag = false;
 
-    private StringBuilder msg;
+    private final StringBuilder msg;
 
     public Message() {
         this.messageCount = 0;
@@ -18,7 +18,7 @@ public class Message {
         if (!message.equals("")){
             this.messageCount++;
             newMessageFlag = newMessage;
-            this.msg.append(messageCount + ":\t\t" + message + "\n");
+            this.msg.append(messageCount).append(":\t\t").append(message).append("\n");
         }
     }
 
