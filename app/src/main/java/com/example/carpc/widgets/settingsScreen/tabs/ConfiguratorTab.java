@@ -93,19 +93,20 @@ public class ConfiguratorTab extends Fragment {
         return v;
     }
 
-
     private void writeToServer(String cmdName) {
         if (cmdName.equals("levels")) {
             writeLevelsToSever();
             return;
         }
         TCPClient tcpClient = TCPClient.getInstance(getContext());
+
         for (int i = 0; i < adapter.getCount(); i++) {
             if (adapter.getItem(i).isConfigValueEmpty()) {
                 Toast.makeText(getContext(), "All input fields shouldn`t be empty", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
+
         try {
             StringBuilder resultCommand = new StringBuilder(cmdName + " ");
 
@@ -136,6 +137,7 @@ public class ConfiguratorTab extends Fragment {
             return;
         }
         TCPClient tcpClient = TCPClient.getInstance(getContext());
+
         try {
             tcpClient.sendMessage("..");
             Thread.sleep(3);
@@ -196,23 +198,13 @@ public class ConfiguratorTab extends Fragment {
             for (int i = 0; i < adapter.getCount(); i++) {
                 String cmdName = adapter.getItem(i).getCmdName();
                 if (cmdName.equals("cells")) {
-                    tcpClient.sendMessage("..");
-                    Thread.sleep(2);
-                    tcpClient.sendMessage("config");
-                    Thread.sleep(2);
-                    tcpClient.sendMessage(cmdName);
-                    Thread.sleep(10);
+                    sendRequest("config", cmdName);
                     String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
                     Log.i(TAG, "newConfigValue: " + newConfigValue);
                     adapter.getItem(i).setConfigValue(newConfigValue);
                     break;
                 } else {
-                    tcpClient.sendMessage("..");
-                    Thread.sleep(2);
-                    tcpClient.sendMessage("levels");
-                    Thread.sleep(2);
-                    tcpClient.sendMessage(cmdName);
-                    Thread.sleep(15);
+                    sendRequest("levels", cmdName);
                     String newConfigValue = DataParser.getInstance().getLevelsDataByCmdName(cmdName);
                     Log.i(TAG, "newConfigValue: " + newConfigValue);
                     adapter.getItem(i).setConfigValue(newConfigValue);
@@ -223,6 +215,39 @@ public class ConfiguratorTab extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void readAllConfigParamsFromCarPC() {
+        try {
+            HashMap<Integer, String> cmdNameList = getConfigurationMap();
+
+            for (int i = 0; i < cmdNameList.size(); i++) {
+                sendRequest("config", cmdNameList.get(i));
+            }
+
+            for (int i = 0; i < adapter.getCount(); i++) {
+                boolean t = adapter.getItem(i).getCmdName().equals("cells") ?
+                        sendRequest("config", adapter.getItem(i).getCmdName()) :
+                        sendRequest("levels", adapter.getItem(i).getCmdName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean sendRequest(String group, String command) {
+        try {
+            TCPClient tcpClient = TCPClient.getInstance(getContext());
+            tcpClient.sendMessage("..");
+            Thread.sleep(2);
+            tcpClient.sendMessage(group);
+            Thread.sleep(2);
+            tcpClient.sendMessage(command);
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     private void updateSpinnerDescriptions(String descriptionText, String helpText) {
@@ -295,44 +320,6 @@ public class ConfiguratorTab extends Fragment {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
         return params;
-    }
-
-    private void readAllConfigParamsFromCarPC() {
-        HashMap<Integer, String> cmdNameList = getConfigurationMap();
-        TCPClient tcpClient = TCPClient.getInstance(getContext());
-        try {
-
-            for (int i = 0; i < cmdNameList.size(); i++) {
-                tcpClient.sendMessage("..");
-                Thread.sleep(2);
-                tcpClient.sendMessage("config");
-                Thread.sleep(2);
-                tcpClient.sendMessage(cmdNameList.get(i));
-                Thread.sleep(5);
-            }
-
-            for (int i = 0; i < adapter.getCount(); i++) {
-                if (adapter.getItem(i).getCmdName().equals("cells")) {
-                    tcpClient.sendMessage("..");
-                    Thread.sleep(2);
-                    tcpClient.sendMessage("config");
-                    Thread.sleep(2);
-                    tcpClient.sendMessage(adapter.getItem(i).getCmdName());
-                    Thread.sleep(10);
-                    break;
-                } else {
-                    tcpClient.sendMessage("..");
-                    Thread.sleep(2);
-                    tcpClient.sendMessage("levels");
-                    Thread.sleep(2);
-                    tcpClient.sendMessage(adapter.getItem(i).getCmdName());
-                    Thread.sleep(10);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
 

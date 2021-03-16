@@ -52,7 +52,6 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
         btnConnect = v.findViewById(R.id.btnConnect);
         btnDisconnect = v.findViewById(R.id.btnDisconnect);
 
-        // set values
         serverAddress.setText(dataPrefs.getIP());
         serverPort.setText(String.valueOf(dataPrefs.getPort()));
 
@@ -61,20 +60,6 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
             myNetworkAddress.setText(localIpAddress);
             setConnectionStateIndicator(true);
         }
-
-        /**
-         *  messageToSend.setOnKeyListener(new View.OnKeyListener() {
-         *
-         *             @Override
-         *             public boolean onKey(View v, int keyCode, KeyEvent event) {
-         *                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-         *                     String temp = messageToSend.getText().toString();
-         *                     if (!temp.equals("")) sendMessage(temp);
-         *                 }
-         *                 return false;
-         *             }
-         *         });
-         */
 
         serverPort.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -87,7 +72,6 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
                         updateConnectionParams(serverAddress.getText().toString(), Integer.parseInt(serverPort.getText().toString()));
                     }
                 }
-
                 return false;
             }
         });
@@ -133,10 +117,8 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     public void updateConnectionParams(String ip, int port) {
         dataPrefs.setIP(ip);
         dataPrefs.setPort(port);
-        // TODO: add commit to data prefs
         tcpClient.createConnection(ip, port, false);
     }
-
 
     public static void setConnectionStateIndicator(boolean stateIndicator) {
         setConnectBtnState(stateIndicator);

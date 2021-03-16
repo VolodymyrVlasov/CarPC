@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,7 +14,6 @@ import com.example.carpc.R;
 import com.example.carpc.network.TCPClient;
 import com.example.carpc.utils.DataParser;
 import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -53,11 +53,8 @@ public class ChartTab extends AbstractDashboardWidget {
         setRetainInstance(true);
 
         barChart = (HorizontalBarChart) v.findViewById(R.id.lineChart);
-
         int xAxisQuantity = DataParser.getInstance().getCellsQuantity();
-
         colors = new ArrayList<Integer>(xAxisQuantity);
-
         barEntries = new ArrayList<BarEntry>(xAxisQuantity);
 
         // set default values with 999 bar height and grey color
@@ -121,7 +118,6 @@ public class ChartTab extends AbstractDashboardWidget {
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getXAxis().setTextSize(15f);
 
-
         barChart.getAxisRight().setDrawGridLines(false);
         barChart.getAxisRight().setDrawAxisLine(false);
         barChart.getAxisRight().setDrawZeroLine(false);
@@ -140,14 +136,11 @@ public class ChartTab extends AbstractDashboardWidget {
         yAxis.setAxisMaximum(DataParser.getInstance().getMaxConfigVoltage() + 100);
         yAxis.setAxisMinimum(900);
 
-        barChart.getXAxis().setLabelCount(12,true);
-
+        barChart.getXAxis().setLabelCount(12, true);
         barChart.getXAxis().setTextColor(COLOR_GREY);
         barChart.getAxisLeft().setTextColor(COLOR_GREY);
 
-
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 float voltage = e.getX();
@@ -160,7 +153,6 @@ public class ChartTab extends AbstractDashboardWidget {
             public void onNothingSelected() {
             }
         });
-
     }
 
     private void updateChartDescriptionDataOnSelect(float voltage, float cellIndex) {
@@ -169,13 +161,19 @@ public class ChartTab extends AbstractDashboardWidget {
     }
 
     private void addBarData(float x, float y, float min, float max, float allowd) {
-        // set color for x
-        colors.set((int) x - 1, getBarColor(y, min, max, allowd));
-        // todo: fix 0 index
-        // update/set bar data with index x
-        barEntries.set((int) x - 1, new BarEntry(x, y));
-        barChart.invalidate();
-
+        try {
+            // set color for x
+            colors.set((int) x - 1, getBarColor(y, min, max, allowd));
+            // todo: fix 0 index
+            // update/set bar data with index x
+            barEntries.set((int) x - 1, new BarEntry(x, y));
+            barChart.invalidate();
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            Toast.makeText(this.getContext(),
+                    "Cant make diagram. Check connection or Cells configuration on \"config\" directory",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     private void addBarData(float x, float y, int color) {
@@ -200,14 +198,12 @@ public class ChartTab extends AbstractDashboardWidget {
         } else if (voltageData < allowd && voltageData > min) {
             return this.YELLOW_COLOR;
         } else {
-            return this.COLOR_GREY; // if another case return also gery color
+            return this.COLOR_GREY; // if another case return also grey color
         }
     }
 
     @Override
     public void updateUI(final DataParser data) {
-//        Log.i(FRAGMENT_TAG, "isInitialized " + isInitialized + " array size " + colors.size() + " size2 " + barEntries.size());
-
         if (!isInitialized) {
             return;
         }
@@ -221,8 +217,6 @@ public class ChartTab extends AbstractDashboardWidget {
         final float min = Float.parseFloat(data.getLevelsDataByCmdName("min"));
         final float max = Float.parseFloat(data.getLevelsDataByCmdName("max"));
         final float allowd = Float.parseFloat(data.getLevelsDataByCmdName("allowd"));
-
-//        Log.i(FRAGMENT_TAG, " data " + groupIndex + " " + groupValue[0] + " " + min + " " + max + " " + allowd);
 
         barChart.post(new Runnable() {
             @Override
