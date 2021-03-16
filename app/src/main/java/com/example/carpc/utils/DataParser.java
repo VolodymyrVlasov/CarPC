@@ -1,6 +1,7 @@
 package com.example.carpc.utils;
 
 import android.util.Log;
+
 import java.util.EnumMap;
 
 enum ParserKey {
@@ -125,7 +126,7 @@ public class DataParser {
     }
 
     public Integer getMaxConfigVoltage() {
-        return Integer.valueOf(parserData.get(ParserKey.LEVELS_MAX));
+        return Integer.parseInt(parserData.get(ParserKey.LEVELS_MAX)) != 0 ? Integer.parseInt(parserData.get(ParserKey.LEVELS_MAX)) : 4200;
     }
 
     public Integer getSpeed() {
@@ -204,7 +205,9 @@ public class DataParser {
     }
 
     public Integer getCellsQuantity() {
-        return Integer.parseInt(parserData.get(ParserKey.CONFIG_CELLS_QUANTITY));
+        return Integer.parseInt(parserData.get(ParserKey.CONFIG_CELLS_QUANTITY)) != 0 ?
+                Integer.parseInt(parserData.get(ParserKey.CONFIG_CELLS_QUANTITY)) :
+                34;
     }
 
     public String getConfigDataByCmdName(String keyName) {
@@ -223,11 +226,11 @@ public class DataParser {
             case "cmin":
                 return parserData.get(ParserKey.LEVELS_CMIN);
             case "min":
-                return parserData.get(ParserKey.LEVELS_MIN);
+                return parserData.get(ParserKey.LEVELS_MIN).equals("0") ? "3000" : parserData.get(ParserKey.LEVELS_MIN);
             case "max":
-                return parserData.get(ParserKey.LEVELS_MAX);
+                return parserData.get(ParserKey.LEVELS_MAX).equals("0") ? "4200" : parserData.get(ParserKey.LEVELS_MAX);
             case "allowd":
-                return parserData.get(ParserKey.LEVELS_ALLOWD);
+                return parserData.get(ParserKey.LEVELS_ALLOWD).equals("0") ? "3500" : parserData.get(ParserKey.LEVELS_ALLOWD);
             case "chrgd":
                 return parserData.get(ParserKey.LEVELS_CHRGD);
             case "bal":
