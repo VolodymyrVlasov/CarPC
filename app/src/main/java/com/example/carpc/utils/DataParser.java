@@ -1,6 +1,7 @@
 package com.example.carpc.utils;
 
 import android.util.Log;
+
 import java.util.EnumMap;
 
 enum ParserKey {
@@ -107,6 +108,7 @@ public class DataParser {
     private void putConfigValue(String inputData) {
         String[] cmd = inputData.substring(10).trim().split(" = ");
         for (ParserKey key : ParserKey.values()) {
+            // TODO: if CONFIG_CELLS_QUANTITY -> write value to shared preference
             if (cmd[0].equals(key.getValue())) {
                 parserData.put(key, cmd[1]);
                 Log.i(TAG + "_CONFIG_VALUE", key + ": " + cmd[1]);
@@ -122,10 +124,6 @@ public class DataParser {
                 Log.i(TAG + "_ACTUAL_VALUE", key + ": " + inputData.substring(2));
             }
         }
-    }
-
-    public Integer getMaxConfigVoltage() {
-        return Integer.valueOf(parserData.get(ParserKey.LEVELS_MAX));
     }
 
     public Integer getSpeed() {
@@ -204,7 +202,9 @@ public class DataParser {
     }
 
     public Integer getCellsQuantity() {
-        return Integer.parseInt(parserData.get(ParserKey.CONFIG_CELLS_QUANTITY));
+        return Integer.parseInt(parserData.get(ParserKey.CONFIG_CELLS_QUANTITY)) != 0 ?
+                Integer.parseInt(parserData.get(ParserKey.CONFIG_CELLS_QUANTITY)) :
+                34;
     }
 
     public String getConfigDataByCmdName(String keyName) {
@@ -223,11 +223,11 @@ public class DataParser {
             case "cmin":
                 return parserData.get(ParserKey.LEVELS_CMIN);
             case "min":
-                return parserData.get(ParserKey.LEVELS_MIN);
+                return parserData.get(ParserKey.LEVELS_MIN).equals("0") ? "3000" : parserData.get(ParserKey.LEVELS_MIN);
             case "max":
-                return parserData.get(ParserKey.LEVELS_MAX);
+                return parserData.get(ParserKey.LEVELS_MAX).equals("0") ? "4200" : parserData.get(ParserKey.LEVELS_MAX);
             case "allowd":
-                return parserData.get(ParserKey.LEVELS_ALLOWD);
+                return parserData.get(ParserKey.LEVELS_ALLOWD).equals("0") ? "3500" : parserData.get(ParserKey.LEVELS_ALLOWD);
             case "chrgd":
                 return parserData.get(ParserKey.LEVELS_CHRGD);
             case "bal":
@@ -235,6 +235,7 @@ public class DataParser {
             case "startbal":
                 return parserData.get(ParserKey.LEVELS_STARTBAL);
             case "cells":
+                // TODO: if zero -> read from shared preference
                 return parserData.get(ParserKey.CONFIG_CELLS_QUANTITY);
             default:
                 return "0";
