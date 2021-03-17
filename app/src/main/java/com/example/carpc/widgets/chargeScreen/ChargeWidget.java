@@ -15,6 +15,6 @@ public class ChargeWidget extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.charge_widget, container, false);
+        return inflater.inflate(R.layout.widget_charge, container, false);
     }
 }

@@ -27,7 +27,7 @@ public class DashboardWidget extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.dashboard_widget, container, false);
+        View v = inflater.inflate(R.layout.widget_dashboard, container, false);
 
         speedometerWidget = new SpeedometerWidget(); //+
         batteryManagerWidget = new BatteryManagerWidget();
@@ -46,21 +46,5 @@ public class DashboardWidget extends Fragment {
         fragmentTransaction.setCustomAnimations(R.animator.left_out, R.animator.right_out).replace(R.id.dashboardRightCont, tripManagerWidget);
         fragmentTransaction.commit();
         return v;
-    }
-
-    public SpeedometerWidget getSpeedometerWidget() {
-        return speedometerWidget;
-    }
-
-    public BatteryWidget getBatteryWidget() {
-        return batteryWidget;
-    }
-
-    public BatteryManagerWidget getBatteryManagerWidget() {
-        return batteryManagerWidget;
-    }
-
-    public TripManagerWidget getTripManagerWidget() {
-        return tripManagerWidget;
     }
 }

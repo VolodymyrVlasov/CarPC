@@ -42,7 +42,7 @@ public class ConfiguratorTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.car_pc_configuration, container, false);
+        View v = inflater.inflate(R.layout.tab_config, container, false);
         spinnerCategories = getContext().getResources().getStringArray(R.array.configurationGroupList);
         spinner = v.findViewById(R.id.configurationGroupList);
 

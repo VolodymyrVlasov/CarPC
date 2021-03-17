@@ -18,7 +18,7 @@ public class IconStatusRightWidget extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.icon_status_right_widget, null);
+        View v = inflater.inflate(R.layout.widget_icon_status_right, null);
 
         rightLight = v.findViewById(R.id.right_light);
         headLight = v.findViewById(R.id.head_light);

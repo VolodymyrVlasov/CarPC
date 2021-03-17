@@ -1,11 +1,14 @@
 package com.example.carpc;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -17,12 +20,10 @@ import com.example.carpc.models.Message;
 import com.example.carpc.network.TCPClient;
 import com.example.carpc.utils.AppConstants;
 import com.example.carpc.utils.Counter;
-import com.example.carpc.utils.DataParser;
+import com.example.carpc.widgets.StartScreenWidget;
 import com.example.carpc.widgets.chargeScreen.ChargeWidget;
 import com.example.carpc.widgets.dashboardScreen.DashboardWidget;
 import com.example.carpc.widgets.settingsScreen.SettingsWidget;
-
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static Message message;
@@ -30,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private DashboardWidget dashboardWidget;
     private SettingsWidget settingsWidget;
     private ChargeWidget chargeWidget;
+    private StartScreenWidget startScreenWidget;
     private androidx.fragment.app.FragmentTransaction fTrans;
+    private LinearLayout rootContainer;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -38,27 +41,57 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        rootContainer = findViewById(R.id.root_container);
+
         message = new Message();
         dataPrefs = DataPrefs.getInstance(this);
         Counter.setUsedAH(dataPrefs.getUsedAmpereHour());
         Counter.setUsedWH(dataPrefs.getUsedWattHour());
+
+        try {
+            TCPClient.getInstance(this);
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         // fragments
         dashboardWidget = new DashboardWidget();
         settingsWidget = new SettingsWidget();
         chargeWidget = new ChargeWidget();
+        startScreenWidget = new StartScreenWidget();
 
         fTrans = getSupportFragmentManager().beginTransaction();
-        fTrans.replace(R.id.frgmCont, dashboardWidget);
+
+        if (TCPClient.getInstance(this).isConnected()) {
+            fTrans.add(R.id.frgmCont, dashboardWidget);
+            TCPClient.getInstance(this).sendMessage(AppConstants.SUBSCRIBE);
+        } else {
+            Toast.makeText(this, "Cannot connect to server!\n" +
+                    "Please, check connection params in settings", Toast.LENGTH_LONG).show();
+            fTrans.add(R.id.frgmCont, startScreenWidget);
+        }
+        fTrans.addToBackStack(null);
+
         fTrans.commit();
 
-//        FOR TESTING
-        Map<String, ?> allData = DataPrefs.getInstance(getApplicationContext()).GetAll();
-        for (Map.Entry<String, ?> entry : allData.entrySet()) {
-            System.out.println("Key: " + entry.getKey() + " - " + entry.getValue());
-        }
-        TCPClient.getInstance(this).sendMessage(AppConstants.SUBSCRIBE);
+        rootContainer.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                changeWidget();
+                return false;
+            }
+        });
+    }
 
+    public void changeWidget() {
+        fTrans = getSupportFragmentManager().beginTransaction();
+        Log.i("MAIN_ACTIVITY", "OnLongClick");
+        fTrans.replace(R.id.frgmCont, settingsWidget);
+        TCPClient.getInstance(this).sendMessage(AppConstants.UNSUBSCRIBE);
+        fTrans.addToBackStack(null);
 
+        fTrans.commit();
     }
 
     @Override
@@ -68,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         dataPrefs.setUsedWattHour(Counter.getUsedWH());
     }
 
+    @SuppressLint("NonConstantResourceId")
     public void onClick(View v) {
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -84,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 TCPClient.getInstance(this).sendMessage(AppConstants.UNSUBSCRIBE);
                 break;
         }
+        fTrans.addToBackStack(null);
         fTrans.commit();
     }
 

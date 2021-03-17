@@ -25,7 +25,7 @@ public class SettingsWidget extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.settings_widget, container, false);
+        View v = inflater.inflate(R.layout.widget_settings, container, false);
         viewPager = v.findViewById(R.id.viewpager);
         tabLayout = v.findViewById(R.id.tabs);
 
