@@ -11,6 +11,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.carpc.R;
 import com.example.carpc.adapters.ViewPagerAdapter;
+import com.example.carpc.network.TCPClient;
+import com.example.carpc.utils.AppConstants;
 import com.example.carpc.widgets.settingsScreen.tabs.ConfiguratorTab;
 import com.example.carpc.widgets.settingsScreen.tabs.ConnectionTab;
 import com.example.carpc.widgets.settingsScreen.tabs.ChartTab;
@@ -38,19 +40,8 @@ public class SettingsWidget extends Fragment {
         super.onActivityCreated(savedInstanceState);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//            }
-//        });
+
+        TCPClient.getInstance(this.getContext()).sendMessage(AppConstants.UNSUBSCRIBE);
     }
 
     private void setupViewPager(ViewPager viewPager) {

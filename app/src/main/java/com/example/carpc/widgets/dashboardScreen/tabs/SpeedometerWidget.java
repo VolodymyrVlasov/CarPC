@@ -34,13 +34,6 @@ public class SpeedometerWidget extends AbstractDashboardWidget {
         return v;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
-        infoTextView.setText(String.valueOf(dpHeight));
-    }
 
     @Override
     public void updateUI(DataParser data) {

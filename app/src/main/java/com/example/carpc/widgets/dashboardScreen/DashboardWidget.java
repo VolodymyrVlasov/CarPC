@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.example.carpc.R;
+import com.example.carpc.network.TCPClient;
+import com.example.carpc.utils.AppConstants;
 import com.example.carpc.widgets.dashboardScreen.tabs.BatteryManagerWidget;
 import com.example.carpc.widgets.dashboardScreen.tabs.BatteryWidget;
 import com.example.carpc.widgets.dashboardScreen.tabs.IconStatusLeftWidget;
@@ -36,6 +38,8 @@ public class DashboardWidget extends Fragment {
         iconStatusLeftWidget = new IconStatusLeftWidget();
         batteryWidget = new BatteryWidget(); //+
 
+        TCPClient.getInstance(this.getContext()).sendMessage(AppConstants.SUBSCRIBE);
+
         fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.replace(R.id.dashboardCenterCont, speedometerWidget);
@@ -45,6 +49,7 @@ public class DashboardWidget extends Fragment {
         fragmentTransaction.setCustomAnimations(R.animator.left_in, R.animator.right_in).replace(R.id.dashboardLeftCont, batteryManagerWidget);
         fragmentTransaction.setCustomAnimations(R.animator.left_out, R.animator.right_out).replace(R.id.dashboardRightCont, tripManagerWidget);
         fragmentTransaction.commit();
+
         return v;
     }
 }

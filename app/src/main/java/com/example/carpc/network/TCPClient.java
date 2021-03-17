@@ -45,10 +45,6 @@ public class TCPClient implements Closeable {
         this.networkListeners.add(newListener);
     }
 
-//    public void setTCPClientListener(TCPClientListener listener) {
-//        this.listener = listener;
-//    }
-
     public static TCPClient getInstance(Context ctx) {
         if (instance == null) {
             DataPrefs data = DataPrefs.getInstance(ctx);

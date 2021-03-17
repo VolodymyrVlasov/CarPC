@@ -26,7 +26,7 @@
         android:layout_marginTop="-20dp"
         android:fontFamily="sans-serif-condensed-light"
         android:gravity="center_horizontal"
-        android:text="layout-notlong-port"
+        android:text="km/h"
         android:textAlignment="center"
         android:id="@+id/info"
         android:textColor="@android:color/white"
