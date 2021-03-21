@@ -22,7 +22,7 @@ public class TripManagerWidget extends AbstractDashboardWidget {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.trip_manager_widget, null);
+        View v = inflater.inflate(R.layout.widget_trip_manager, null);
         passedDistanceTextView = v.findViewById(R.id.passed_last_charge_text_view);
         rangeDistanceTextView = v.findViewById(R.id.range_last_charge_text_view);
         ampereHourTextView = v.findViewById(R.id.ampere_hour_text_view);

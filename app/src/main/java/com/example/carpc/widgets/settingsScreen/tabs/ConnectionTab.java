@@ -44,7 +44,7 @@ public class ConnectionTab extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.connection_tab, null);
+        View v = inflater.inflate(R.layout.tab_connection, null);
 
         serverAddress = v.findViewById(R.id.server_address);
         serverPort = v.findViewById(R.id.server_port);

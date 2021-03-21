@@ -21,7 +21,7 @@ public class BatteryManagerWidget extends AbstractDashboardWidget {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.battery_manager_widget, null);
+        View v = inflater.inflate(R.layout.widget_battery_manager, null);
 
         currentTextView = v.findViewById(R.id.current_text_view);
         voltageTextView = v.findViewById(R.id.voltae_text_view);

@@ -61,8 +61,6 @@
         parameter value is 25000mA.</string>
 
 
-
-
     <string-array name="inputTypesSpeed">
         <item>SP 1</item>
         <item>SP 2</item>

@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.example.carpc.R;
+import com.example.carpc.network.TCPClient;
+import com.example.carpc.utils.AppConstants;
 import com.example.carpc.widgets.dashboardScreen.tabs.BatteryManagerWidget;
 import com.example.carpc.widgets.dashboardScreen.tabs.BatteryWidget;
 import com.example.carpc.widgets.dashboardScreen.tabs.IconStatusLeftWidget;
@@ -27,7 +29,7 @@ public class DashboardWidget extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.dashboard_widget, container, false);
+        View v = inflater.inflate(R.layout.widget_dashboard, container, false);
 
         speedometerWidget = new SpeedometerWidget(); //+
         batteryManagerWidget = new BatteryManagerWidget();
@@ -35,6 +37,8 @@ public class DashboardWidget extends Fragment {
         iconStatusRightWidget = new IconStatusRightWidget();
         iconStatusLeftWidget = new IconStatusLeftWidget();
         batteryWidget = new BatteryWidget(); //+
+
+        TCPClient.getInstance(this.getContext()).sendMessage(AppConstants.SUBSCRIBE);
 
         fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -45,22 +49,7 @@ public class DashboardWidget extends Fragment {
         fragmentTransaction.setCustomAnimations(R.animator.left_in, R.animator.right_in).replace(R.id.dashboardLeftCont, batteryManagerWidget);
         fragmentTransaction.setCustomAnimations(R.animator.left_out, R.animator.right_out).replace(R.id.dashboardRightCont, tripManagerWidget);
         fragmentTransaction.commit();
+
         return v;
-    }
-
-    public SpeedometerWidget getSpeedometerWidget() {
-        return speedometerWidget;
-    }
-
-    public BatteryWidget getBatteryWidget() {
-        return batteryWidget;
-    }
-
-    public BatteryManagerWidget getBatteryManagerWidget() {
-        return batteryManagerWidget;
-    }
-
-    public TripManagerWidget getTripManagerWidget() {
-        return tripManagerWidget;
     }
 }

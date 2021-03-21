@@ -39,7 +39,7 @@ public class TerminalTab extends AbstractDashboardWidget implements View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.terminal_tab, container, false);
+        View v = inflater.inflate(R.layout.tab_terminal, container, false);
         inputDataScrollView = v.findViewById(R.id.inputDataScrollView);
         messagesTextView = v.findViewById(R.id.inputMessages);
         messageToSend = v.findViewById(R.id.myMessage);
@@ -90,6 +90,8 @@ public class TerminalTab extends AbstractDashboardWidget implements View.OnClick
         btnSubscribe.setOnClickListener((View.OnClickListener) this);
         btnUnsubscribe.setOnClickListener((View.OnClickListener) this);
     }
+
+
 
     @Override
     public void onClick(View v) {

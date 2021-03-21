@@ -23,7 +23,7 @@ public class BatteryWidget extends AbstractDashboardWidget {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.battery_widget, container, false);
+        View v = inflater.inflate(R.layout.widget_battery, container, false);
         view = (LinearLayout) v.findViewById(R.id.for_battery_canvas);
         batteryIcon = new DrawView(getContext());
         batteryIcon.setZOrderOnTop(true);

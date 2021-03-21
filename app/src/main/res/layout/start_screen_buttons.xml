@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btnDashboard"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/transparent_bg_bordered_button"
+        android:onClick="onClick"
+        android:text="@string/btnDashboardScreen"
+        android:textColor="@color/materialGray" />
+
+    <Button
+        android:id="@+id/btnSettings"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/transparent_bg_bordered_button"
+        android:onClick="onClick"
+        android:text="@string/btnSettingsScreen"
+        android:textColor="@color/materialGray" />
+
+    <Button
+        android:id="@+id/btnCharge"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/transparent_bg_bordered_button"
+        android:onClick="onClick"
+        android:text="@string/btnChargeScreen"
+        android:textColor="@color/materialGray" />
+
+</LinearLayout>

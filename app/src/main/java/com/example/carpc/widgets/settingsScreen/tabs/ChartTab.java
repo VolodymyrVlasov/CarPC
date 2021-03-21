@@ -56,7 +56,7 @@ public class ChartTab extends AbstractDashboardWidget {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.chart_tab, container, false);
+        View v = inflater.inflate(R.layout.tab_chart, container, false);
         setRetainInstance(true);
 
         barChart = (HorizontalBarChart) v.findViewById(R.id.lineChart);

@@ -11,6 +11,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.carpc.R;
 import com.example.carpc.adapters.ViewPagerAdapter;
+import com.example.carpc.network.TCPClient;
+import com.example.carpc.utils.AppConstants;
 import com.example.carpc.widgets.settingsScreen.tabs.ConfiguratorTab;
 import com.example.carpc.widgets.settingsScreen.tabs.ConnectionTab;
 import com.example.carpc.widgets.settingsScreen.tabs.ChartTab;
@@ -25,7 +27,7 @@ public class SettingsWidget extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.settings_widget, container, false);
+        View v = inflater.inflate(R.layout.widget_settings, container, false);
         viewPager = v.findViewById(R.id.viewpager);
         tabLayout = v.findViewById(R.id.tabs);
 
@@ -38,19 +40,8 @@ public class SettingsWidget extends Fragment {
         super.onActivityCreated(savedInstanceState);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//            }
-//        });
+
+        TCPClient.getInstance(this.getContext()).sendMessage(AppConstants.UNSUBSCRIBE);
     }
 
     private void setupViewPager(ViewPager viewPager) {

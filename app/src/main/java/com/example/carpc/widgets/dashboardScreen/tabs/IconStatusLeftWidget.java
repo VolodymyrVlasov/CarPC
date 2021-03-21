@@ -14,7 +14,7 @@ public class IconStatusLeftWidget extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.icon_status_left_widget, null);
+        View v = inflater.inflate(R.layout.widget_icon_status_left, null);
         setRetainInstance(true);
         return v;
     }

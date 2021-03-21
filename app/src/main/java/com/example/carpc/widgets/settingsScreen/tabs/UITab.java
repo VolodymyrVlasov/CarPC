@@ -12,7 +12,7 @@ public class UITab extends Fragment {
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                        Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.u_i, container, false);
+        View v = inflater.inflate(R.layout.tab_ui, container, false);
         setRetainInstance(true);
         System.out.println("Create UI TAB");
         return v;
