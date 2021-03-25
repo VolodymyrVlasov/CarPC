@@ -73,7 +73,7 @@
                 android:textSize="35sp" />
 
             <TextView
-                android:id="@+id/voltae_text_view"
+                android:id="@+id/voltage_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -23,9 +23,9 @@ import com.example.carpc.models.Message;
 import com.example.carpc.network.TCPClient;
 import com.example.carpc.utils.AppConstants;
 import com.example.carpc.utils.DataParser;
-import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
+import com.example.carpc.widgets.AbstractWidget;
 
-public class TerminalTab extends AbstractDashboardWidget implements View.OnClickListener {
+public class TerminalTab extends AbstractWidget implements View.OnClickListener {
     private ScrollView inputDataScrollView;
     private EditText messageToSend;
     private TextView messagesTextView;

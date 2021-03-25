@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import com.example.carpc.R;
 import com.example.carpc.network.TCPClient;
 import com.example.carpc.utils.DataParser;
-import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
+import com.example.carpc.widgets.AbstractWidget;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -28,7 +28,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChartTab extends AbstractDashboardWidget {
+public class ChartTab extends AbstractWidget {
     private HorizontalBarChart barChart;
     private ArrayList<BarEntry> barEntries;
     private List<Integer> colors;

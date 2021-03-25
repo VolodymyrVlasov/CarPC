@@ -10,9 +10,9 @@ import android.widget.TextView;
 import com.example.carpc.R;
 import com.example.carpc.utils.Counter;
 import com.example.carpc.utils.DataParser;
-import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
+import com.example.carpc.widgets.AbstractWidget;
 
-public class BatteryManagerWidget extends AbstractDashboardWidget {
+public class BatteryManagerWidget extends AbstractWidget {
     public static TextView currentTextView, voltageTextView, powerTextView,
             avConsumption, currentConsumption, currentSessionWattMeter,
             minCellNumber, minCellVoltage,
@@ -24,7 +24,7 @@ public class BatteryManagerWidget extends AbstractDashboardWidget {
         View v = inflater.inflate(R.layout.widget_battery_manager, null);
 
         currentTextView = v.findViewById(R.id.current_text_view);
-        voltageTextView = v.findViewById(R.id.voltae_text_view);
+        voltageTextView = v.findViewById(R.id.voltage_text_view);
         powerTextView = v.findViewById(R.id.power_text_view);
 
         avConsumption = v.findViewById(R.id.average_WH_divide_KM_TextView);

@@ -40,39 +40,6 @@
         <!--        <item name="android:backgroundStacked">@android:color/black</item>-->
     </style>
 
-
-    <!-- Root layout-->
-    <style name="root_container" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
-        <item name="android:layout_marginLeft">20dp</item>
-        <item name="android:layout_marginRight">20dp</item>
-    </style>
-
-    <!-- Divider LEFT -->
-    <style name="divider_left" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:scaleType">fitXY</item>
-        <item name="android:paddingEnd">20dp</item>
-        <item name="srcCompat">@drawable/pic_divider_line_to_left</item>
-    </style>
-
-    <!-- Divider RIGHT -->
-    <style name="divider_right" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:scaleType">fitXY</item>
-        <item name="android:paddingStart">20dp</item>
-        <item name="srcCompat">@drawable/pic_divider_line_to_right</item>
-    </style>
-
     <!-- Values style dark -->
     <style name="value_dark" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:layout_width">0dp</item>
@@ -80,7 +47,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:text">0</item>
-        <item name="android:textColor">@android:color/holo_blue_bright</item>
+        <item name="android:textColor">@android:color/holo_orange_dark</item>
         <item name="android:textSize">40sp</item>
     </style>
 
@@ -89,7 +56,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:textColor">@android:color/tertiary_text_dark</item> <!-- darker_gray -->
+        <item name="android:textColor">@android:color/darker_gray</item> <!-- darker_gray -->
         <item name="android:textSize">15sp</item>
     </style>
 

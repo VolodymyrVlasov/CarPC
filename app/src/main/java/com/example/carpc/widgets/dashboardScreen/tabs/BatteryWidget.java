@@ -12,9 +12,9 @@ import android.widget.TextView;
 import com.example.carpc.R;
 import com.example.carpc.utils.DataParser;
 import com.example.carpc.utils.plotter.DrawView;
-import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
+import com.example.carpc.widgets.AbstractWidget;
 
-public class BatteryWidget extends AbstractDashboardWidget {
+public class BatteryWidget extends AbstractWidget {
     DrawView batteryIcon;
     LinearLayout view;
     TextView rangeTextView;

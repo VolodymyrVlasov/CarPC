@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-h720dp/widget_battery_manager.xml" value="0.75" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-h720dp/widget_speedometer.xml" value="0.6645833333333333" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-h720dp/widget_trip_manager.xml" value="0.28923076923076924" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-h750dp/widget_battery_manager.xml" value="0.6028169014084507" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-h750dp/widget_speedometer.xml" value="0.1" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-h800dp/widget_battery_manager.xml" value="0.19435736677115986" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-h850dp/widget_speedometer.xml" value="0.19236111111111112" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-notlong-port/widget_battery_manager.xml" value="0.6666666666666666" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-notlong-port/widget_speedometer.xml" value="0.865625" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout/widget_battery_manager.xml" value="0.5208333333333334" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout/widget_speedometer.xml" value="0.5770833333333333" />
+      </map>
+    </option>
+  </component>
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>
@@ -48,7 +65,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

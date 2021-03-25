@@ -1,11 +1,11 @@
-package com.example.carpc.widgets.dashboardScreen;
+package com.example.carpc.widgets;
 
 import androidx.fragment.app.Fragment;
 import com.example.carpc.network.TCPClient;
 import com.example.carpc.utils.DataParser;
 
-public abstract class AbstractDashboardWidget extends Fragment implements TCPClient.TCPClientListener {
-    public AbstractDashboardWidget() {
+public abstract class AbstractWidget extends Fragment implements TCPClient.TCPClientListener {
+    public AbstractWidget() {
         TCPClient.getInstance(getContext()).addNetworkListener(this);
     }
 

@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private StartScreenWidget startScreenWidget;
 
     private androidx.fragment.app.FragmentTransaction fTrans;
+
     private LinearLayout rootContainer;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

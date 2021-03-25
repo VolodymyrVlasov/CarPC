@@ -8,9 +8,9 @@ import android.widget.TextView;
 
 import com.example.carpc.R;
 import com.example.carpc.utils.DataParser;
-import com.example.carpc.widgets.dashboardScreen.AbstractDashboardWidget;
+import com.example.carpc.widgets.AbstractWidget;
 
-public class TripManagerWidget extends AbstractDashboardWidget {
+public class TripManagerWidget extends AbstractWidget {
     //LAST CHARGE
     public TextView passedDistanceTextView, rangeDistanceTextView, ampereHourTextView;
     //CURRENT TRIP
