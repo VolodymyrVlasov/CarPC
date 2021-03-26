@@ -7,13 +7,8 @@
     tools:context=".widgets.dashboardScreen.tabs.BatteryWidget">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal">
+        style="@style/root_container"
+        android:layout_width="match_parent">
 
         <LinearLayout
             android:id="@+id/for_battery_canvas"
@@ -31,24 +26,10 @@
 
         <TextView
             android:id="@+id/range"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="RANGE"
-            android:textAlignment="center"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="18sp" />
+            style="@style/middle_value" />
 
         <TextView
             android:id="@+id/temp_outside"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="TEMP"
-            android:textAlignment="center"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="18sp" />
+            style="@style/middle_value" />
     </LinearLayout>
 </FrameLayout>

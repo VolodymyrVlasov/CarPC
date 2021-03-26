@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/textView3"
-            style="@style/value_name_dark"
+            style="@style/title"
             android:layout_weight="2"
             android:text="BATTERY MANAGEMENT" />
 
@@ -37,15 +37,15 @@
 
         <TextView
             android:id="@+id/current_text_view"
-            style="@style/value_dark" />
+            style="@style/big_value" />
 
         <TextView
             android:id="@+id/voltage_text_view"
-            style="@style/value_dark" />
+            style="@style/big_value" />
 
         <TextView
             android:id="@+id/power_text_view"
-            style="@style/value_dark" />
+            style="@style/big_value" />
     </LinearLayout>
 
     <LinearLayout
@@ -56,17 +56,17 @@
 
         <TextView
             android:id="@+id/name_Amp"
-            style="@style/value_name_dark"
-            android:text="Amp" />
+            style="@style/description"
+            android:text="AMP" />
 
         <TextView
             android:id="@+id/name_Volt"
-            style="@style/value_name_dark"
-            android:text="Volt" />
+            style="@style/description"
+            android:text="VOLT" />
 
         <TextView
             android:id="@+id/name_kW"
-            style="@style/value_name_dark"
+            style="@style/description"
             android:text="kW" />
     </LinearLayout>
 
@@ -79,11 +79,7 @@
 
         <ImageView
             android:id="@+id/image_divider_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/pic_divider_line_center" />
+            style="@style/divider_center" />
 
     </LinearLayout>
 
@@ -95,15 +91,15 @@
 
         <TextView
             android:id="@+id/average_WH_divide_KM_TextView"
-            style="@style/value_dark" />
+            style="@style/big_value" />
 
         <TextView
             android:id="@+id/current_WH_divide_KM_TextView"
-            style="@style/value_dark" />
+            style="@style/big_value" />
 
         <TextView
             android:id="@+id/this_session_used_power"
-            style="@style/value_dark" />
+            style="@style/big_value" />
     </LinearLayout>
 
     <LinearLayout
@@ -114,17 +110,17 @@
 
         <TextView
             android:id="@+id/name_AV_Wh_km"
-            style="@style/value_name_dark"
+            style="@style/description"
             android:text="AV Wh/km" />
 
         <TextView
             android:id="@+id/name_Wh_km"
-            style="@style/value_name_dark"
+            style="@style/description"
             android:text="Wh/km" />
 
         <TextView
             android:id="@+id/name_kWh"
-            style="@style/value_name_dark"
+            style="@style/description"
             android:text="kWh" />
     </LinearLayout>
 
@@ -136,81 +132,55 @@
 
         <ImageView
             android:id="@+id/image_divider_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/pic_divider_line_center" />
+            style="@style/divider_center" />
     </LinearLayout>
 
 
     <LinearLayout
         android:id="@+id/minCell"
-        style="@style/root_container"
+        style="@style/root_big_margin_container"
         app:layout_constraintTop_toBottomOf="@+id/divider_2"
         tools:ignore="MissingConstraints">
 
+
         <TextView
             android:id="@+id/name_cell_min"
-            style="@style/value_name_dark"
+            style="@style/small_value"
             android:layout_weight="2"
             android:gravity="left"
             android:text="Cell MIN:" />
 
         <TextView
             android:id="@+id/value_cell_min_id"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="0"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="15sp" />
+            style="@style/small_value" />
 
         <TextView
             android:id="@+id/value_cell_min_voltage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="4.200"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="15sp" />
+            style="@style/small_value"
+            android:gravity="right" />
 
+        <LinearLayout
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/root_container"
-        app:layout_constraintTop_toBottomOf="@+id/minCell"
-        tools:ignore="MissingConstraints">
 
         <TextView
             android:id="@+id/name_cell_max"
-            style="@style/value_name_dark"
+            style="@style/small_value"
             android:layout_weight="2"
             android:gravity="left"
-            android:text="Cell MAX:" />
+            android:text="Cell MAX:"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/value_cell_max_id"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="0"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="15sp" />
+            style="@style/small_value" />
 
         <TextView
             android:id="@+id/value_cell_max_voltage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="4.200"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="15sp" />
+            style="@style/small_value"
+            android:gravity="right" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

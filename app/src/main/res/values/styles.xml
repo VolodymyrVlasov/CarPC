@@ -41,17 +41,29 @@
     </style>
 
 
-    <!-- Root layout-->
+    <!-- Root container-->
     <style name="root_container" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginBottom">3dp</item>
         <item name="android:layout_marginLeft">20dp</item>
         <item name="android:layout_marginRight">20dp</item>
     </style>
+
+    <!-- Root container with big margin-->
+    <style name="root_big_margin_container" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">40dp</item>
+    </style>
+
 
     <!-- Divider LEFT -->
     <style name="divider_left" parent="Theme.AppCompat.Light.NoActionBar">
@@ -59,7 +71,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:scaleType">fitXY</item>
-        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingEnd">10dp</item>
         <item name="srcCompat">@drawable/pic_divider_line_to_left</item>
     </style>
 
@@ -69,28 +81,95 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:scaleType">fitXY</item>
-        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingStart">10dp</item>
         <item name="srcCompat">@drawable/pic_divider_line_to_right</item>
     </style>
 
-    <!-- Values style dark -->
-    <style name="value_dark" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:gravity">center_horizontal</item>
-        <item name="android:text">0</item>
-        <item name="android:textColor">@android:color/holo_blue_bright</item>
-        <item name="android:textSize">40sp</item>
-    </style>
-
-    <style name="value_name_dark" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Divider CENTER -->
+    <style name="divider_center" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:gravity">center_horizontal</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="srcCompat">@drawable/pic_divider_line_center</item>
+    </style>
+
+    <!--X_Big values style -->
+    <style name="x_big_value" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+<!--        <item name="android:layout_weight">1</item>-->
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:text">0</item>
+        <item name="android:textColor">@android:color/holo_blue_bright</item>
+        <item name="android:textSize">110sp</item>
+    </style>
+
+    <!--Big values style -->
+    <style name="big_value" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:text">0</item>
+        <item name="android:textColor">@android:color/holo_blue_bright</item>
+        <item name="android:textSize">35sp</item>
+    </style>
+
+    <!-- Middle values style -->
+    <style name="middle_value" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@android:color/tertiary_text_dark</item> <!-- darker_gray -->
+        <item name="android:textSize">18sp</item>
+        <item name="android:text">0</item>
+    </style>
+
+    <!-- Small values style -->
+    <style name="small_value" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">15dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAlignment">center</item>
         <item name="android:textColor">@android:color/tertiary_text_dark</item> <!-- darker_gray -->
         <item name="android:textSize">15sp</item>
+        <item name="android:text">0</item>
+    </style>
+
+    <!-- Title labels style -->
+    <style name="title" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">15dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@android:color/tertiary_text_dark</item> <!-- darker_gray -->
+        <item name="android:textSize">15sp</item>
+        <item name="android:text">0</item>
+    </style>
+
+    <!-- Description labels style -->
+    <style name="description" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@android:color/tertiary_text_dark</item> <!-- darker_gray -->
+        <item name="android:textSize">10sp</item>
+        <item name="android:text">0</item>
     </style>
 
 </resources>

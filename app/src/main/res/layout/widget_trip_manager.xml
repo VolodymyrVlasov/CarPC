@@ -1,354 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical">
+    android:layout_gravity="center">
 
+    <LinearLayout
+        android:id="@+id/widget_name"
+        style="@style/root_container"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/image_divider_1"
+            style="@style/divider_left" />
 
-        <LinearLayout
-            android:id="@+id/widget_name"
-            android:layout_width="match_parent"
-            android:layout_height="12dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="1dp">
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/title"
+            android:layout_weight="2"
+            android:text="LAST CHARGE" />
 
-            <ImageView
-                android:id="@+id/image_divider_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/pic_divider_line_to_left" />
+        <ImageView
+            android:id="@+id/image_divider_2"
+            style="@style/divider_right" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="LAST CHARGE"
-                android:textColor="@android:color/white"
-                android:textSize="10sp" />
+    </LinearLayout>
 
-            <ImageView
-                android:id="@+id/image_divider_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/pic_divider_line_to_right" />
+    <LinearLayout
+        android:id="@+id/value_of_last_charge_trip"
+        style="@style/root_container"
+        app:layout_constraintTop_toBottomOf="@+id/widget_name"
+        tools:ignore="MissingConstraints">
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/passed_last_charge_text_view"
+            style="@style/big_value" />
 
-        <LinearLayout
-            android:id="@+id/value_of_last_charge_trip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/widget_name"
-            tools:ignore="MissingConstraints">
+        <TextView
+            android:id="@+id/range_last_charge_text_view"
+            style="@style/big_value" />
 
-            <TextView
-                android:id="@+id/passed_last_charge_text_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="0"
-                android:textColor="@android:color/white"
-                android:textSize="35sp" />
+        <TextView
+            android:id="@+id/ampere_hour_text_view"
+            style="@style/big_value" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/range_last_charge_text_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="0"
-                android:textColor="@android:color/white"
-                android:textSize="35sp" />
+    <LinearLayout
+        android:id="@+id/name_of_last_charge_trip"
+        style="@style/root_container"
+        app:layout_constraintTop_toBottomOf="@+id/value_of_last_charge_trip"
+        tools:ignore="MissingConstraints">
 
-            <TextView
-                android:id="@+id/ampere_hour_text_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="0"
-                android:textColor="@android:color/white"
-                android:textSize="35sp" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/name_Amp"
+            style="@style/description"
+            android:layout_height="match_parent"
+            android:text="PASSED" />
 
-        <LinearLayout
-            android:id="@+id/name_of_last_charge_trip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/name_Volt"
+            style="@style/description"
+            android:text="RANGE" />
 
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/value_of_last_charge_trip"
-            tools:ignore="MissingConstraints">
+        <TextView
+            android:id="@+id/name_kW"
+            style="@style/description"
+            android:text="Ah" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/name_Amp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="@string/passed"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="10sp" />
+    <LinearLayout
+        android:id="@+id/current_trip_divider"
+        style="@style/root_container"
+        app:layout_constraintTop_toBottomOf="@+id/name_of_last_charge_trip"
+        tools:ignore="MissingConstraints">
 
-            <TextView
-                android:id="@+id/name_Volt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="RANGE"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="10sp" />
+        <ImageView style="@style/divider_left" />
 
-            <TextView
-                android:id="@+id/name_kW"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="Ah"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="10sp" />
-        </LinearLayout>
+        <TextView
+            style="@style/title"
+            android:layout_weight="2"
+            android:text="CURRENT TRIP" />
 
-        <LinearLayout
-            android:id="@+id/current_trip_divider"
-            android:layout_width="match_parent"
-            android:layout_height="12dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/name_of_last_charge_trip">
+        <ImageView style="@style/divider_right" />
 
-            <ImageView
-                android:id="@+id/image_divider_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/pic_divider_line_to_left" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="CURRENT TRIP"
-                android:textColor="@android:color/white"
-                android:textSize="10sp" />
+    <LinearLayout
+        android:id="@+id/value_of_current_trip"
+        style="@style/root_container"
+        app:layout_constraintTop_toBottomOf="@+id/current_trip_divider"
+        tools:ignore="MissingConstraints">
 
-            <ImageView
-                android:id="@+id/image_divider_5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/pic_divider_line_to_right" />
+        <TextView
+            android:id="@+id/passed_current_trip_text_view"
+            style="@style/big_value" />
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/current_trip_used_energy_text_view"
+            style="@style/big_value" />
+
+        <TextView
+            android:id="@+id/current_trip_average_consumption_text_view"
+            style="@style/big_value" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/name_of_current_trip"
+        style="@style/root_container"
+        app:layout_constraintTop_toBottomOf="@+id/value_of_current_trip"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/name_AV_Wh_km"
+            style="@style/description"
+            android:text="@string/passed" />
+
+        <TextView
+            android:id="@+id/name_Wh_km"
+            style="@style/description"
+            android:text="kWh" />
+
+        <TextView
+            android:id="@+id/name_kWh"
+            style="@style/description"
+            android:text="AV Wh/ km" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/odometer_divider"
+        style="@style/root_container"
+        app:layout_constraintTop_toBottomOf="@+id/name_of_current_trip"
+        tools:ignore="MissingConstraints">
+
+        <ImageView style="@style/divider_left" />
+
+        <TextView
+            style="@style/title"
+            android:text="ODOMETER" />
+
+        <ImageView style="@style/divider_right" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/total_trip_cnt"
+        style="@style/root_big_margin_container"
+        app:layout_constraintTop_toBottomOf="@+id/odometer_divider"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/name_total_trip"
+            style="@style/small_value"
+            android:layout_weight="3"
+            android:gravity="left"
+            android:text="Total trip:" />
+
+        <TextView
+            android:id="@+id/value_total_trip"
+            style="@style/small_value"
+            android:gravity="right" />
 
         <LinearLayout
-            android:id="@+id/value_of_current_trip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/current_trip_divider"
-            tools:ignore="MissingConstraints">
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"/>
 
-            <TextView
-                android:id="@+id/passed_current_trip_text_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="0"
-                android:textColor="@android:color/white"
-                android:textSize="35sp" />
+        <TextView
+            android:id="@+id/name_total_energy"
+            style="@style/small_value"
+            android:layout_weight="3"
+            android:gravity="left"
+            android:text="Total energy:" />
 
-            <TextView
-                android:id="@+id/current_trip_used_energy_text_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="0"
-                android:textColor="@android:color/white"
-                android:textSize="35sp" />
+        <TextView
+            android:id="@+id/value_total_energy"
+            style="@style/small_value"
+            android:gravity="right" />
 
-            <TextView
-                android:id="@+id/current_trip_average_consumption_text_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="0"
-                android:textColor="@android:color/white"
-                android:textSize="35sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/name_of_current_trip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/value_of_current_trip"
-            tools:ignore="MissingConstraints">
-
-            <TextView
-                android:id="@+id/name_AV_Wh_km"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="@string/passed"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="10sp" />
-
-            <TextView
-                android:id="@+id/name_Wh_km"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="kWh"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="10sp" />
-
-            <TextView
-                android:id="@+id/name_kWh"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="AV Wh/ km"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/odometer_divider"
-            android:layout_width="match_parent"
-            android:layout_height="12dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/name_of_current_trip">
-
-            <ImageView
-                android:id="@+id/image_divider_7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/pic_divider_line_to_left" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="ODOMETER"
-                android:textColor="@android:color/white"
-                android:textSize="10sp" />
-
-            <ImageView
-                android:id="@+id/image_divider_8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/pic_divider_line_to_right" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/odometer_divider">
-
-            <TextView
-                android:id="@+id/name_total_trip"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="left"
-                android:text="Total trip:"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/value_total_trip"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/name_total_energy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:textAlignment="center"
-                android:text="Total energy:"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/value_total_energy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="15sp" />
-
-        </LinearLayout>
+    </LinearLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
