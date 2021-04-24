@@ -1,7 +1,9 @@
 package com.example.carpc;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -23,6 +26,7 @@ import com.example.carpc.network.TCPClient;
 import com.example.carpc.utils.Counter;
 import com.example.carpc.widgets.chargeScreen.ChargeWidget;
 import com.example.carpc.widgets.dashboardScreen.DashboardWidget;
+import com.example.carpc.widgets.dashboardScreen.tabs.MapsFragment;
 import com.example.carpc.widgets.settingsScreen.SettingsWidget;
 import com.example.carpc.widgets.startScreen.StartScreenMenu;
 import com.example.carpc.widgets.startScreen.StartScreenWidget;
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ChargeWidget chargeWidget;
     private StartScreenWidget startScreenWidget;
 
+
     private androidx.fragment.app.FragmentTransaction fTrans;
 
     private LinearLayout rootContainer;
@@ -44,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         rootContainer = findViewById(R.id.root_container);
 
@@ -58,23 +65,24 @@ public class MainActivity extends AppCompatActivity {
         Counter.setUsedAH(dataPrefs.getUsedAmpereHour());
         Counter.setUsedWH(dataPrefs.getUsedWattHour());
 
+
         changeWidget(startScreenWidget);
 
-        try {
-            TCPClient.getInstance(this);
-            Thread.sleep(50);
-
-            if (TCPClient.getInstance(this).isConnected()) {
-                changeWidget(dashboardWidget);
-            } else {
-                Toast toast = Toast.makeText(this, "Cannot connect to server!\n" +
-                        "Please, check connection params", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER | Gravity.BOTTOM, 0, 150);
-                toast.show();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            TCPClient.getInstance(this);
+//            Thread.sleep(50);
+//
+//            if (TCPClient.getInstance(this).isConnected()) {
+//                changeWidget(dashboardWidget);
+//            } else {
+//                Toast toast = Toast.makeText(this, "Cannot connect to server!\n" +
+//                        "Please, check connection params", Toast.LENGTH_LONG);
+//                toast.setGravity(Gravity.CENTER | Gravity.BOTTOM, 0, 150);
+//                toast.show();
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         rootContainer.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -84,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     public void changeWidget(Fragment widget) {
         fTrans = getSupportFragmentManager().beginTransaction();

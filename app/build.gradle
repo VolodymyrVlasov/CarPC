@@ -26,8 +26,6 @@ ext {
     supportLibrary = "27.0.2"
 }
 
-
-
 dependencies {
 
     //noinspection GradleCompatible
@@ -46,5 +44,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
+
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     // add chart library
 }

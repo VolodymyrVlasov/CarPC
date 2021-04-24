@@ -13,11 +13,15 @@
         <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-h800dp/widget_battery_manager.xml" value="0.19435736677115986" />
         <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-h850dp/widget_speedometer.xml" value="0.19236111111111112" />
         <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-land/widget_battery_manager.xml" value="0.49114583333333334" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-land/widget_dashboard.xml" value="0.321875" />
         <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-notlong-port/widget_battery_manager.xml" value="0.6666666666666666" />
         <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-notlong-port/widget_speedometer.xml" value="0.865625" />
         <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout-v28/widget_speedometer.xml" value="0.4244791666666667" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout/activity_main.xml" value="0.39082969432314413" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout/fragment_maps.xml" value="0.2869791666666667" />
         <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout/widget_battery.xml" value="0.2518518518518518" />
         <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout/widget_battery_manager.xml" value="0.4657534246575342" />
+        <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout/widget_dashboard.xml" value="0.3558951965065502" />
         <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout/widget_speedometer.xml" value="0.1" />
         <entry key="..\:/code/AndroidStudioProjects/CarPC/app/src/main/res/layout/widget_trip_manager.xml" value="0.25" />
       </map>

@@ -11,6 +11,12 @@
         android:layout_height="match_parent"
         android:layout_gravity="center">
 
+        <FrameLayout
+            android:id="@+id/dashboardMapCont"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+
         <LinearLayout
             android:id="@+id/top_panel"
             android:layout_width="match_parent"
